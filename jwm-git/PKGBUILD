@@ -1,0 +1,49 @@
+pkgname=jwm-git
+pkgver=71c1549
+pkgrel=1
+pkgdesc="A lightweight window manager for the X11 Window System"
+arch=('i686' 'x86_64')
+conflicts=('jwm')
+url="http://joewing.net/projects/jwm/"
+license=('GPL2')
+depends=('libx11' 'libxft' 'libjpeg>=7' 'libxpm' 'libxinerama' 'libpng')
+backup=('etc/system.jwmrc')
+source=('git://github.com/joewing/jwm.git'
+        jwm.desktop)
+# contacted upstream about desktop
+# no reply
+md5sums=('SKIP'
+         'ad898472f7538ffc3ff511c055fee535')
+
+build() {
+  cd "$srcdir/jwm"
+  
+  patch -p1 -i $startdir/border-of-window-title.patch              || return 1
+  patch -p1 -i $startdir/battery.patch                             || return 1
+  patch -p1 -i $startdir/click-middle-in-taskbar.patch             || return 1
+  patch -p1 -i $startdir/wmname-tag.patch                          || return 1
+  patch -p1 -i $startdir/minimization-indicator.patch              || return 1
+  patch -p1 -i $startdir/move-window-to-desktop.patch              || return 1
+  patch -p1 -i $startdir/pager-border.patch                        || return 1
+  patch -p1 -i $startdir/dock-border.patch                         || return 1
+  patch -p1 -i $startdir/flat-traybutton.patch                     || return 1
+  patch -p1 -i $startdir/ru-text-icons.patch                       || return 1
+  patch -p1 -i $startdir/menu-separator.patch                      || return 1
+  patch -p1 -i $startdir/change-size-of-maximized-x-y-window.patch || return 1
+  patch -p1 -i $startdir/disable-pager-wheel.patch                 || return 1
+  patch -p1 -i $startdir/disable-taskbar-wheel.patch               || return 1
+  patch -p1 -i $startdir/fix-am-init-automake.patch                || return 1
+  patch -p1 -i $startdir/fix-buffer-overflow.patch                 || return 1
+  
+  cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
+  ./autogen.sh
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-fribidi --disable-xmu --disable-shape  --disable-cairo  --disable-rsvg --disable-jpeg  
+  make
+}
+
+package() {
+  cd "$srcdir/jwm"
+  make BINDIR="$pkgdir/usr/bin" MANDIR="$pkgdir/usr/share/man" \
+       DESTDIR="$pkgdir" SYSCONF="$pkgdir/etc" install
+  install -Dm644 "$srcdir/jwm.desktop" "$pkgdir/usr/share/xsessions/jwm.desktop"
+}

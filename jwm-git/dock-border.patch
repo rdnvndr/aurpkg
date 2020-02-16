@@ -1,0 +1,39 @@
+diff -cr jwm-933/src/dock.c jwm-roand/src/dock.c
+*** jwm-933/src/dock.c	2014-05-31 18:18:49.000000000 +0400
+--- jwm-roand/src/dock.c	2014-06-21 23:07:10.232217514 +0400
+***************
+*** 463,469 ****
+     memset(&event, 0, sizeof(event));
+     for(np = dock->nodes; np; np = np->next) {
+  
+!       JXMoveResizeWindow(display, np->window, x, y, itemSize, itemSize);
+  
+        /* Reparent if this window likes to go other places. */
+        if(np->needs_reparent) {
+--- 463,469 ----
+     memset(&event, 0, sizeof(event));
+     for(np = dock->nodes; np; np = np->next) {
+  
+!       JXMoveResizeWindow(display, np->window, x + 3, y + 3, itemSize - 6, itemSize - 6);
+  
+        /* Reparent if this window likes to go other places. */
+        if(np->needs_reparent) {
+***************
+*** 475,482 ****
+        event.window = np->window;
+        event.x = dock->cp->screenx + x;
+        event.y = dock->cp->screeny + y;
+!       event.width = itemSize;
+!       event.height = itemSize;
+        JXSendEvent(display, np->window, False, StructureNotifyMask,
+                    (XEvent*)&event);
+  
+--- 475,482 ----
+        event.window = np->window;
+        event.x = dock->cp->screenx + x;
+        event.y = dock->cp->screeny + y;
+!       event.width = itemSize - 6;
+!       event.height = itemSize - 6;
+        JXSendEvent(display, np->window, False, StructureNotifyMask,
+                    (XEvent*)&event);
+  

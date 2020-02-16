@@ -1,0 +1,14 @@
+diff -cr old/Makefile new/Makefile
+*** old/Makefile	2019-07-11 07:17:43.112268961 +0300
+--- new/Makefile	2019-07-11 07:13:50.372529957 +0300
+***************
+*** 14,19 ****
+--- 14,21 ----
+  EXTRA_CFLAGS += -Wno-unused-function
+  EXTRA_CFLAGS += -Wno-unused
+  
++ EXTRA_CFLAGS += -Wno-incompatible-pointer-types
++ 
+  EXTRA_CFLAGS += -Wno-uninitialized
+  
+  EXTRA_CFLAGS += -I$(src)/include

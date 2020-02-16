@@ -1,0 +1,1 @@
+sqlcmd -i attach.sql -S localhost -U sa -H localhost 

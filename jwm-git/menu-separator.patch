@@ -1,0 +1,14 @@
+diff -cr a/src/winmenu.c b/src/winmenu.c
+*** a/src/winmenu.c     2016-09-29 19:29:08.000000000 +0300
+--- b/src/winmenu.c     2016-09-29 19:31:12.000000000 +0300
+***************
+*** 110,115 ****
+--- 110,116 ----
+     }
+  
+     if(!(np->state.status & STAT_WMDIALOG)) {
++       AddWindowMenuItem(menu, NULL, MA_NONE, np, 0);
+        if(settings.desktopCount > 1) {
+           if(np->state.status & STAT_STICKY) {
+              AddWindowMenuItem(menu, _("Unstick"), MA_STICK, np, 0);
+

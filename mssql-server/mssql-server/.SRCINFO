@@ -1,0 +1,17 @@
+pkgbase = mssql-server
+	pkgdesc = Microsoft SQL Server for Linux
+	pkgver = 15.0.4003.23
+	pkgrel = 2
+	url = https://www.microsoft.com/en-us/sql-server/sql-server-vnext-including-Linux
+	install = mssql-server.install
+	arch = x86_64
+	license = unknown
+	depends = python2-configparser
+	depends = numactl
+	depends = sssd
+	depends = openssl-1.0>=1.0.2.l
+	source = https://packages.microsoft.com/rhel/7/mssql-server-2019/mssql-server-15.0.4003.23-3.x86_64.rpm
+	sha256sums = 2c617e905b553e32b37b48f2d3cbce9bc6274e1e2f56172ff9efd696d264bbbc
+
+pkgname = mssql-server
+

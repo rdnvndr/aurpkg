@@ -1,0 +1,156 @@
+diff -cr transmission-2.94/qt/FileTreeDelegate.cc transmission-2.94-roand/qt/FileTreeDelegate.cc
+*** transmission-2.94/qt/FileTreeDelegate.cc	2015-12-07 00:32:20.254758128 +0300
+--- transmission-2.94-roand/qt/FileTreeDelegate.cc	2016-05-15 15:57:31.000000000 +0300
+***************
+*** 9,14 ****
+--- 9,15 ----
+  
+  #include <QApplication>
+  #include <QPainter>
++ #include <QStyleFactory>
+  
+  #include "FileTreeDelegate.h"
+  #include "FileTreeModel.h"
+***************
+*** 66,72 ****
+        p.textVisible = true;
+        p.progress = int(100.0*index.data().toDouble());
+        p.text = QString::fromLatin1 ("%1%").arg (p.progress);
+!       style->drawControl(QStyle::CE_ProgressBar, &p, painter);
+      }
+    else if(column == FileTreeModel::COL_WANTED)
+      {
+--- 67,73 ----
+        p.textVisible = true;
+        p.progress = int(100.0*index.data().toDouble());
+        p.text = QString::fromLatin1 ("%1%").arg (p.progress);
+!       QStyleFactory::create(QString::fromLatin1 ("Fusion"))->drawControl(QStyle::CE_ProgressBar, &p, painter);
+      }
+    else if(column == FileTreeModel::COL_WANTED)
+      {
+diff -cr transmission-2.94/qt/MainWindow.ui transmission-2.94-roand/qt/MainWindow.ui
+*** transmission-2.94/qt/MainWindow.ui	2015-10-20 09:41:05.089746404 +0300
+--- transmission-2.94-roand/qt/MainWindow.ui	2016-05-15 16:13:10.252379182 +0300
+***************
+*** 21,27 ****
+      <property name="spacing">
+       <number>0</number>
+      </property>
+!     <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+--- 21,36 ----
+      <property name="spacing">
+       <number>0</number>
+      </property>
+!      <property name="leftMargin">
+!       <number>0</number>
+!      </property>
+!      <property name="topMargin">
+!       <number>0</number>
+!      </property>
+!      <property name="rightMargin">
+!       <number>0</number>
+!      </property>
+!      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+***************
+*** 303,309 ****
+      <bool>false</bool>
+     </attribute>
+     <addaction name="action_OpenFile"/>
+-    <addaction name="action_AddURL"/>
+     <addaction name="action_Start"/>
+     <addaction name="action_Pause"/>
+     <addaction name="action_Remove"/>
+--- 312,317 ----
+diff -cr transmission-2.94/qt/TorrentDelegate.cc transmission-2.94-roand/qt/TorrentDelegate.cc
+*** transmission-2.94/qt/TorrentDelegate.cc	2015-08-04 00:19:13.453559824 +0300
+--- transmission-2.94-roand/qt/TorrentDelegate.cc	2016-05-15 16:04:16.000000000 +0300
+***************
+*** 16,21 ****
+--- 16,22 ----
+  #include <QPixmap>
+  #include <QPixmapCache>
+  #include <QStyleOptionProgressBar>
++ #include <QStyleFactory>
+  
+  #include "Formatter.h"
+  #include "Torrent.h"
+***************
+*** 525,531 ****
+    myProgressBarStyle->state = progressBarState;
+    setProgressBarPercentDone (option, tor);
+  
+!   style->drawControl (QStyle::CE_ProgressBar, myProgressBarStyle, painter);
+  
+    painter->restore ();
+  }
+--- 526,532 ----
+    myProgressBarStyle->state = progressBarState;
+    setProgressBarPercentDone (option, tor);
+  
+!   QStyleFactory::create(QString::fromLatin1 ("Fusion"))->drawControl (QStyle::CE_ProgressBar, myProgressBarStyle, painter);
+  
+    painter->restore ();
+  }
+diff -cr transmission-2.94/qt/TorrentDelegateMin.cc transmission-2.94-roand/qt/TorrentDelegateMin.cc
+*** transmission-2.94/qt/TorrentDelegateMin.cc	2015-08-01 19:00:31.677384652 +0300
+--- transmission-2.94-roand/qt/TorrentDelegateMin.cc	2016-05-15 16:01:10.000000000 +0300
+***************
+*** 17,22 ****
+--- 17,23 ----
+  #include <QPixmap>
+  #include <QPixmapCache>
+  #include <QStyleOptionProgressBar>
++ #include <QStyleFactory>
+  
+  #include <libtransmission/transmission.h>
+  #include <libtransmission/utils.h>
+***************
+*** 29,35 ****
+  enum
+  {
+    GUI_PAD = 6,
+!   BAR_WIDTH = 50,
+    BAR_HEIGHT = 16,
+    LINE_SPACING = 4
+  };
+--- 30,36 ----
+  enum
+  {
+    GUI_PAD = 6,
+!   BAR_WIDTH = 55,
+    BAR_HEIGHT = 16,
+    LINE_SPACING = 4
+  };
+***************
+*** 92,98 ****
+      const QFontMetrics nameFM (nameFont);
+      const QSize nameSize (nameFM.size (0, myNameText));
+  
+-     statusFont.setPointSize (static_cast<int> (statusFont.pointSize () * 0.85));
+      const QFontMetrics statusFM (statusFont);
+      const QSize statusSize (statusFM.size (0, myStatusText));
+  
+--- 93,98 ----
+***************
+*** 222,228 ****
+    myProgressBarStyle->textVisible = true;
+    myProgressBarStyle->textAlignment = Qt::AlignCenter;
+    setProgressBarPercentDone (option, tor);
+!   style->drawControl (QStyle::CE_ProgressBar, myProgressBarStyle, painter);
+  
+    painter->restore();
+  }
+--- 222,228 ----
+    myProgressBarStyle->textVisible = true;
+    myProgressBarStyle->textAlignment = Qt::AlignCenter;
+    setProgressBarPercentDone (option, tor);
+!   QStyleFactory::create(QString::fromLatin1 ("Fusion"))->drawControl (QStyle::CE_ProgressBar, myProgressBarStyle, painter);
+  
+    painter->restore();
+  }

@@ -1,0 +1,27 @@
+pkgbase = oracle-sqldeveloper
+	pkgdesc = A graphical tool for database development
+	pkgver = 19.2.1.247.2212
+	pkgrel = 1
+	url = http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html
+	arch = any
+	license = custom:OTN
+	depends = java-environment>=8
+	depends = java-environment<=11
+	depends = bash
+	depends = perl
+	optdepends = ksh
+	optdepends = java8-openjfx: Required to run the application with JDK8
+	optdepends = java11-openjfx: Required to run the application with JDK11
+	source = manual://sqldeveloper-19.2.1.247.2212-no-jre.zip
+	source = oracle-sqldeveloper.desktop
+	source = oracle-sqldeveloper.sh
+	source = LICENSE
+	source = java_home.patch
+	md5sums = ec986f454d747b742830284e6cd46fb0
+	md5sums = 1d17d18e10ab85dead0770e8840273b3
+	md5sums = 26c1dc933a9ab58a4245f4f351717645
+	md5sums = 71a4092467209c160d0f34abbc08e049
+	md5sums = fe446201cc0d5326ecb757c384c67232
+
+pkgname = oracle-sqldeveloper
+

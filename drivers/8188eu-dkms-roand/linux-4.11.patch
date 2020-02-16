@@ -1,0 +1,15 @@
+*** a/include/osdep_service.h 2015-04-17 09:54:43.000000000 +0300
+--- b/include/osdep_service.h 2017-05-28 11:12:26.723593001 +0300
+***************
+*** 20,25 ****
+--- 20,29 ----
+ #ifndef __OSDEP_SERVICE_H_
+ #define __OSDEP_SERVICE_H_
+
++ #include <linux/version.h>
++ #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++ #include <linux/sched/signal.h>
++ #endif
+
+ #define _FAIL 0
+ #define _SUCCESS 1

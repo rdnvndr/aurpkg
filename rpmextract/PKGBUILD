@@ -1,0 +1,17 @@
+# $Id: PKGBUILD 245324 2015-09-04 20:25:12Z tpowa $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+
+pkgname=rpmextract
+pkgver=1.0
+pkgrel=7
+pkgdesc="Script to convert or extract RPM archives (contains rpm2cpio)"
+url="http://www.archlinux.org"
+arch=('any')
+license=('GPL')
+depends=('bash' 'libarchive' 'coreutils')
+
+package() {
+  install -d ${pkgdir}/usr/bin
+  install -m755 ${srcdir}/rpmextract.sh ${pkgdir}/usr/bin/
+  install -m755 ${srcdir}/rpm2cpio.sh ${pkgdir}/usr/bin/
+}

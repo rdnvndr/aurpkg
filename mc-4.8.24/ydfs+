@@ -1,0 +1,84 @@
+#! /bin/sh
+#
+# extfs support for ydcmd
+# Written by Rodionov Andrey <roand@inbox.ru>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ydcmd_list ()
+{
+   ugid="`id -nu` `id -ng`"
+   date_mc='\3\-\2\-\1 \4'
+   date_cr='....\-..\-..T..:..:.....:..'
+   date_re='\(....\)\-\(..\)\-\(..\)T\(..:..:..\)...:..'
+   pred='<dir>'
+   pref='[0-9]*'
+   list()
+   {  
+      ydcmd ls --long $1 | while read url; do
+         echo $url | sed -n "s/$date_cr\s*$date_re\s*\($pred\)\s*\(.*\)/drwxr-xr-x 1 $ugid 0 $date_mc $2\/\6/p;s/$date_cr\s*$date_re\s*\($pref\)\s*\(.*\)/-rw-r--r-- 1 $ugid \5 $date_mc $2\/\6/p"
+         itemtype=`echo $url| sed -n "s/$date_cr\s*$date_re\s*\($pred\)\s*\(.*\)/\5/p"`
+         if [ "$itemtype" == "<dir>" ]; then
+            item=`echo $url| sed -n "s/$date_cr\s*$date_re\s*\($pred\)\s*\(.*\)/\6/p"`
+            list "$1/$item" "$2\/$item" 
+         fi      
+      done
+   }
+   list
+}
+
+ydcmd_copyout ()
+{
+    rm "$3"
+    ydcmd get --rsync --quiet "/$2" "$3"
+}
+
+ydcmd_copyin ()
+{
+    ydcmd put --rsync  --quiet "$3" "/$2"
+}
+
+ydcmd_mkdir ()
+{
+  ydcmd mkdir --quiet "/$2"
+}
+
+ydcmd_rm ()
+{
+  ydcmd rm --quiet "/$2"
+}
+
+ydcmd_rmdir ()
+{
+  ydcmd rm --quiet "/$2"
+}
+
+# override any locale for dates
+LC_DATE=C
+export LC_DATE
+
+umask 077
+
+cmd="$1"
+shift
+case "$cmd" in
+  list)    ydcmd_list    "" | sort -k 8 ;;
+  copyout) ydcmd_copyout "$@" ;;
+  copyin)  ydcmd_copyin  "$@" ;;
+  mkdir)   ydcmd_mkdir   "$@" ;;
+  rm)      ydcmd_rm      "$@" ;;
+  rmdir)   ydcmd_rmdir   "$@" ;;
+  *) exit 1 ;;
+esac
+exit 0

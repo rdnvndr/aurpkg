@@ -1,0 +1,359 @@
+diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
+*** mc-4.8.17/src/filemanager/panel.c	2016-05-07 18:42:52.000000000 +0300
+--- mc-roand/src/filemanager/panel.c	2016-06-11 00:27:09.000000000 +0300
+***************
+*** 79,84 ****
+--- 79,128 ----
+  
+  #include "panel.h"
+  
++ #ifdef HAVE_SLANG
++ #	define MCLIB_V_RTEE_CHAR SLSMG_RTEE_CHAR
++ #	define MCLIB_V_LTEE_CHAR SLSMG_LTEE_CHAR
++ #	define MCLIB_V_UTEE_CHAR SLSMG_UTEE_CHAR
++ #	define MCLIB_V_DTEE_CHAR SLSMG_DTEE_CHAR
++ #else
++ #	define MCLIB_V_RTEE_CHAR ACS_RTEE
++ #	define MCLIB_V_LTEE_CHAR ACS_LTEE
++ #	define MCLIB_V_UTEE_CHAR ACS_TTEE
++ #	define MCLIB_V_DTEE_CHAR ACS_BTEE
++ #endif
++ 
++ #ifdef UTF8
++ #include <wchar.h>
++ #include <wctype.h>
++ 
++ #define mc_wchar_t wchar_t
++ #define mc_wint_t wint_t
++ 
++ #else
++ 
++ #define mc_wchar_t unsigned char
++ #define mc_wint_t int
++ 
++ #endif
++ 
++ void mclib_v_draw_object(int _y, int _x, mc_wchar_t _ch){
++  #ifdef HAVE_SLANG
++  #ifdef UTF8 
++      SLsmg_draw_object (_y, _x, (SLwchar_Type) _ch);
++  #else 
++      SLsmg_draw_object (_y, _x, (unsigned char) _ch); 
++  #endif 
++  #else
++      /*
++      FIXME: needed to test with --with-screen=ncurses
++      */
++       attron(A_ALTCHARSET);
++       mvaddch(_y, _x, (const chtype) _ch); 
++       attroff(A_ALTCHARSET);
++  #endif
++ }
++ 
++ 
+  /*** global variables ****************************************************************************/
+  
+  /* The hook list for the select file function */
+***************
+*** 445,450 ****
+--- 489,630 ----
+      }
+  }
+  
++ 
++ static void
++ panel_update_hline (WPanel *panel) {
++ 
++     int orignx = panel->widget.x;
++     int origny = panel->widget.y;
++ 	
++ 	//tty_setcolor (COLOR_NORMAL);
++ 
++     if (panel->list_format==list_full) {
++ 	mclib_v_draw_object (origny, orignx+panel->widget.cols-22, MCLIB_V_UTEE_CHAR);
++ 	mclib_v_draw_object (origny, orignx+panel->widget.cols-14, MCLIB_V_UTEE_CHAR);
++     }
++ 
++     if (panel->list_format==list_brief) {
++        int brief_cols = panel->brief_cols;
++        for (int i=1;i<brief_cols;i++) 
++           mclib_v_draw_object (origny, orignx+((int)((panel->widget.cols-2)/brief_cols))*i, MCLIB_V_UTEE_CHAR);
++     }
++ 
++     if (panel->list_format==list_user) {
++ 	int     length;
++ 	GSList *format, *home;
++ 
++ 	length     = 1;
++ 	home     = panel->format;
++ 	int width = panel->widget.cols;
++ 
++ 	for (format = home; format != NULL; format = g_slist_next (format)) {
++ 
++ 	    if (length == width)
++ 		break;
++       format_item_t *fi = (format_item_t *) format->data;
++ 	    if (fi->string_fn){
++ 		int len;
++ 
++ 		len = fi->field_len;
++ 		if (len + length > width)
++ 		    len = width - length;
++ 		if (len >= BUF_MEDIUM)
++ 		    len = BUF_MEDIUM - 1;
++ 		if (len <= 0)
++ 		    break;
++ 
++ 		length += len;
++ 
++ 	    } else {
++ 		mclib_v_draw_object (origny, orignx+length, MCLIB_V_UTEE_CHAR);
++ 
++ 		//if (panel->split){
++ 		//    mclib_v_draw_object (origny, orignx+length+panel->widget.cols/2-1, MCLIB_V_UTEE_CHAR);
++ 		//}
++ 		length++;
++ 	    }
++ 	
++ 	}
++ 	//if (panel->split){
++ 	//    mclib_v_draw_object (origny, orignx+panel->widget.cols/2-1, MCLIB_V_UTEE_CHAR);
++ 	//}
++     }
++ 
++ }
++ 
++  static void panel_update_fline (WPanel *panel)
++  {
++     int pos_mini_info;
++   //  if (show_mini_info)
++  	pos_mini_info = 3;
++   //  else
++   //  {
++  	// pos_mini_info = 1;
++   //  }
++     
++     //tty_setcolor(COLOR_NORMAL);
++ 
++     int orignx = panel->widget.x;
++     int origny = panel->widget.y;
++     
++     if (panel->list_format==list_full)
++     {
++        mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+panel->widget.cols-22, MCLIB_V_DTEE_CHAR);
++        mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+panel->widget.cols-14, MCLIB_V_DTEE_CHAR);
++     }
++     
++     if (panel->list_format==list_brief)
++     {
++        int brief_cols = panel->brief_cols;
++        for (int i=1;i<brief_cols;i++) 
++           mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+((int)((panel->widget.cols-2)/brief_cols))*i, MCLIB_V_DTEE_CHAR);
++     }
++     
++     
++     if (panel->list_format==list_user)
++     {
++           int      length;
++           GSList *format, *home;
++            
++  	 length    = 1;
++           home      = panel->format;
++  	 int width = panel->widget.cols;
++  
++           for (format = home; format != NULL; format = g_slist_next (format)) {
++  
++      	    if (length == width)
++ 	         break;
++       format_item_t *fi = (format_item_t *) format->data;  
++  	    if (fi->string_fn){
++  	        int len;
++  
++  		len = fi->field_len;
++  		if (len + length > width)
++  		    len = width - length;
++  		if (len >= BUF_MEDIUM)
++  		    len = BUF_MEDIUM - 1;
++  		if (len <= 0)
++  		    break;
++  
++  	        length += len;
++  		
++  	    } else {
++  		mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+length, MCLIB_V_DTEE_CHAR);
++  		
++  		
++  		//if (panel->split){
++  		//    mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+length+panel->widget.cols/2-1, MCLIB_V_DTEE_CHAR);
++  		//}
++  		length++;
++  	    }
++  	    //if (panel->split){
++  		//mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+panel->widget.cols/2-1, MCLIB_V_DTEE_CHAR);
++  	    //}
++  	}
++  
++     }   
++  }
++ 
+  /* --------------------------------------------------------------------------------------------- */
+  /** String representations of various file attributes name */
+  
+***************
+*** 1119,1124 ****
+--- 1299,1305 ----
+          tty_draw_hline (w->y + y, w->x + 1, ACS_HLINE, w->cols - 2);
+          /* Status displays total marked size.
+           * Centered in panel, full format. */
++         panel_update_fline (panel);
+          display_total_marked_size (panel, y, -1, FALSE);
+      }
+  }
+***************
+*** 1274,1291 ****
+      }
+  
+      widget_gotoyx (w, 0, 1);
+-     tty_print_string (panel_history_prev_item_sign);
+  
+      tmp = panels_options.show_dot_files ? panel_hiddenfiles_sign_show : panel_hiddenfiles_sign_hide;
+!     tmp = g_strdup_printf ("%s[%s]%s", tmp, panel_history_show_list_sign,
+!                            panel_history_next_item_sign);
+  
+!     widget_gotoyx (w, 0, w->cols - 6);
+      tty_print_string (tmp);
+  
+      g_free (tmp);
+! 
+!     widget_gotoyx (w, 0, 3);
+  
+      if (panel->is_panelized)
+          tty_printf (" %s ", _("Panelize"));
+--- 1455,1471 ----
+      }
+  
+      widget_gotoyx (w, 0, 1);
+  
+      tmp = panels_options.show_dot_files ? panel_hiddenfiles_sign_show : panel_hiddenfiles_sign_hide;
+!     tmp = g_strdup_printf("%s%s%s%s",panel_history_prev_item_sign,tmp,panel_history_show_list_sign,panel_history_next_item_sign);
+  
+! 
+!     widget_gotoyx (w, 0, w->cols - 5);
+      tty_print_string (tmp);
+  
+      g_free (tmp);
+!     panel_update_hline (panel);    
+!     widget_gotoyx (&panel->widget, 0, 2);
+  
+      if (panel->is_panelized)
+          tty_printf (" %s ", _("Panelize"));
+***************
+*** 1335,1340 ****
+--- 1515,1521 ----
+      }
+  
+      show_free_space (panel);
++     panel_update_fline (panel);
+  
+      if (panel->active)
+          tty_set_normal_attrs ();
+***************
+*** 1517,1523 ****
+              panel->sort_info.reverse ? panel_sort_up_sign : panel_sort_down_sign;
+          char *str;
+  
+!         str = g_strdup_printf ("%s%s", sort_sign, Q_ (panel->sort_field->hotkey));
+          widget_gotoyx (panel, 1, 1);
+          tty_print_string (str);
+          g_free (str);
+--- 1698,1704 ----
+              panel->sort_info.reverse ? panel_sort_up_sign : panel_sort_down_sign;
+          char *str;
+  
+!         str = g_strdup_printf ("%s", Q_ (panel->sort_field->hotkey));
+          widget_gotoyx (panel, 1, 1);
+          tty_print_string (str);
+          g_free (str);
+***************
+*** 3823,3838 ****
+          if (event->y == 0)
+          {
+              /* top frame */
+!             if (event->x == 1)
+                  /* "<" button */
+                  directory_history_prev (panel);
+              else if (event->x == w->cols - 2)
+                  /* ">" button */
+                  directory_history_next (panel);
+!             else if (event->x >= w->cols - 5 && event->x <= w->cols - 3)
+                  /* "^" button */
+                  directory_history_list (panel);
+!             else if (event->x == w->cols - 6)
+                  /* "." button show/hide hidden files */
+                  send_message (midnight_dlg, NULL, MSG_ACTION, CK_ShowHidden, NULL);
+              else
+--- 4004,4019 ----
+          if (event->y == 0)
+          {
+              /* top frame */
+!             if (event->x == w->cols - 5)
+                  /* "<" button */
+                  directory_history_prev (panel);
+              else if (event->x == w->cols - 2)
+                  /* ">" button */
+                  directory_history_next (panel);
+!             else if (event->x == w->cols - 3)
+                  /* "^" button */
+                  directory_history_list (panel);
+!             else if (event->x == w->cols - 4)
+                  /* "." button show/hide hidden files */
+                  send_message (midnight_dlg, NULL, MSG_ACTION, CK_ShowHidden, NULL);
+              else
+***************
+*** 3845,3851 ****
+              break;
+          }
+  
+!         if (event->y == 1)
+          {
+              /* sort on clicked column */
+              mouse_sort_col (panel, event->x + 1);
+--- 4026,4032 ----
+              break;
+          }
+  
+!         if (event->y == 1 && event->x == 1)
+          {
+              /* sort on clicked column */
+              mouse_sort_col (panel, event->x + 1);
+***************
+*** 3854,3859 ****
+--- 4035,4062 ----
+  
+          if (!is_active)
+              change_panel ();
++         if (event->y <= 1)
++         {
++             mark_if_marking (panel, event);
++             if (panels_options.mouse_move_pages)
++                 prev_page (panel);
++             else
++                 move_up (panel);
++             event->result.repeat = msg == MSG_MOUSE_DOWN;
++             break;
++         }
++   
++         if (!((panel->top_file + event->y-1 <= panel->dir.len) && event->y-1 <= panel_lines (panel)))
++         {
++             mark_if_marking (panel, event);
++             if (panels_options.mouse_move_pages)
++                 next_page (panel);
++             else
++                 move_down (panel);
++             event->result.repeat = msg == MSG_MOUSE_DOWN;
++             break;
++         }
++ 
+          MC_FALLTHROUGH;
+  
+      case MSG_MOUSE_DRAG:

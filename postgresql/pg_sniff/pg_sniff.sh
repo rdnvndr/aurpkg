@@ -1,0 +1,1 @@
+tshark -i lo -T fields  -e pgsql.query -p -f "dst port 5432"

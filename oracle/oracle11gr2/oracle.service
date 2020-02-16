@@ -1,0 +1,29 @@
+[Unit]
+Description=Oracle service
+After=network.target nss-lookup.target
+
+[Service]
+ProtectHome=false
+Type=forking
+User=oracle
+TimeoutSec=600
+
+Environment=ORACLE_BASE=/home/oracle/app/oracle
+Environment=ORACLE_HOME=/home/oracle/app/oracle/product/11.2.0/dbhome
+
+ExecStart=/bin/bash -c '\
+  PATH=$PATH:$ORACLE_HOME/bin; \
+  $ORACLE_HOME/bin/lsnrctl start; \
+  $ORACLE_HOME/bin/dbstart $ORACLE_HOME; \
+'
+ExecStartPost=+/bin/bash -c 'touch /var/lock/oracle'
+
+ExecStop=/bin/bash -c '\
+  PATH=$PATH:$ORACLE_HOME/bin; \
+  $ORACLE_HOME/bin/lsnrctl stop; \
+  $ORACLE_HOME/bin/dbshut $ORACLE_HOME; \
+'
+ExecStopPost=+/bin/bash -c 'rm -f /var/lock/oracle'
+
+[Install]
+WantedBy=multi-user.target

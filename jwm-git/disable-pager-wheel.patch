@@ -1,0 +1,24 @@
+diff -cr a/src/pager.c b/src/pager.c
+*** a/src/pager.c	2016-09-25 11:30:07.601291162 +0300
+--- b/src/pager.c	2016-09-25 11:28:50.000000000 +0300
+***************
+*** 224,241 ****
+        StartPagerMove(cp, x, y);
+        break;
+  
+-    case Button4:
+- 
+-       /* Change to the previous desktop. */
+-       LeftDesktop();
+-       break;
+- 
+-    case Button5:
+- 
+-       /* Change to the next desktop. */
+-       RightDesktop();
+-       break;
+- 
+     default:
+        break;
+     }
+--- 224,229 ----

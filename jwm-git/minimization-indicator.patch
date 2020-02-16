@@ -1,0 +1,45 @@
+diff -cr jwm/src/taskbar.c jwm-master/src/taskbar.c
+*** jwm/src/taskbar.c	2014-05-17 01:06:06.000000000 +0400
+--- jwm-master/src/taskbar.c	2014-05-25 21:17:06.137489458 +0400
+***************
+*** 721,726 ****
+--- 721,742 ----
+           button.text = tp->clients->client->name;
+        }
+        DrawButton(&button);
++       
++       if(tp->clients->client->state.status & STAT_MINIMIZED) {
++         const int isize = (bp->itemHeight + 7) / 8;
++         int i;
++         
++         GC gc; 
++         gc = JXCreateGC(display, button.drawable, 0, NULL);
++         JXSetForeground(display, gc, colors[COLOR_TRAY_FG]);
++         for(i = 0; i <= isize; i++) {
++            const int xc = x - 6 + button.width + isize - i - button.border;
++            const int y1 = bp->itemHeight - 3 - isize + i - button.border - 1;
++            const int y2 = bp->itemHeight - 3 - button.border - 1;
++            JXDrawLine(display, button.drawable, gc, xc, y1, xc, y2);
++         }
++       }
++ 
+        if(displayName) {
+           Release(displayName);
+        }
+diff -cr jwm/src/client.c jwm-master/src/client.c
+*** jwm/src/client.c	2014-05-17 01:06:06.000000000 +0400
+--- jwm-master/src/client.c	2014-05-25 21:26:14.822450433 +0400
+***************
+*** 318,323 ****
+--- 318,328 ----
+     if(np->state.status & STAT_ACTIVE) {
+        FocusNextStacked(np);
+     }
++    /* A minimized client can't be active. */
++    if(activeClient == np) {
++       activeClient = NULL;
++       np->state.status &= ~STAT_ACTIVE;
++    }
+  
+     if(lower) {
+        /* Move this client to the end of the layer list. */

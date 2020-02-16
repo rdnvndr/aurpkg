@@ -1,0 +1,191 @@
+diff -cr jwm-1592/po/ru.po jwm-roand/po/ru.po
+*** jwm-1592/po/ru.po	2017-03-27 02:46:08.000000000 +0300
+--- jwm-roand/po/ru.po	2017-03-27 21:13:07.103308878 +0300
+***************
+*** 337,356 ****
+  
+  #: src/taskbar.c:444 src/winmenu.c:48
+  msgid "Close"
+! msgstr "Закрыть"
+  
+  #: src/taskbar.c:451 src/winmenu.c:66
+  msgid "Minimize"
+! msgstr "Свернуть"
+  
+  #: src/taskbar.c:458 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
+  #: src/winmenu.c:106
+  msgid "Restore"
+! msgstr "Восстановить"
+  
+  #: src/taskbar.c:465 src/winmenu.c:179
+  msgid "Send To"
+! msgstr "Переместить на рабочий стол"
+  
+  #: src/taskbar.c:961
+  #, c-format
+--- 337,356 ----
+  
+  #: src/taskbar.c:444 src/winmenu.c:48
+  msgid "Close"
+! msgstr "  Закрыть"
+  
+  #: src/taskbar.c:451 src/winmenu.c:66
+  msgid "Minimize"
+! msgstr "  Свернуть"
+  
+  #: src/taskbar.c:458 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
+  #: src/winmenu.c:106
+  msgid "Restore"
+! msgstr "  Восстановить"
+  
+  #: src/taskbar.c:465 src/winmenu.c:179
+  msgid "Send To"
+! msgstr "  Переместить на стол"
+  
+  #: src/taskbar.c:961
+  #, c-format
+***************
+*** 390,460 ****
+  
+  #: src/winmenu.c:49
+  msgid "Kill"
+! msgstr "Ликвидировать"
+  
+  #: src/winmenu.c:57
+  msgid "Resize"
+! msgstr "Изменить размер"
+  
+  #: src/winmenu.c:60
+  msgid "Move"
+! msgstr "Переместить"
+  
+  #: src/winmenu.c:72
+  msgid "Unshade"
+! msgstr "Развернуть из заголовка"
+  
+  #: src/winmenu.c:74
+  msgid "Shade"
+! msgstr "Свернуть в заголовок"
+  
+  #: src/winmenu.c:81
+  msgid "Maximize-y"
+! msgstr "Развернуть-y"
+  
+  #: src/winmenu.c:86
+  msgid "Maximize-x"
+! msgstr "Развернуть-x"
+  
+  #: src/winmenu.c:90
+  msgid "Maximize"
+! msgstr "Развернуть"
+  
+  #: src/winmenu.c:112
+  msgid "Unstick"
+! msgstr "Только на этом рабочем столе"
+  
+  #: src/winmenu.c:114
+  msgid "Stick"
+! msgstr "Всегда на видимом рабочем столе"
+  
+  #: src/winmenu.c:139
+  msgid "Layer"
+! msgstr "Расположение окна"
+  
+  #: src/winmenu.c:148
+  msgid "[Above]"
+! msgstr "[Всегда наверху]"
+  
+  #: src/winmenu.c:150
+  msgid "Above"
+! msgstr "Всегда наверху"
+  
+  #: src/winmenu.c:153
+  msgid "[Normal]"
+! msgstr "[Также как другие]"
+  
+  #: src/winmenu.c:155
+  msgid "Normal"
+! msgstr "Также как другие"
+  
+  #: src/winmenu.c:158
+  msgid "[Below]"
+! msgstr "[Всегда позади]"
+  
+  #: src/winmenu.c:160
+  msgid "Below"
+! msgstr "Всегда позади"
+  
+  #~ msgid "invalid tray width: %d"
+  #~ msgstr "недопустимое значение ширины панели: %d"
+--- 390,460 ----
+  
+  #: src/winmenu.c:49
+  msgid "Kill"
+! msgstr "  Ликвидировать"
+  
+  #: src/winmenu.c:57
+  msgid "Resize"
+! msgstr "  Изменить размер"
+  
+  #: src/winmenu.c:60
+  msgid "Move"
+! msgstr "  Переместить"
+  
+  #: src/winmenu.c:72
+  msgid "Unshade"
+! msgstr "  Развернуть из заголовка"
+  
+  #: src/winmenu.c:74
+  msgid "Shade"
+! msgstr "  Свернуть в заголовок"
+  
+  #: src/winmenu.c:81
+  msgid "Maximize-y"
+! msgstr "  Развернуть по вертикали"
+  
+  #: src/winmenu.c:86
+  msgid "Maximize-x"
+! msgstr "  Развернуть по горизонтали"
+  
+  #: src/winmenu.c:90
+  msgid "Maximize"
+! msgstr "  Развернуть"
+  
+  #: src/winmenu.c:112
+  msgid "Unstick"
+! msgstr "  Показать на этом столе"
+  
+  #: src/winmenu.c:114
+  msgid "Stick"
+! msgstr "  Показать на всех столах"
+  
+  #: src/winmenu.c:139
+  msgid "Layer"
+! msgstr "  Расположение окна"
+  
+  #: src/winmenu.c:148
+  msgid "[Above]"
+! msgstr " [Впереди всех]"
+  
+  #: src/winmenu.c:150
+  msgid "Above"
+! msgstr " Впереди всех"
+  
+  #: src/winmenu.c:153
+  msgid "[Normal]"
+! msgstr " [Обычное]"
+  
+  #: src/winmenu.c:155
+  msgid "Normal"
+! msgstr " Обычное"
+  
+  #: src/winmenu.c:158
+  msgid "[Below]"
+! msgstr " [Позади всех]"
+  
+  #: src/winmenu.c:160
+  msgid "Below"
+! msgstr " Позади всех"
+  
+  #~ msgid "invalid tray width: %d"
+  #~ msgstr "недопустимое значение ширины панели: %d"

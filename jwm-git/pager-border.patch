@@ -1,0 +1,30 @@
+diff -cr jwm-2.1.0/src/pager.c jwm-roand/src/pager.c
+*** jwm-2.1.0/src/pager.c	2012-03-03 12:14:03.543597080 +0000
+--- jwm-roand/src/pager.c	2012-03-03 13:44:40.060193629 +0000
+***************
+*** 564,569 ****
+--- 564,576 ----
+                   (deskWidth + 1) * x - 1, 0,
+                   (deskWidth + 1) * x - 1, height);
+     }
++    JXSetForeground(display, rootGC, colors[COLOR_TRAY_DOWN]);
++    JXDrawLine(display, buffer, rootGC, 0,0, width,0);
++    JXDrawLine(display, buffer, rootGC, 0,0, 0,height);
++  
++    JXSetForeground(display, rootGC, colors[COLOR_TRAY_UP]);
++    JXDrawLine(display, buffer, rootGC, 0,height-1, width,height-1);
++    JXDrawLine(display, buffer, rootGC, width-1, 0, width-1,height);
+  
+  }
+  
+--- a/src/pager.c
++++ b/src/pager.c
+@@ -555,7 +555,7 @@ void DrawPager(const PagerType *pp)
+    }
+ 
+    /* Draw the desktop dividers. */
+-   JXSetForeground(display, rootGC, colors[COLOR_PAGER_OUTLINE]);
++   JXSetForeground(display, rootGC, colors[COLOR_PAGER_FG]);
+    for(x = 1; x < settings.desktopHeight; x++) {
+       JXDrawLine(display, buffer, rootGC,
+                  0, (deskHeight + 1) * x - 1,

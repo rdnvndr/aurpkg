@@ -1,0 +1,19 @@
+[Unit]
+
+Description=Trac service
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/sh -c '\
+   INSTANCES="3050 3051 3052"; \
+   PYTHON_EGG_CACHE="/home/trac/egg_cache"; \
+   ARGS="-e /home/trac/projects"; \
+   export PYTHON_EGG_CACHE; \
+   for I in $INSTANCES; do  \
+      /usr/bin/tracd -d --group=trac --user=trac -p $I $ARGS ; \
+   done; \
+'
+
+[Install]
+WantedBy=multi-user.target

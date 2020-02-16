@@ -1,0 +1,16 @@
+pkgname=compat-libpthread_nonshared
+pkgver=2.31
+pkgrel=1
+pkgdesc=""
+arch=('x86_64')
+url=""
+license=('GPL')
+
+build() {
+  ar cr libpthread_nonshared.a
+}
+
+package() {
+  install -dm 0755  "$pkgdir/usr/lib"
+  install -m 0644 libpthread_nonshared.a "$pkgdir/usr/lib/libpthread_nonshared.a"
+}

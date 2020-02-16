@@ -1,0 +1,18 @@
+diff -cr jwm-1592/src/taskbar.c jwm-roand/src/taskbar.c
+*** jwm-1592/src/taskbar.c	2017-04-24 23:33:45.825476248 +0300
+--- jwm-roand/src/taskbar.c	2017-04-24 23:34:42.658808925 +0300
+***************
+*** 324,335 ****
+        case Button3:
+           ShowClientList(bar, entry);
+           break;
+-       case Button4:
+-          FocusPrevious();
+-          break;
+-       case Button5:
+-          FocusNext();
+-          break;
+        default:
+           break;
+        }
+--- 324,329 ----

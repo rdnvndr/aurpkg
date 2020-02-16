@@ -1,0 +1,173 @@
+*** a/src/platformsupport/themes/genericunix/qgenericunixthemes_p.h      2019-01-28 20:11:52.000000000 +0300
+--- b/src/platformsupport/themes/genericunix/qgenericunixthemes_p.h  2019-02-04 21:06:22.517881192 +0300
+***************
+*** 83,88 ****
+--- 83,89 ----
+  
+      const QFont *font(Font type) const override;
+      QVariant themeHint(ThemeHint hint) const override;
++     const QPalette *palette(Palette type = SystemPalette) const override;
+  
+      static QStringList xdgIconThemePaths();
+      static QStringList iconFallbackPaths();
+*** a/src/platformsupport/themes/genericunix/qgenericunixthemes.cpp	2019-01-28 20:11:52.000000000 +0300
+--- b/src/platformsupport/themes/genericunix/qgenericunixthemes.cpp	2019-02-04 19:36:16.140947714 +0300
+***************
+*** 143,166 ****
+  
+      const QFont systemFont;
+      QFont fixedFont;
+  };
+  
+  QGenericUnixTheme::QGenericUnixTheme()
+      : QPlatformTheme(new QGenericUnixThemePrivate())
+  {
+  }
+  
+  const QFont *QGenericUnixTheme::font(Font type) const
+  {
+      Q_D(const QGenericUnixTheme);
+!     switch (type) {
+!     case QPlatformTheme::SystemFont:
+!         return &d->systemFont;
+!     case QPlatformTheme::FixedFont:
+!         return &d->fixedFont;
+!     default:
+!         return 0;
+!     }
+  }
+  
+  // Helper to return the icon theme paths from XDG.
+--- 143,166 ----
+  
+      const QFont systemFont;
+      QFont fixedFont;
++     void refresh();
++ 
++     ResourceHelper resources;
++     QStringList styleNames;
++ 
++ 
+  };
+  
+  QGenericUnixTheme::QGenericUnixTheme()
+      : QPlatformTheme(new QGenericUnixThemePrivate())
+  {
++     d_func()->refresh();
+  }
+  
+  const QFont *QGenericUnixTheme::font(Font type) const
+  {
+      Q_D(const QGenericUnixTheme);
+!     return d->resources.fonts[type];
+  }
+  
+  // Helper to return the icon theme paths from XDG.
+***************
+*** 215,220 ****
+--- 215,221 ----
+  
+  QVariant QGenericUnixTheme::themeHint(ThemeHint hint) const
+  {
++     Q_D(const QGenericUnixTheme);
+      switch (hint) {
+      case QPlatformTheme::SystemIconFallbackThemeName:
+          return QVariant(QString(QStringLiteral("hicolor")));
+***************
+*** 225,233 ****
+      case QPlatformTheme::DialogButtonBoxButtonsHaveIcons:
+          return QVariant(true);
+      case QPlatformTheme::StyleNames: {
+!         QStringList styleNames;
+!         styleNames << QStringLiteral("Fusion") << QStringLiteral("Windows");
+!         return QVariant(styleNames);
+      }
+      case QPlatformTheme::KeyboardScheme:
+          return QVariant(int(X11KeyboardScheme));
+--- 226,232 ----
+      case QPlatformTheme::DialogButtonBoxButtonsHaveIcons:
+          return QVariant(true);
+      case QPlatformTheme::StyleNames: {
+!         return QVariant(d->styleNames);
+      }
+      case QPlatformTheme::KeyboardScheme:
+          return QVariant(int(X11KeyboardScheme));
+***************
+*** 263,268 ****
+--- 262,273 ----
+  }
+  #endif
+  
++ const QPalette *QGenericUnixTheme::palette(QPlatformTheme::Palette type) const
++ {
++    Q_D(const QGenericUnixTheme);
++    return d->resources.palettes[type];
++ }
++ 
+  #if QT_CONFIG(settings)
+  class QKdeThemePrivate : public QPlatformThemePrivate
+  {
+***************
+*** 881,884 ****
+--- 886,946 ----
+      return result;
+  }
+  
++ 
++ 
++ void QGenericUnixThemePrivate::refresh()
++ {
++     resources.clear();
++     QSettings settings(QSettings::UserScope, QLatin1String("Trolltech"));
++ 
++     settings.beginGroup(QLatin1String("Qt"));
++ 
++     QStringList strlist;
++     int i;
++     QPalette pal(Qt::black);
++     int groupCount = 0;
++     strlist = settings.value(QLatin1String("Palette/active")).toStringList();
++     if (!strlist.isEmpty()) {
++         ++groupCount;
++         for (i = 0; i < qMin(strlist.count(), int(QPalette::NColorRoles)); i++)
++             pal.setColor(QPalette::Active, (QPalette::ColorRole) i,
++                          QColor(strlist[i]));
++     }
++     strlist = settings.value(QLatin1String("Palette/inactive")).toStringList();
++     if (!strlist.isEmpty()) {
++         ++groupCount;
++         for (i = 0; i < qMin(strlist.count(), int(QPalette::NColorRoles)); i++)
++             pal.setColor(QPalette::Inactive, (QPalette::ColorRole) i,
++                          QColor(strlist[i]));
++     }
++     strlist = settings.value(QLatin1String("Palette/disabled")).toStringList();
++     if (!strlist.isEmpty()) {
++         ++groupCount;
++         for (i = 0; i < qMin(strlist.count(), int(QPalette::NColorRoles)); i++)
++             pal.setColor(QPalette::Disabled, (QPalette::ColorRole) i,
++                          QColor(strlist[i]));
++     }
++ 
++     resources.palettes[QPlatformTheme::SystemPalette] = new QPalette(pal);
++ 
++     QFont *font = new QFont(QLatin1String(defaultSystemFontNameC), defaultSystemFontSize);
++     QString fontDescription;
++     fontDescription = settings.value(QLatin1String("font")).toString();
++     font->fromString(fontDescription );
++ 
++     resources.fonts[QPlatformTheme::SystemFont] = font;
++ 
++     resources.fonts[QPlatformTheme::FixedFont] =
++             new QFont(QStringLiteral("monospace"), font->pointSize());
++ 
++ 
++     QString stylename = settings.value(QLatin1String("style")).toString();
++     
++     styleNames.push_front(stylename);
++ 
++     settings.endGroup(); // Qt
++ 
++     return;
++ }
++ 
+  QT_END_NAMESPACE

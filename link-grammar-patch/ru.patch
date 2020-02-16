@@ -1,0 +1,46 @@
+diff -cr ru/4.0.dict ru-new/4.0.dict
+*** ru/4.0.dict	2018-11-17 20:40:00.000000000 +0300
+--- ru-new/4.0.dict	2018-12-25 01:16:35.786802005 +0300
+***************
+*** 757,762 ****
+--- 757,776 ----
+  обе.cfi: {Api-} & {Nip+}  & (Ji- or (Sp3+ or SIp3- or [[Wd-]]) or ((Xt- or [[]]) & S-) or Nip- or <макро-сущ-i> or N-);
+  обе.cfv: {Api-} & {Nip+}  & (Jv- or [MVv-] or [MVIv+] or Nvp- or <макро-сущ-v> or N-); % ЧИСЛ,вн
+  
++ NUMBERS: ({Api- or ET-} & ( Ngm+ or Nip+ ) & (Ji- or (Sp3+ or SIp3- or [[Wd-]]) or ((Xt- or [[]]) & S-) or Nip- or <макро-сущ-i> or N-))
++       or ({Api- or ET-} & ( Ngm+ or Nip+ or NIgm- ) & (Jv- or [MVv-] or [MVIv+] or Nvp- or <макро-сущ-v> or N-))
++       or ({Api- or ET-} & ( Ngm+ ) & (Ji- or (Sp3+ or SIp3- or [[Wd-]]) or ((Xt- or [[]]) & S-) or Nip- or <макро-сущ-i> or N-))
++       or ({Api- or ET-} & ( Ngm+ or NIgm- ) & (Jv- or [MVv-] or [MVIv+] or Nvp- or <макро-сущ-v> or N-))
++       or ({Api- or ET-} & ( Ngn+ ) & (Jv- or [MVv-] or [MVIv+] or Nvp- or <макро-сущ-v> or N-))
++       or ({Api-} & {Ngm+}  & (Ji- or (Sp3+ or SIp3- or [[Wd-]]) or ((Xt- or [[]]) & S-) or Nip- or <макро-сущ-i> or N-))
++       or ({Api-} & {Ngm+}  & (Jv- or [MVv-] or [MVIv+] or Nvp- or <макро-сущ-v> or N-))
++       or ({Api-} & {Nip+}  & (Ji- or (Sp3+ or SIp3- or [[Wd-]]) or ((Xt- or [[]]) & S-) or Nip- or <макро-сущ-i> or N-))
++       or ({Api-} & {Nip+}  & (Jv- or [MVv-] or [MVIv+] or Nvp- or <макро-сущ-v> or N-))
++       or ({Api- or ET-} & { Ngp+ } & (Ji- or (Sp3+ or Sn3+ or SIp3- or [[Wd-]]) or ((Xt- or [[]]) & S-) or Nip- or <макро-сущ-i> or N-))
++       or ({Api-} & { Ngp+ } & (Jv- or [MVv-] or [MVIv+] or Nvp- or <макро-сущ-v> or N-))
++       or ({ Ng+ } & ( Jg- or [Mg-] or [ ( { Xia- } & MVag- ) or MVIag+] or Ngp- or <макро-сущ-g> or N-))
++       or ({Api-} & { Ngp+ } & (Ji- or (Sp3+ or Sn3+ or SIp3- or [[Wd-]]) or ((Xt- or [[]]) & S-) or Nip- or <макро-сущ-i> or N-));
++ 
+  %% ЧИСЛИТЕЛЬНЫЕ не обязательно требующие N+
+  %% Аднумератив, аднумеративный падеж, счетный падеж, двойственное число.
+  двое.nci трое.nci четверо.nci пятеро.nci шестеро.nci семеро.nci :  {Api- or ET-} & { Ngp+ } & (Ji- or (Sp3+ or Sn3+ or SIp3- or [[Wd-]]) or ((Xt- or [[]]) & S-) or Nip- or <макро-сущ-i> or N-); % ЧИСЛ,им
+diff -cr ru/4.0.regex ru-new/4.0.regex
+*** ru/4.0.regex	2018-11-17 20:40:00.000000000 +0300
+--- ru-new/4.0.regex	2018-12-25 00:25:55.947857019 +0300
+***************
+*** 25,31 ****
+  % NUMBERS: /^[0-9,.]*[0-9]$/
+  
+  % This parses signed numbers and ranges, e.g. "-5" and "5-10" and "9+/-6.5"
+! % NUMBERS: /^[0-9.,-]*[0-9](\+\/-[0-9.,-]*[0-9])?$/
+  
+  % Parses simple fractions e.g. "1/60" with no decimal points or anything fancy
+  % FRACTION: /^[0-9]+\/[0-9]+$/
+--- 25,31 ----
+  % NUMBERS: /^[0-9,.]*[0-9]$/
+  
+  % This parses signed numbers and ranges, e.g. "-5" and "5-10" and "9+/-6.5"
+! NUMBERS: /^[0-9.,-]*[0-9](\+\/-[0-9.,-]*[0-9])?$/
+  
+  % Parses simple fractions e.g. "1/60" with no decimal points or anything fancy
+  % FRACTION: /^[0-9]+\/[0-9]+$/

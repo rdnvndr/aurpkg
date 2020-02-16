@@ -1,0 +1,69 @@
+diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
+*** jwm-2.1.0/src/clock.c	2012-01-27 01:04:17.000000000 +0000
+--- jwm-roand/src/clock.c	2012-03-03 16:14:31.710077664 +0000
+***************
+*** 241,248 ****
+        abs(cp->mousex - x) < settings.doubleClickDelta &&
+        abs(cp->mousey - y) < settings.doubleClickDelta) {
+        if(GetTimeDifference(now, &cp->mouseTime) >= settings.popupDelay) {
+!          longTime = GetTimeString("%c", cp->zone);
+!          ShowPopup(x, y, longTime, POPUP_CLOCK);
+        }
+     }
+  
+--- 241,295 ----
+        abs(cp->mousex - x) < settings.doubleClickDelta &&
+        abs(cp->mousey - y) < settings.doubleClickDelta) {
+        if(GetTimeDifference(now, &cp->mouseTime) >= settings.popupDelay) {
+!               longTime = GetTimeString("%d %B %Y%n%A %T", cp->zone);
+!               FILE *fp1;
+!               int PresentRate = 0;
+!               int RemainingCapacity = 0;
+!               int DesignCapacity = 0;
+!               int LastFullCapacity =0;
+!               char Charging[11];
+!               fp1 = fopen("/sys/class/power_supply/BAT0/power_now","r");
+!               if(fp1 != NULL) {
+!                  fscanf(fp1,"%d",&PresentRate);
+!                  fclose(fp1);
+!               }
+!               if(fp1 != NULL) {
+!                  fp1=fopen("/sys/class/power_supply/BAT0/energy_now","r");
+!                  fscanf(fp1,"%d",&RemainingCapacity);
+!                  fclose(fp1);
+!               }
+!               fp1 = fopen("/sys/class/power_supply/BAT0/energy_full","r");
+!               if(fp1 != NULL) {
+!                  fscanf(fp1,"%d",&LastFullCapacity);
+!                  fclose(fp1);
+!               }
+!               fp1 = fopen("/sys/class/power_supply/BAT0/status","r");
+!               if(fp1 != NULL) {
+!                  fscanf(fp1,"%s",Charging);
+!                  fclose(fp1);
+!               }
+!               char *out = NULL;
+!               int Perc = (LastFullCapacity != 0)?((float)RemainingCapacity/(float)LastFullCapacity*100):0;
+!               if(PresentRate != 0) {
+!                   int Hours = 0;
+!                   int Minute = 0;
+!                   if(Charging[0] =='D') {
+!                       Hours = RemainingCapacity/PresentRate;
+!                       Minute = ((float)(RemainingCapacity)/(float)(PresentRate)-Hours)*60;
+!                       asprintf(&out,"\nРазрядка, %d%%, %.2d:%.2d",Perc,Hours,Minute);
+!                   } else {
+!                       Hours = (float)(LastFullCapacity-RemainingCapacity)/(float)PresentRate;
+!                       Minute = ((float)(LastFullCapacity-RemainingCapacity)/(float)(PresentRate)-(float)Hours)*60;
+!                       asprintf(&out,"\nЗарядка, %d%%, %.2d:%.2d",Perc,Hours,Minute);
+!                   }
+!               } else {
+!                  if(Charging[0] =='D')
+!                     asprintf(&out,"\nРазрядка, %d%%, none",Perc);
+!                  else
+!                     asprintf(&out,"\nЗарядка, %d%%, none",Perc);
+!               }
+!               ShowPopup(x, y, strcat(longTime,out), POPUP_CLOCK);
+!               free(out);
+        }
+     }
+  

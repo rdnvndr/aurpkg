@@ -1,0 +1,48 @@
+# Contributor: Ali H. Caliskan <ali.h.caliskan//gmail.com>
+
+_filename1=linux.x64_11gR2_database_1of2.zip 
+_filename2=linux.x64_11gR2_database_2of2.zip 
+pkgname=oracle
+pkgver=11gR2
+pkgrel=1
+pkgdesc="Database Management System"
+url="http://www.oracle.com"
+arch=('x86_64')
+license=('OTN')
+install=${pkgname}.install
+depends=('java-runtime' 'ksh' 'rpm' 'gawk' 'gdb' 'libaio' 'libelf' \
+	 'sysstat' 'libstdc++5')
+source=("$_filename1" "$_filename2" 'oracledb' 'ee.rsp' '.bash_profile' '.bashrc' 'oracle.service')
+md5sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+	cd $srcdir
+
+	# Creating ORACLE_HOME dir
+	mkdir -p $pkgdir/home/oracle/app/oracle/product/11.2.0/dbhome
+
+	# Copy Oracle database files
+	mkdir -p $pkgdir/home/oracle/tmp
+	mv database $pkgdir/home/oracle/tmp/
+
+  if [ "$CARCH" = "x86_64" ]; then
+
+	# Preparing for the native unzip 
+	mv $pkgdir/home/oracle/tmp/database/install/unzip \
+	$pkgdir/home/oracle/tmp/database/install/unzip.bak
+
+	# Creating x64_64 specific symbolic links
+	mkdir -p $pkgdir/usr
+	/bin/ln -s /usr/bin/unzip \
+	$pkgdir/home/oracle/tmp/database/install/unzip
+
+  fi
+  
+  install -Dm644 -g dba -o oracle $srcdir/.bash_profile $pkgdir/home/oracle/.bash_profile
+  install -Dm644 -g dba -o oracle $srcdir/.bashrc $pkgdir/home/oracle/.bashrc
+  
+	# Install oracledb
+	install -Dm755 $srcdir/oracledb $pkgdir/etc/rc.d/oracledb
+	install -Dm755 $srcdir/oracle.service $pkgdir/usr/lib/systemd/system/oracle.service
+	install -Dm755 $srcdir/ee.rsp $pkgdir/home/oracle/tmp/database/install/ee.rsp
+}

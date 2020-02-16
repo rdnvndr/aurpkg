@@ -1,0 +1,21 @@
+diff -cr jwm-1632/src/border.c jwm-roand/src/border.c
+*** jwm-1632/src/border.c	2012-01-27 01:04:17.000000000 +0000
+--- jwm-roand/src/border.c	2012-03-03 11:39:35.270290418 +0000
+***************
+*** 1126,1132 ****
+                      Pixmap canvas, GC gc, long fg)
+  {
+  #ifdef USE_ICONS
+!    const int iconSize = GetBorderIconSize();
+     const int titleHeight = GetTitleHeight();
+     IconNode *icon = np->icon ? np->icon : buttonIcons[BI_MENU];
+     PutIcon(icon, canvas, fg,
+--- 1126,1132 ----
+                      Pixmap canvas, GC gc, long fg)
+  {
+  #ifdef USE_ICONS
+!    const int iconSize = GetBorderIconSize() + 2;
+     const int titleHeight = GetTitleHeight();
+     IconNode *icon = np->icon ? np->icon : buttonIcons[BI_MENU];
+     PutIcon(icon, canvas, fg,
+

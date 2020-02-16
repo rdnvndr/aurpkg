@@ -1,0 +1,19 @@
+diff -cr qpdfview/sources/settings.cpp qpdfview-roand/sources/settings.cpp
+*** qpdfview/sources/mainwindow.cpp	2015-02-22 12:46:29.000000000 +0300
+--- qpdfview-roand/sources/mainwindow.cpp	2015-04-05 13:30:41.954839522 +0300
+***************
+*** 2868,2874 ****
+  
+      // progress and error icons
+  
+!     s_settings->pageItem().setProgressIcon(loadIconWithFallback(QLatin1String("image-loading")));
+      s_settings->pageItem().setErrorIcon(loadIconWithFallback(QLatin1String("image-missing")));
+  }
+  
+--- 2868,2874 ----
+  
+      // progress and error icons
+  
+!     s_settings->pageItem().setProgressIcon(QIcon());
+      s_settings->pageItem().setErrorIcon(loadIconWithFallback(QLatin1String("image-missing")));
+  }

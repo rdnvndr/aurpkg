@@ -1,0 +1,20 @@
+diff -cr jwm-2.1.0/src/taskbar.c jwm-roand/src/taskbar.c
+*** jwm-2.1.0/src/taskbar.c	2012-01-21 17:39:19.874691527 +0000
+--- jwm-roand/src/taskbar.c	2012-01-21 18:07:43.204610350 +0000
+***************
+*** 257,262 ****
+--- 257,269 ----
+              FocusGroup(entry);
+           }
+           break;
++       case Button2:
++          if (entry) { 
++            ClientEntry *cp;
++            for (cp = entry->clients; cp; cp = cp->next) 
++               DeleteClient(cp->client);
++          }
++          break;
+        case Button3:
+           ShowClientList(bar, entry);
+           break;
+

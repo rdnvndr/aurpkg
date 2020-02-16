@@ -1,0 +1,41 @@
+pkgname=rtl8188eu-dkms-git
+pkgver=r461.00b5f0d1
+pkgrel=1
+pkgdesc="RTL8188EU driver"
+url="https://github.com/lwfinger/rtl8188eu"
+arch=('i686' 'x86_64')
+license=('GPL')
+depends=('dkms' 'linux-headers' 'linux-firmware')
+source=("${pkgname}::git+https://github.com/lwfinger/rtl8188eu")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "${srcdir}/${pkgname}"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+    install -d "${pkgdir}/etc/modprobe.d"
+    echo "blacklist r8188eu" > "${pkgdir}/etc/modprobe.d/r8188eu.conf"
+
+    install -d "${pkgdir}/usr/src/8188eu-1.0"
+    for i in core dkms.conf hal include Makefile os_dep; do
+        cp -a "${srcdir}/${pkgname}/${i}" "${pkgdir}/usr/src/8188eu-1.0"
+    done
+}
+
+post_install() {
+    dkms install 8188eu/1.0
+}
+
+pre_upgrade() {
+    pre_remove 1.0
+}
+
+post_upgrade() {
+    post_install 1.0
+}
+
+pre_remove() {
+    dkms remove 8188eu/1.0 --all
+}

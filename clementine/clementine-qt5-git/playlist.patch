@@ -1,0 +1,20 @@
+*** clementine-1.0.1/src/translations/ru.po	2012-01-22 12:43:26.000000000 +0000
+--- clementine-roand/src/translations/ru.po	2012-08-08 22:57:03.803256098 +0000
+***************
+*** 3585,3591 ****
+  #: playlist/playlistmanager.cpp:84 playlist/playlistmanager.cpp:152
+  #: playlist/playlistmanager.cpp:497 playlist/playlisttabbar.cpp:357
+  msgid "Playlist"
+! msgstr "Список воспроизведения"
+  
+  #: widgets/osd.cpp:173
+  msgid "Playlist finished"
+--- 3585,3591 ----
+  #: playlist/playlistmanager.cpp:84 playlist/playlistmanager.cpp:152
+  #: playlist/playlistmanager.cpp:497 playlist/playlisttabbar.cpp:357
+  msgid "Playlist"
+! msgstr "Список"
+  
+  #: widgets/osd.cpp:173
+  msgid "Playlist finished"
+

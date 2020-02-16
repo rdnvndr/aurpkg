@@ -1,0 +1,1 @@
+sqlcmd -i change_sa_passwd.sql -S localhost -U sa  -H localhost 

@@ -1,0 +1,29 @@
+pkgname=qtcreator-spellchecker-plugin
+pkgver=v2.0.5
+pkgrel=1
+pkgdesc="Spell Checker plugin for the Qt Creator IDE"
+groups=('qt' 'qt5')
+arch=('i686' 'x86_64')
+url="https://github.com/CJCombrink/SpellChecker-Plugin"
+license=('GPL3')
+depends=('qtcreator' 'hunspell')
+makedepends=('git' 'qtcreator-src')
+source=("$pkgname"::git+https://github.com/CJCombrink/SpellChecker-Plugin.git)
+sha256sums=('SKIP')
+
+build() {
+    cd "${srcdir}/${pkgname}"
+    git checkout ${pkgver}
+
+    QTC_SOURCE=/usr/src/qtcreator QTC_BUILD=build qmake \
+        "LIBS+=-L/usr/lib/qtcreator/ -L/usr/lib/qtcreator/plugins" \
+        "KSYNTAXHIGHLIGHTING_LIB_DIR=/usr/lib" "KSYNTAXHIGHLIGHTING_INCLUDE_DIR=/usr/include/KF5/KSyntaxHighlighting"
+
+    make
+}
+
+package() {
+    cd "${srcdir}/${pkgname}"
+
+    make INSTALL_ROOT="${pkgdir}/usr" install
+}

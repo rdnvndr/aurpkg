@@ -1,8 +1,6 @@
-# Contributor: Ali H. Caliskan <ali.h.caliskan//gmail.com>
-
 _filename1=linuxx64_12201_database.zip
 pkgname=oracle
-pkgver=12cR2
+pkgver=12.2.0.1
 pkgrel=1
 pkgdesc="Database Management System"
 url="http://www.oracle.com"

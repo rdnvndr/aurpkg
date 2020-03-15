@@ -3,4 +3,5 @@
 *.tar.xz
 *.tar.zst
 *.tar.gz
+*.tgz
 *.tar.bz

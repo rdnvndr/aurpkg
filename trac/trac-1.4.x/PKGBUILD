@@ -1,0 +1,33 @@
+pkgname=trac
+pkgver=1.4.1
+pkgrel=1
+pkgdesc="Trac Integrated SCM & Project Management using Apache & Subversion."
+arch=('any')
+url="http://trac.edgewall.org/"
+license=('BSD')
+depends=(python2 python2-babel python2-setuptools python2-jinja)
+makedepends=(clearsilver)
+install=trac.install
+source=(http://ftp.edgewall.com/pub/trac/Trac-$pkgver.tar.gz
+	license.txt
+	tracd.service
+	imggrid.png
+        commitupdate.patch
+        quicksearch.patch)
+sha256sums=('dfab4660df2b4d912e4ae36b40dbf4d2718df49177c89542408b2709ecf5c134'
+            'a0936aa2fab3714eb6a3e8ff64b730576d8a5f81340a0601f006c847761607c4'
+            '3f050f1c9367b1b28e18a6ff0088f991676a9fbba3f5177859ce4db64f95ca42'
+            'SKIP'
+            'SKIP'
+            'SKIP')
+
+package() {
+  cp -f $srcdir/imggrid.png $srcdir/Trac-$pkgver/trac/htdocs
+  cd "$srcdir"/Trac-$pkgver
+  patch -p1 < $startdir/commitupdate.patch || return 1
+  patch -p1 < $startdir/quicksearch.patch || return 1
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir"
+  install -D -m644 "$srcdir"/license.txt "$pkgdir"/usr/share/licenses/trac/license.txt
+  install -Dm0644 "$srcdir"/tracd.service "$pkgdir"/usr/lib/systemd/system/tracd.service
+}

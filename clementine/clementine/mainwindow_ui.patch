@@ -1,4 +1,4 @@
-*** clementine-orig/src/ui/mainwindow.ui	2016-12-17 23:40:19.000000000 +0300
+    *** clementine-orig/src/ui/mainwindow.ui	2016-12-17 23:40:19.000000000 +0300
 --- clementine-new/src/ui/mainwindow.ui	2016-12-17 23:41:52.539990467 +0300
 ***************
 *** 57,63 ****
@@ -13,14 +13,14 @@
            <number>0</number>
           </property>
           <item>
-!          <widget class="FancyTabWidget" name="tabs" native="true">
-!           <property name="minimumSize">
-!            <size>
-!             <width>362</width>
-!             <height>0</height>
-!            </size>
-!           </property>
-!          </widget>
+!           <widget class="FancyTabWidget" name="tabs" native="true">
+!            <property name="minimumSize">
+!             <size>
+!              <width>362</width>
+!              <height>0</height>
+!             </size>
+!            </property>
+!           </widget>
           </item>
           <item>
            <widget class="NowPlayingWidget" name="now_playing" native="true"/>

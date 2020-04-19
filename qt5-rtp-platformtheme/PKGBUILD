@@ -1,0 +1,32 @@
+pkgname=qt5-rtp-platformtheme
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="A theme engine for Qt5"
+arch=(x86_64)
+url="https://github.com/rdnvndr/$pkgname"
+license=('GPL3')
+depends=('qt5-base')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/rdnvndr/$pkgname/archive/v${pkgver}.tar.gz")
+sha512sums=('SKIP')
+
+prepare() {
+  mkdir -p build
+}
+
+build() {
+  cd build
+  cmake ../$pkgname-$pkgver
+  make
+}
+
+package() {
+  cd build
+  install -Dm555 librtptheme.so "$pkgdir"/usr/lib/qt/plugins/platformthemes/librtptheme.so
+}
+
+post_install() {
+  echo "Add lines "
+  echo "    export QT_QPA_PLATFORMTHEME=rtptheme"
+  echo "    export QT_STYLE_OVERRIDE=Windows"
+  echo "to ~/.profile and re-login."
+}

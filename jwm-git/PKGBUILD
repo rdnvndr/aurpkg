@@ -37,7 +37,7 @@ build() {
   
   cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
   ./autogen.sh
-  ./configure --prefix=/usr --sysconfdir=/etc --disable-fribidi --disable-xmu --disable-cairo  --disable-rsvg --disable-jpeg  
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-fribidi --disable-cairo  --disable-rsvg --disable-jpeg  
   make
 }
 

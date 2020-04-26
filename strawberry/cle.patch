@@ -1,0 +1,19 @@
+*** old/src/core/qtsystemtrayicon.cpp	2010-12-24 00:18:40.000000000 +0000
+--- new/src/core/qtsystemtrayicon.cpp	2010-12-11 17:30:37.000000000 +0000
+***************
+*** 237,243 ****
+  }
+  
+  void QtSystemTrayIcon::SetNowPlaying(const Song &song, const QUrl &cover_url) {
+! 
+  #ifdef Q_OS_WIN
+    Q_UNUSED(song);
+    Q_UNUSED(cover_url);
+--- 237,243 ----
+  }
+  
+  void QtSystemTrayIcon::SetNowPlaying(const Song &song, const QUrl &cover_url) {
+!   return;
+  #ifdef Q_OS_WIN
+    Q_UNUSED(song);
+    Q_UNUSED(cover_url);

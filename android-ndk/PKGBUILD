@@ -1,0 +1,26 @@
+# Maintainer: Chih-Hsuan Yen <yan12125@gmail.com>
+# Contributor: Alexander F Rødseth <xyproto@archlinux.org>
+# Contributor: Daniel Micay <danielmicay@gmail.com>
+# Contributor: frownlee <florez.brownlee@gmail.com>
+
+pkgname=android-ndk
+pkgver=r21.c
+pkgrel=1
+pkgdesc='Android C/C++ developer kit'
+arch=('x86_64')
+url='https://developer.android.com/ndk/'
+license=('GPL' 'LGPL' 'custom')
+options=('!strip' 'staticlibs')
+backup=("etc/profile.d/$pkgname.sh")
+install="$pkgname.install"
+replaces=('android-ndk64')
+depends=('glibc')
+optdepends=(
+  'ncurses5-compat-libs: for using gdb'
+  'python2: various helper scripts'
+  'python: various helper scripts'
+)
+
+package() {
+  install -Ddm755 "$pkgdir/opt"
+}

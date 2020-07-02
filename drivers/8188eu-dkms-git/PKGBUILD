@@ -15,10 +15,12 @@ depends=('dkms')
 makedepends=('git')
 source=("${_pkgname}::git+${url}#branch=v${_pkgver}"
         blacklist-r8188eu.conf
-        dkms.conf)
+        dkms.conf
+        led.patch)
 sha256sums=('SKIP'
             'edaeafe28410017fabb742d6ccdf060a945150fb56e41084adb7b9dd66739e2b'
-            '70db4a4d738e77952dd063fc066f961932112786d796dcdb4508f4ec9c5ef844')
+            '70db4a4d738e77952dd063fc066f961932112786d796dcdb4508f4ec9c5ef844'
+            'SKIP')
 provides=('8188eu-dkms')
 conflicts=('8188eu-dkms')
 
@@ -27,6 +29,21 @@ pkgver() {
 
   echo "${_pkgver}.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
 }
+
+prepare() {
+  cd "${_pkgname}"
+  local i; for i in "${source[@]}"; do
+    case $i in
+      *.patch)
+        msg2 "Applying patch ${i}"
+        patch -p1 -i "${srcdir}/${i}"
+    esac
+  done
+
+  # Disable power saving
+  sed -i 's/^CONFIG_POWER_SAVING \= y/CONFIG_POWER_SAVING = n/' Makefile
+}
+
 
 package() {
   local install_dir="${pkgdir}/usr/src/${_pkgname}-${pkgver}"

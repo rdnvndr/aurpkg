@@ -14,3 +14,18 @@ index 91f3eec..624c6fa 100644
  //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
  
  #define CONFIG_PROC_DEBUG
+diff --git a/core/rtw_cmd.c.orig b/core/rtw_cmd.c
+index ca1ac28b..9bb92a2c 100644
+--- a/core/rtw_cmd.c.orig
++++ b/core/rtw_cmd.c
+@@ -474,8 +474,8 @@ _func_enter_;
+ 
+ 		if ((padapter->bDriverStopped == _TRUE)||(padapter->bSurpriseRemoved == _TRUE))
+ 		{
+-			DBG_871X_LEVEL(_drv_always_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
+-				__FUNCTION__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
++//			DBG_871X_LEVEL(_drv_always_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
++//				__FUNCTION__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
+ 			break;
+ 		}
+ 

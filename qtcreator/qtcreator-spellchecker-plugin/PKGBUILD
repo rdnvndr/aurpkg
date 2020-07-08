@@ -1,5 +1,6 @@
 pkgname=qtcreator-spellchecker-plugin
-pkgver=07ba234
+pkgver=2.0.6
+_commit=69b3fda
 pkgrel=1
 pkgdesc="Spell Checker plugin for the Qt Creator IDE"
 groups=('qt' 'qt5')
@@ -13,7 +14,7 @@ sha256sums=('SKIP')
 
 build() {
     cd "${srcdir}/${pkgname}"
-    git checkout ${pkgver}
+    git checkout ${_commit}
 
     QTC_SOURCE=/usr/src/qtcreator QTC_BUILD=build qmake \
         "LIBS+=-L/usr/lib/qtcreator/ -L/usr/lib/qtcreator/plugins" \

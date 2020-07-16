@@ -2,7 +2,7 @@
 # Contributor: Fabio 'Lolix' Loli <lolix@disroot.org> -> https://github.com/FabioLolix
 
 pkgname=strawberry
-pkgver=0.6.12
+pkgver=0.6.13
 pkgrel=1
 pkgdesc="A music player aimed at audio enthusiasts and music collectors"
 arch=(x86_64)
@@ -14,17 +14,14 @@ optdepends=('gst-libav: additional codecs'
             'gst-plugins-bad: additional codecs'
             'gst-plugins-ugly: additional codecs')
 source=("https://github.com/jonaski/strawberry/releases/download/$pkgver/$pkgname-$pkgver.tar.xz")
-sha256sums=('c53207613508da507f0a9cb4b13e23532fe06b9aaf3200d44b5e4b84170aeb79')
+sha256sums=('0c0cee6c1f75541dcc89c3dcb2db29e79f07d7b4dabc911c89853ad0b50fba29')
 
 prepare() {
-  mkdir -p build
   cd $pkgname-$pkgver
   patch -p1 < $startdir/cle.patch
 }
-
 build() {
-  cd build
-  cmake ../$pkgname-$pkgver \
+  cmake -B build -S $pkgname-$pkgver \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DUSE_SYSTEM_TAGLIB=ON \
     -DENABLE_AUDIOCD=ON \
@@ -38,11 +35,11 @@ build() {
     -DENABLE_UDISKS2=OFF \
     -DENABLE_VLC=OFF \
     -DENABLE_SUBSONIC=OFF \
+    -DENABLE_TIDAL=OFF \
     -DENABLE_XINE=OFF
-  make
+  cmake --build build
 }
 
 package() {
-  cd build
-  make DESTDIR="$pkgdir" install
+  DESTDIR="$pkgdir" cmake --install build
 }

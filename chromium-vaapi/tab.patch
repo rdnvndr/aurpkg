@@ -1,7 +1,5 @@
 *** old/chrome/browser/ui/layout_constants.cc	2019-02-07 01:06:38.000000000 +0300
 --- new/chrome/browser/ui/layout_constants.cc	2019-02-11 00:59:36.133485914 +0300
-*** layout_constants.cc.orig    2019-05-22 00:50:23.000000000 +0300
---- layout_constants.cc.orig1   2019-05-26 17:18:55.788516233 +0300
 ***************
 *** 44,50 ****
       case HOSTED_APP_PAGE_ACTION_ICON_SIZE:
@@ -97,19 +95,19 @@
 *** old/chrome/browser/ui/views/tabs/tab_strip.cc	2019-02-07 01:06:38.000000000 +0300
 --- new/chrome/browser/ui/views/tabs/tab_strip.cc	2019-02-10 12:17:46.623499794 +0300
 ***************
-*** 2700,2706 ****
-    const int extra_vertical_space = GetLayoutConstant(TAB_HEIGHT) -
-                                     GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP) -
-                                     NewTabButton::kButtonSize.height();
+*** 3557,3563 ****
+    if (tab_search_button_)
+      tab_search_button_->SetBorder(views::CreateEmptyBorder(button_insets));
+  
 !   constexpr int kHorizontalInset = 8;
-    new_tab_button_->SetBorder(views::CreateEmptyBorder(gfx::Insets(
-        extra_vertical_space / 2, kHorizontalInset, 0, kHorizontalInset)));
+    tab_controls_container_->SetBorder(views::CreateEmptyBorder(
+        gfx::Insets(0, kHorizontalInset, 0, kHorizontalInset)));
   }
---- 2700,2706 ----
-    const int extra_vertical_space = GetLayoutConstant(TAB_HEIGHT) -
-                                     GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP) -
-                                     NewTabButton::kButtonSize.height();
+--- 3557,3563 ----
+    if (tab_search_button_)
+      tab_search_button_->SetBorder(views::CreateEmptyBorder(button_insets));
+  
 !   constexpr int kHorizontalInset = 3;
-    new_tab_button_->SetBorder(views::CreateEmptyBorder(gfx::Insets(
-        extra_vertical_space / 2, kHorizontalInset, 0, kHorizontalInset)));
+    tab_controls_container_->SetBorder(views::CreateEmptyBorder(
+        gfx::Insets(0, kHorizontalInset, 0, kHorizontalInset)));
   }

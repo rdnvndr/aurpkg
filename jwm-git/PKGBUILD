@@ -1,6 +1,6 @@
 pkgname=jwm-git
-pkgver=3a35c639
-pkgrel=2
+pkgver=1ba58f9
+pkgrel=1
 pkgdesc="A lightweight window manager for the X11 Window System"
 arch=('i686' 'x86_64')
 conflicts=('jwm')
@@ -33,6 +33,7 @@ build() {
   patch -p1 -i $startdir/disable-pager-wheel.patch                 || return 1
   patch -p1 -i $startdir/disable-taskbar-wheel.patch               || return 1
   patch -p1 -i $startdir/fix-am-init-automake.patch                || return 1
+  patch -p1 -i $startdir/fix-minimize.patch                || return 1
   
   cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
   ./autogen.sh

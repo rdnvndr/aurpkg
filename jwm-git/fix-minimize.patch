@@ -1,0 +1,102 @@
+*** a/src/taskbar.c	2020-11-28 00:01:24.133109340 +0300
+--- b/src/taskbar.c	2020-11-28 00:50:21.076360897 +0300
+***************
+*** 265,317 ****
+        ClientEntry *cp;
+        ClientNode *focused = NULL;
+        char hasActive = 0;
+-       char allTop;
+  
+        switch(mask) {
+        case Button1:  /* Raise or minimize items in this group. */
+! 
+!          allTop = IsGroupOnTop(entry);
+!          if(allTop) {
+!             for(cp = entry->clients; cp; cp = cp->next) {
+!                int layer;
+!                if(cp->client->state.status & STAT_MINIMIZED) {
+!                   continue;
+!                } else if(!ShouldFocus(cp->client, 0)) {
+!                   continue;
+!                }
+!                for(layer = LAST_LAYER; layer >= FIRST_LAYER; layer--) {
+!                   ClientNode *np;
+!                   for(np = nodes[layer]; np; np = np->next) {
+!                      if(np->state.status & STAT_MINIMIZED) {
+!                         continue;
+!                      } else if(!ShouldFocus(np, 0)) {
+!                         continue;
+!                      }
+!                      if(np == cp->client) {
+!                         const char isActive = (np->state.status & STAT_ACTIVE)
+!                                             && IsClientOnCurrentDesktop(np);
+!                         if(isActive) {
+!                            focused = np;
+                          }
+!                         if(!(cp->client->state.status
+!                               & (STAT_CANFOCUS | STAT_TAKEFOCUS))
+!                            || isActive) {
+!                            hasActive = 1;
+!                         }
+!                      }
+!                      if(hasActive) {
+!                         goto FoundActiveAndTop;
+!                      }
+!                   }
+!                }
+!             }
+!          }
+! FoundActiveAndTop:
+!          if(hasActive && allTop) {
+!             /* The client is already active.
+!              * Here we switch desktops if the client is on another
+!              * desktop too. Otherwise we minimize the client.
+!              */
+              ClientNode *nextClient = NULL;
+              int i;
+  
+--- 265,308 ----
+        ClientEntry *cp;
+        ClientNode *focused = NULL;
+        char hasActive = 0;
+  
+        switch(mask) {
+        case Button1:  /* Raise or minimize items in this group. */
+!           for(cp = entry->clients; cp; cp = cp->next) {
+!                       int layer;
+!                       if(cp->client->state.status & STAT_MINIMIZED) {
+!                          continue;
+!                       } else if(!ShouldFocus(cp->client, 0)) {
+!                          continue;
+!                       }
+!                       for(layer = LAST_LAYER; layer >= FIRST_LAYER; layer--) {
+!                          ClientNode *np;
+!                          for(np = nodes[layer]; np; np = np->next) {
+!                             if(np->state.status & STAT_MINIMIZED) {
+!                                continue;
+!                             } else if(!ShouldFocus(np, 0)) {
+!                                continue;
+!                             }
+!                             if(np == cp->client) {
+!                                const char isActive = (np->state.status & STAT_ACTIVE)
+!                                                    && IsClientOnCurrentDesktop(np);
+!                                if(isActive) {
+!                                   focused = np;
+!                                }
+!                                if(!(cp->client->state.status
+!                                                  & (STAT_CANFOCUS | STAT_TAKEFOCUS))
+!                                               || isActive) {
+!                                               hasActive = 1;
+!                                }
+!                             }
+!                             if(hasActive) {
+!                                 goto FoundActive;
+!                             }
+                          }
+!                     }
+!                 }
+!       FoundActive:
+!         if(hasActive) {
+              ClientNode *nextClient = NULL;
+              int i;
+  

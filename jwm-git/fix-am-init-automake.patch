@@ -8,20 +8,3 @@ diff -cr a/configure.ac b/configure.ac
   AC_PREREQ(2.57)
   AC_CONFIG_SRCDIR([src])
   AC_CONFIG_SRCDIR([po])
-***************
-*** 499,505 ****
-  ############################################################################
-  AM_ICONV
-  AM_GNU_GETTEXT([external])
-! AM_GNU_GETTEXT_VERSION([0.19])
-  LDFLAGS="$LDFLAGS $LIBINTL $LIBICONV"
-  
-  ############################################################################
---- 500,506 ----
-  ############################################################################
-  AM_ICONV
-  AM_GNU_GETTEXT([external])
-! AM_GNU_GETTEXT_VERSION([0.20])
-  LDFLAGS="$LDFLAGS $LIBINTL $LIBICONV"
-  
-  ############################################################################

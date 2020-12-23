@@ -2,6 +2,23 @@ diff -cr jwm-1632/src/border.c jwm-roand/src/border.c
 *** jwm-1632/src/border.c	2012-01-27 01:04:17.000000000 +0000
 --- jwm-roand/src/border.c	2012-03-03 11:39:35.270290418 +0000
 ***************
+*** 470,476 ****
+              titley += settings.borderWidth - 1;
+           }
+           RenderString(canvas, FONT_BORDER, borderTextColor,
+!                       titlex, titley, titleWidth, np->name);
+        }
+  
+     }
+--- 470,476 ----
+              titley += settings.borderWidth - 1;
+           }
+           RenderString(canvas, FONT_BORDER, borderTextColor,
+!                       titlex, titley + 2, titleWidth, np->name);
+        }
+  
+     }
+***************
 *** 1126,1136 ****
                       Pixmap canvas, GC gc, long fg)
   {

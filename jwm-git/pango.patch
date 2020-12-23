@@ -1,0 +1,20 @@
+diff -cr a/src/font.c b/src/font.c
+*** a/src/font.c	2020-12-23 18:07:00.158925587 +0300
+--- b/src/font.c	2020-12-23 18:09:14.754684308 +0300
+***************
+*** 153,159 ****
+  
+           pango_layout_set_single_paragraph_mode(fonts[x], TRUE);
+           pango_layout_set_width(fonts[x], -1);
+!          pango_layout_set_ellipsize(fonts[x], PANGO_ELLIPSIZE_MIDDLE);
+  
+           metrics = pango_context_get_metrics(font_context, desc, NULL);
+           font_ascents[x] = pango_font_metrics_get_ascent(metrics);
+--- 153,159 ----
+  
+           pango_layout_set_single_paragraph_mode(fonts[x], TRUE);
+           pango_layout_set_width(fonts[x], -1);
+!          pango_layout_set_ellipsize(fonts[x], PANGO_ELLIPSIZE_END);
+  
+           metrics = pango_context_get_metrics(font_context, desc, NULL);
+           font_ascents[x] = pango_font_metrics_get_ascent(metrics);

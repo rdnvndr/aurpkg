@@ -32,6 +32,23 @@ diff -cr jwm-1271/src/traybutton.c jwm-roand/src/traybutton.c
 *** jwm-1271/src/traybutton.c	2015-09-12 02:46:52.000000000 +0300
 --- jwm-roand/src/traybutton.c	2015-09-18 20:06:44.000000000 +0300
 ***************
+*** 187,193 ****
+     bp = (TrayButtonType*)cp->object;
+  
+     if(bp->label) {
+!       labelWidth = GetStringWidth(FONT_TRAY, bp->label) + 6;
+        labelHeight = GetStringHeight(FONT_TRAY) + 6;
+     } else {
+        labelWidth = 4;
+--- 187,193 ----
+     bp = (TrayButtonType*)cp->object;
+  
+     if(bp->label) {
+!       labelWidth = GetStringWidth(FONT_TRAY, bp->label) + 8;
+        labelHeight = GetStringHeight(FONT_TRAY) + 6;
+     } else {
+        labelWidth = 4;
+***************
 *** 267,277 ****
      } else {
         button.type = BUTTON_TRAY;
@@ -69,7 +86,7 @@ diff -cr jwm-1271/src/button.c jwm-roand/src/button.c
         if(iconWidth > 0 && textWidth + iconWidth + 7 > width) {
            textWidth = width - iconWidth - 7;
 +          if (bp->type==BUTTON_TASK || bp->type==BUTTON_TASK_ACTIVE)
-+              textWidth = textWidth - 7; 
++              textWidth = textWidth - 3; 
         } else if(iconWidth == 0 && textWidth + 5 > width) {
            textWidth = width - 5;
         }

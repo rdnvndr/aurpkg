@@ -1,20 +1,14 @@
-# Maintainer: Maxim Baz <$pkgname at maximbaz dot com>
-# Contributor: Kien Dang Tran loganeast257@gmail.com
-# Contributor: Samantha McVey samantham@posteo.net
-
-# Based on extra/chromium, but with a patch to enable VA-API
-
 # Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 # Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 
-pkgname=chromium-vaapi
+pkgname=chromium
 pkgver=87.0.4280.88
-pkgrel=1
+pkgrel=3
 _launcher_ver=6
 _gcc_patchset=9
-pkgdesc="Chromium with VA-API support to enable hardware acceleration"
+pkgdesc="A web browser built for speed, simplicity, and security"
 arch=('x86_64')
 url="https://www.chromium.org/Home"
 license=('BSD')
@@ -30,17 +24,17 @@ optdepends=('pepper-flash: support for Flash content'
             'kdialog: needed for file dialogs in KDE'
             'org.freedesktop.secrets: password storage backend on GNOME / Xfce'
             'kwallet: for storing passwords in KWallet on KDE desktops')
-provides=('chromium')
-conflicts=('chromium')
-source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$pkgver.tar.xz
+source=(https://commondatastorage.googleapis.com/chromium-browser-official/$pkgname-$pkgver.tar.xz
         https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver/chromium-launcher-$_launcher_ver.tar.gz
         https://github.com/stha09/chromium-patches/releases/download/chromium-${pkgver%%.*}-patchset-$_gcc_patchset/chromium-${pkgver%%.*}-patchset-$_gcc_patchset.tar.xz
-        wayland-egl.patch
+        icu68.patch
+        v8-icu68.patch
         subpixel-anti-aliasing-in-FreeType-2.8.1.patch)
 sha256sums=('3e4645328735ef60db78d1a313efb3770a3edeaede90d076414df52f567a09c0'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'c99934bcd2f3ae8ea9620f5f59a94338b2cf739647f04c28c8a551d9083fa7e9'
-            'bf86923eaee5529ab9fb6148bd6c33a73c8746ab1b4ade0cd3b761109bc55826'
+            '38fb5218331d6e03915490dab64f7b8bf26833a581d1aaa02090437c67e9439c'
+            '6e919c9712d8fe6c2918778df1f8c2ee0675a87a48be5d2aaa54e320703ced4b'
             '1e2913e21c491d546e05f9b4edf5a6c7a22d89ed0b36ef692ca6272bcd5faec6')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
@@ -77,7 +71,7 @@ _google_default_client_id=413772536636.apps.googleusercontent.com
 _google_default_client_secret=0ZChLK6AxeA3Isu96MkwqDR4
 
 prepare() {
-  cd "$srcdir/chromium-$pkgver"
+  cd "$srcdir/$pkgname-$pkgver"
   patch -Np1 -i $startdir/tab.patch
 
   # Allow building against system libraries in official builds
@@ -91,14 +85,13 @@ prepare() {
     third_party/libxml/chromium/*.cc
 
   # Upstream fixes
+  patch -Np1 -i ../icu68.patch
+  patch -Np1 -d v8 <../v8-icu68.patch
   patch -Np1 -d third_party/skia <../subpixel-anti-aliasing-in-FreeType-2.8.1.patch
 
   # Fixes for building with libstdc++ instead of libc++
   patch -Np1 -i ../patches/chromium-87-ServiceWorkerContainerHost-crash.patch
   patch -Np1 -i ../patches/chromium-87-openscreen-include.patch
-
-  # Wayland/EGL regression (crbug #1071528 #1071550)
-  patch -Np1 -i ../wayland-egl.patch
 
   # Force script incompatible with Python 3 to use /usr/bin/python2
   sed -i '1s|python$|&2|' third_party/dom_distiller_js/protoc_plugins/*.py
@@ -126,7 +119,7 @@ prepare() {
 build() {
   make -C chromium-launcher-$_launcher_ver
 
-  cd "$srcdir/chromium-$pkgver"
+  cd "$srcdir/$pkgname-$pkgver"
 
   if check_buildoption ccache y; then
     # Avoid falling back to preprocessor mode when sources contain time macros
@@ -156,7 +149,6 @@ build() {
     'enable_widevine=true'
     'use_vaapi=true'
     'enable_nacl=false'
-    'enable_swiftshader=false'
     "google_api_key=\"${_google_api_key}\""
     "google_default_client_id=\"${_google_default_client_id}\""
     "google_default_client_secret=\"${_google_default_client_secret}\""
@@ -189,7 +181,7 @@ package() {
   install -Dm644 LICENSE \
     "$pkgdir/usr/share/licenses/chromium/LICENSE.launcher"
 
-  cd "$srcdir/chromium-$pkgver"
+  cd "$srcdir/$pkgname-$pkgver"
 
   install -D out/Release/chrome "$pkgdir/usr/lib/chromium/chromium"
   install -Dm4755 out/Release/chrome_sandbox "$pkgdir/usr/lib/chromium/chrome-sandbox"
@@ -220,6 +212,11 @@ package() {
     chrome_200_percent.pak
     resources.pak
     v8_context_snapshot.bin
+
+    # ANGLE
+    libEGL.so
+    libGLESv2.so
+
     chromedriver
   )
 
@@ -229,6 +226,7 @@ package() {
 
   cp "${toplevel_files[@]/#/out/Release/}" "$pkgdir/usr/lib/chromium/"
   install -Dm644 -t "$pkgdir/usr/lib/chromium/locales" out/Release/locales/*.pak
+  install -Dm755 -t "$pkgdir/usr/lib/chromium/swiftshader" out/Release/swiftshader/*.so
 
   for size in 24 48 64 128 256; do
     install -Dm644 "chrome/app/theme/chromium/product_logo_$size.png" \

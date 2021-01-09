@@ -1,5 +1,5 @@
 diff --git a/core/rtw_security.c b/core/rtw_security.c
-index 98415684..2746289b 100644
+index 9841568..2746289 100644
 --- a/core/rtw_security.c
 +++ b/core/rtw_security.c
 @@ -2281,7 +2281,7 @@ BIP_exit:
@@ -48,7 +48,7 @@ index 98415684..2746289b 100644
  
  	sha256_init(&ctx);
 diff --git a/include/rtw_security.h b/include/rtw_security.h
-index 00b08fd7..c350665b 100644
+index 00b08fd..c350665 100644
 --- a/include/rtw_security.h
 +++ b/include/rtw_security.h
 @@ -235,7 +235,7 @@ struct security_priv

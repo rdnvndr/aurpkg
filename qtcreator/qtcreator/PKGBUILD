@@ -8,8 +8,8 @@
 
 pkgname=qtcreator
 pkgver=4.14.0
-_clangver=11.0.0
-pkgrel=3
+_clangver=11.0.1
+pkgrel=4
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -31,10 +31,10 @@ optdepends=('qt5-doc: integrated Qt documentation'
             'valgrind: analyze support'
             'perf: performer analyzer')
 source=("https://download.qt.io/official_releases/qtcreator/${pkgver%.*}/$pkgver/qt-creator-opensource-src-$pkgver.tar.xz"
-         qtcreator-fix-clang-paths.patch
-         "QTCREATORBUG-21681.patch")
+         qtcreator-fix-clang-paths.patch::"https://code.qt.io/cgit/qt-creator/qt-creator.git/patch/?id=86348d56"
+        "QTCREATORBUG-21681.patch")
 sha256sums=('d240109351e96446ff149cbd56341ec02ba37bfa50462a85e4d02dfe6b21201e'
-            'eaaa001d3b2705ca2bdfafca5ffce7919baed8726c50113ae03e1d97da5b8c8d'
+            '99518ed7e9525bba7a8f49111c948b56fae224298f06d7dc93bb905bbcd87de4'
             'SKIP')
 
 prepare() {
@@ -48,6 +48,7 @@ prepare() {
   sed -e 's|libexec/qtcreator|lib/qtcreator|' -i cmake/QtCreatorAPIInternal.cmake
 # Fix clang include path
   patch -p1 -i ../qtcreator-fix-clang-paths.patch
+  
   patch -p1 -i ../QTCREATORBUG-21681.patch
 }
 

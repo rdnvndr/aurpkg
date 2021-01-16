@@ -1,4 +1,4 @@
-pkgname=qt5-rtp-platformtheme
+pkgname=qt6-rtp-platformtheme
 _pkgname=qt-rtp-platformtheme
 pkgver=0.2.0
 pkgrel=1
@@ -16,13 +16,13 @@ prepare() {
 
 build() {
   cd build
-  cmake ../$_pkgname-$pkgver -DQT_DEFAULT_MAJOR_VERSION=5
+  cmake ../$_pkgname-$pkgver -DQT_DEFAULT_MAJOR_VERSION=6
   make
 }
 
 package() {
   cd build
-  install -Dm555 librtptheme.so "$pkgdir"/usr/lib/qt/plugins/platformthemes/librtptheme.so
+  install -Dm555 librtptheme.so "$pkgdir"/usr/lib/qt6/plugins/platformthemes/librtptheme.so
 }
 
 post_install() {

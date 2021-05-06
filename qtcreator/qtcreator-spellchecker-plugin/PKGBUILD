@@ -1,6 +1,6 @@
 pkgname=qtcreator-spellchecker-plugin
-pkgver=2.0.8
-_commit=bb485cd2de66ace76dd6b8bc242ef9c94aa05541
+pkgver=2.0.9
+_commit=b65ecf2aec20aa24f502c14552d4f8eb8ccab344
 pkgrel=1
 pkgdesc="Spell Checker plugin for the Qt Creator IDE"
 groups=('qt' 'qt5')

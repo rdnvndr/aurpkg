@@ -326,11 +326,11 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
               /* sort on clicked column */
               mouse_sort_col (panel, event->x + 1);
 ***************
-*** 3854,3859 ****
---- 4035,4062 ----
+*** 3882,3887 ****
+--- 4062,4089 ----
   
           if (!is_active)
-              change_panel ();
+              (void) change_panel ();
 +         if (event->y <= 1)
 +         {
 +             mark_if_marking (panel, event);
@@ -341,7 +341,7 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
 +             event->result.repeat = msg == MSG_MOUSE_DOWN;
 +             break;
 +         }
-+   
++    
 +         if (!((panel->top_file + event->y-1 <= panel->dir.len) && event->y-1 <= panel_lines (panel)))
 +         {
 +             mark_if_marking (panel, event);

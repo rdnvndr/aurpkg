@@ -14,7 +14,7 @@ diff -cr jwm-1632/src/border.c jwm-roand/src/border.c
               titley += settings.borderWidth - 1;
            }
            RenderString(canvas, FONT_BORDER, borderTextColor,
-!                       titlex, titley + 2, titleWidth, np->name);
+!                       titlex, titley + 1, titleWidth, np->name);
         }
   
      }

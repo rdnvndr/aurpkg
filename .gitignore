@@ -1,9 +1,2 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
-*.tar.xz
-*.tar.zst
-*.tar.gz
-*.tgz
-*.tar.bz
-*.tar.bz2
-*.rpm

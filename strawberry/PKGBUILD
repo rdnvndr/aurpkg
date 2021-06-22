@@ -2,24 +2,25 @@
 # Contributor: Fabio 'Lolix' Loli <lolix@disroot.org> -> https://github.com/FabioLolix
 
 pkgname=strawberry
-pkgver=0.8.5
-pkgrel=1
+pkgver=0.9.3
+pkgrel=2
 pkgdesc="A music player aimed at audio enthusiasts and music collectors"
 arch=(x86_64)
 url="https://www.strawbs.org/"
 license=(GPL3)
-depends=(chromaprint protobuf gst-plugins-base gst-plugins-good qt5-x11extras libcdio libgpod libmtp fftw)
-makedepends=(cmake boost qt5-tools)
+depends=(qt6-base chromaprint protobuf gst-plugins-base gst-plugins-good libcdio libmtp fftw)
+makedepends=(cmake boost qt6-tools)
 optdepends=('gst-libav: additional codecs'
             'gst-plugins-bad: additional codecs'
             'gst-plugins-ugly: additional codecs')
 source=("https://github.com/jonaski/strawberry/releases/download/$pkgver/$pkgname-$pkgver.tar.xz")
-sha256sums=('e8643e71588ba6b2245dbd96c54935941608643ea576e5413abb05b5cc186a89')
+sha256sums=('0fe9c38c4d1e2f10c1130dbd87ea6e740bef729fe78820a84ffabe524a80c83e')
 
 prepare() {
   cd $pkgname-$pkgver
   patch -p1 < $startdir/cle.patch
 }
+
 
 build() {
   cmake -B build -S $pkgname-$pkgver \

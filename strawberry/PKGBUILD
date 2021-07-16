@@ -8,8 +8,8 @@ pkgdesc="A music player aimed at audio enthusiasts and music collectors"
 arch=(x86_64)
 url="https://www.strawbs.org/"
 license=(GPL3)
-depends=(qt6-base chromaprint protobuf gst-plugins-base gst-plugins-good libcdio libmtp fftw)
-makedepends=(cmake boost qt6-tools)
+depends=(qt5-base chromaprint protobuf gst-plugins-base gst-plugins-good libcdio libmtp fftw)
+makedepends=(cmake boost qt5-tools)
 optdepends=('gst-libav: additional codecs'
             'gst-plugins-bad: additional codecs'
             'gst-plugins-ugly: additional codecs')

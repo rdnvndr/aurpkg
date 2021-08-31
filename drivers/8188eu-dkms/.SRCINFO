@@ -1,9 +1,8 @@
 pkgbase = 8188eu-dkms
 	pkgdesc = Driver for Realtek RTL8188EUS (RTL8188EUS, RTL8188ETV) WLAN
 	pkgver = v4.3.0.8_13968
-	pkgrel = 15
+	pkgrel = 16
 	url = http://www.realtek.com.tw/
-	install = 8188eu-dkms.install
 	arch = any
 	license = GPL
 	depends = dkms
@@ -43,8 +42,7 @@ pkgbase = 8188eu-dkms
 	md5sums = 0f23196d2f3be2aff32393c698c10d7a
 	md5sums = d3d112aec7a0cdccc7161ba1d66b8475
 	md5sums = 96d4403315c7af254d2be5706b726317
-	md5sums = 4fbcd8b8b9d3e4a610b826ab1217f369
+	md5sums = 8906dbc463e885aa6aa95679e5c5f659
 	md5sums = 0b14ee4517f78ada4d471654afd82b79
 
 pkgname = 8188eu-dkms
-

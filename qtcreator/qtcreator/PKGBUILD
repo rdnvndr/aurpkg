@@ -9,13 +9,14 @@
 pkgname=qtcreator
 pkgver=5.0.0
 _clangver=12.0.1
-pkgrel=1
+pkgrel=3
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
 license=(GPL3)
-depends=(qt5-tools qt5-quickcontrols qt5-quickcontrols2 qt5-webengine qt5-svg qt5-quick3d qt5-serialport
-         clang=$_clangver clazy syntax-highlighting yaml-cpp)
+# Note: built against Qt5 because of https://bugreports.qt.io/browse/QTCREATORBUG-26134
+depends=(qt5-tools qt5-quickcontrols2 qt5-svg qt5-quick3d qt5-webengine qt5-serialport syntax-highlighting # qt6-shadertools qt6-5compat
+         clang=$_clangver clazy yaml-cpp)
 makedepends=(cmake llvm python)
 options=(docs)
 optdepends=('qt5-doc: integrated Qt documentation'
@@ -46,12 +47,18 @@ build() {
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBEXECDIR=lib \
     -DWITH_DOCS=ON \
-    -DBUILD_QBS=OFF
+    -DBUILD_DEVELOPER_DOCS=ON \
+    -DBUILD_QBS=OFF \
+    -DQTC_CLANG_BUILDMODE_MATCH=ON \
+    -DBUILD_HELVIEWERBACKEND_QTWEBENGINE=ON
   cmake --build build
+#  cmake --build build --target docs
 }
 
 package() {
   DESTDIR="$pkgdir" cmake --install build
+# Install docs
+  cp -r build/share/doc "$pkgdir"/usr/share
 
   install -Dm644 qt-creator-opensource-src-$pkgver/LICENSE.GPL3-EXCEPT "$pkgdir"/usr/share/licenses/qtcreator/LICENSE.GPL3-EXCEPT
 }

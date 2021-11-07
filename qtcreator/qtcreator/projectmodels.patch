@@ -1,0 +1,20 @@
+diff -cr a/src/plugins/projectexplorer/projectmodels.cpp b/src/plugins/projectexplorer/projectmodels.cpp
+*** a/src/plugins/projectexplorer/projectmodels.cpp	2021-09-30 05:33:49.000000000 +0300
+--- b/src/plugins/projectexplorer/projectmodels.cpp	2021-11-07 15:40:11.945407765 +0300
+***************
+*** 507,513 ****
+                  addFolderNode(parent, subFolderNode, seen);
+              }
+          } else if (FileNode *fileNode = node->asFileNode()) {
+!             if (!seen->contains(fileNode)) {
+                  seen->insert(fileNode);
+                  parent->appendChild(new WrapperNode(fileNode));
+              }
+--- 507,513 ----
+                  addFolderNode(parent, subFolderNode, seen);
+              }
+          } else if (FileNode *fileNode = node->asFileNode()) {
+!             if (!seen->contains(fileNode) && !(m_filterProjects && fileNode->fileType() == FileType::Project)) {
+                  seen->insert(fileNode);
+                  parent->appendChild(new WrapperNode(fileNode));
+              }

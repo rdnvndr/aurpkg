@@ -16,7 +16,7 @@ fi
 pkgname=mesa210
 pkgdesc='An open-source implementation of the OpenGL specification. (stable release)'
 pkgver=21.0.2
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="https://mesa3d.org/"
 license=('MIT')
@@ -29,8 +29,14 @@ depends=('libdrm' 'libxcb' 'wayland' 'python' 'libclc' 'clang' 'libx11' 'libxshm
          'libxdamage' 'libomxil-bellagio' 'libunwind' 'lm_sensors' 'libglvnd' 'vulkan-icd-loader' 'llvm' 'clang' 'gcc-libs' 'gcc'
          'glslang')
 source=("https://archive.mesa3d.org/mesa-$pkgver.tar.xz"
+        "swr-llvm13-patch1.patch"
+        "swr-llvm13-patch2.patch"
+        "ac_llvm_helper.patch"
         "LICENSE")
 md5sums=("SKIP"
+         "SKIP"
+         "SKIP"
+         "SKIP"
          "SKIP")
 if [[ $_llvm = "y" ]]; then
   source+=("0001-enable-llvm-by-default.patch")

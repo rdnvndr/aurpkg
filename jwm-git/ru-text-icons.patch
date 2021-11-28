@@ -1,51 +1,51 @@
-diff -cr jwm-1592/po/ru.po jwm-roand/po/ru.po
-*** jwm-1592/po/ru.po	2017-03-27 02:46:08.000000000 +0300
---- jwm-roand/po/ru.po	2017-03-27 21:13:07.103308878 +0300
+diff -cr a/po/ru.po b/po/ru.po
+*** a/po/ru.po	2017-03-27 02:46:08.000000000 +0300
+--- b/po/ru.po	2017-03-27 21:13:07.103308878 +0300
 ***************
-*** 337,356 ****
+*** 383,402 ****
   
-  #: src/taskbar.c:444 src/winmenu.c:48
+  #: src/taskbar.c:483 src/winmenu.c:48
   msgid "Close"
 ! msgstr "Закрыть"
   
-  #: src/taskbar.c:451 src/winmenu.c:66
+  #: src/taskbar.c:490 src/winmenu.c:66
   msgid "Minimize"
 ! msgstr "Свернуть"
   
-  #: src/taskbar.c:458 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
+  #: src/taskbar.c:497 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
   #: src/winmenu.c:106
   msgid "Restore"
 ! msgstr "Восстановить"
   
-  #: src/taskbar.c:465 src/winmenu.c:179
+  #: src/taskbar.c:504 src/winmenu.c:179
   msgid "Send To"
 ! msgstr "Переместить на рабочий стол"
   
-  #: src/taskbar.c:961
+  #: src/taskbar.c:999
   #, c-format
---- 337,356 ----
+--- 383,402 ----
   
-  #: src/taskbar.c:444 src/winmenu.c:48
+  #: src/taskbar.c:483 src/winmenu.c:48
   msgid "Close"
 ! msgstr "  Закрыть"
   
-  #: src/taskbar.c:451 src/winmenu.c:66
+  #: src/taskbar.c:490 src/winmenu.c:66
   msgid "Minimize"
 ! msgstr "  Свернуть"
   
-  #: src/taskbar.c:458 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
+  #: src/taskbar.c:497 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
   #: src/winmenu.c:106
   msgid "Restore"
 ! msgstr "  Восстановить"
   
-  #: src/taskbar.c:465 src/winmenu.c:179
+  #: src/taskbar.c:504 src/winmenu.c:179
   msgid "Send To"
-! msgstr "  Переместить на стол"
+! msgstr "  Переместить на"
   
-  #: src/taskbar.c:961
+  #: src/taskbar.c:999
   #, c-format
 ***************
-*** 390,460 ****
+*** 436,506 ****
   
   #: src/winmenu.c:49
   msgid "Kill"
@@ -117,7 +117,7 @@ diff -cr jwm-1592/po/ru.po jwm-roand/po/ru.po
   
   #~ msgid "invalid tray width: %d"
   #~ msgstr "недопустимое значение ширины панели: %d"
---- 390,460 ----
+--- 436,506 ----
   
   #: src/winmenu.c:49
   msgid "Kill"

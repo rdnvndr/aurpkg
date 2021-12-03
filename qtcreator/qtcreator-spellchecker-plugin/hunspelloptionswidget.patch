@@ -1,19 +1,373 @@
-*** a/src/SpellCheckers/HunspellChecker/hunspelloptionswidget.cpp	2021-08-27 12:10:17.018916389 +0300
---- b/src/SpellCheckers/HunspellChecker/hunspelloptionswidget.cpp	2021-08-27 12:08:20.669981542 +0300
-***************
-*** 106,112 ****
-      userDictFileName.replace( QRegularExpression( QLatin1String( "\\.dic$" ) ), QLatin1String( ".udic" ) );
-      userDictFileName = QLatin1String( "QtC-" ) + userDictFileName;
-      /* Add the file name to the User Resource Path */
-!     QString userDictName = Core::ICore::userResourcePath() + QLatin1String( "/UserDictionaries/" ) + userDictFileName;
-      updateUserDictionary( userDictName );
-    }
-  }
---- 106,112 ----
-      userDictFileName.replace( QRegularExpression( QLatin1String( "\\.dic$" ) ), QLatin1String( ".udic" ) );
-      userDictFileName = QLatin1String( "QtC-" ) + userDictFileName;
-      /* Add the file name to the User Resource Path */
-!     QString userDictName = Core::ICore::userResourcePath().toString() + QLatin1String( "/UserDictionaries/" ) + userDictFileName;
-      updateUserDictionary( userDictName );
-    }
-  }
+diff --git a/spellchecker_dependencies.pri b/spellchecker_dependencies.pri
+index 567ad34d..946e045a 100644
+--- a/spellchecker_dependencies.pri
++++ b/spellchecker_dependencies.pri
+@@ -1,14 +1,12 @@
+ QTC_PLUGIN_NAME = SpellChecker
+ QTC_LIB_DEPENDS += \
+-    cplusplus \
+     extensionsystem
+ 
+ QTC_PLUGIN_DEPENDS += \
+     coreplugin \
+     texteditor \
+     projectexplorer \
+-    cppeditor \
+-    cpptools
++    cppeditor
+ 
+ QTC_PLUGIN_RECOMMENDS += \
+     # optional plugin dependencies. nothing here at this time
+diff --git a/src/Parsers/CppParser/cppdocumentparser.cpp b/src/Parsers/CppParser/cppdocumentparser.cpp
+index c9ed5580..bbccb292 100644
+--- a/src/Parsers/CppParser/cppdocumentparser.cpp
++++ b/src/Parsers/CppParser/cppdocumentparser.cpp
+@@ -34,8 +34,8 @@
+ #include <coreplugin/progressmanager/progressmanager.h>
+ #include <cppeditor/cppeditorconstants.h>
+ #include <cppeditor/cppeditordocument.h>
+-#include <cpptools/cppmodelmanager.h>
+-#include <cpptools/cpptoolsreuse.h>
++#include <cppeditor/cppmodelmanager.h>
++#include <cppeditor/cpptoolsreuse.h>
+ #include <projectexplorer/project.h>
+ #include <projectexplorer/session.h>
+ #include <texteditor/syntaxhighlighter.h>
+@@ -344,11 +344,11 @@ public:
+   QStringSet getCppFiles( const QStringSet& list )
+   {
+     return Utils::filtered( list, []( const QString& file ) {
+-            const CppTools::ProjectFile::Kind kind = CppTools::ProjectFile::classify( file );
++            const CppEditor::ProjectFile::Kind kind = CppEditor::ProjectFile::classify( file );
+             switch( kind ) {
+-              case CppTools::ProjectFile::Unclassified:
++              case CppEditor::ProjectFile::Unclassified:
+                 return false;
+-              case CppTools::ProjectFile::Unsupported: {
++              case CppEditor::ProjectFile::Unsupported: {
+                 /* Check our doxy MimeType added by this plugin */
+                 const Utils::MimeType mimeType = Utils::mimeTypeForFile( file );
+                 const QString mt               = mimeType.name();
+@@ -396,8 +396,8 @@ CppDocumentParser::CppDocumentParser( QObject* parent )
+   /* Crete the options page for the parser */
+   d->optionsPage = new CppParserOptionsPage( d->settings, this );
+ 
+-  CppTools::CppModelManager* modelManager = CppTools::CppModelManager::instance();
+-  connect( modelManager, &CppTools::CppModelManager::documentUpdated, this, &CppDocumentParser::parseCppDocumentOnUpdate, Qt::DirectConnection );
++  CppEditor::CppModelManager* modelManager = CppEditor::CppModelManager::instance();
++  connect( modelManager, &CppEditor::CppModelManager::documentUpdated, this, &CppDocumentParser::parseCppDocumentOnUpdate, Qt::DirectConnection );
+   connect(         qApp, &QApplication::aboutToQuit,                  this, [=]() {
+           /* Disconnect any signals that might still get emitted. */
+           modelManager->disconnect( this );
+@@ -534,7 +534,7 @@ void CppDocumentParser::reparseProject()
+   const Utils::FilePaths projectFiles = d->activeProject->files( ProjectExplorer::Project::SourceFiles );
+   const QStringList fileList             = Utils::transform( projectFiles, &Utils::FilePath::toString );
+ 
+-  const QStringSet fileSet = d->getCppFiles( fileList.toSet() );
++  const QStringSet fileSet = d->getCppFiles( QStringSet(fileList.begin(), fileList.end()) );
+   d->filesInStartupProject = fileSet;
+ 
+   {
+@@ -552,7 +552,7 @@ void CppDocumentParser::reparseProject()
+ void CppDocumentParser::queueFilesForUpdate()
+ {
+   /* Only re-parse the files that were added. */
+-  static CppTools::CppModelManager* modelManager = CppTools::CppModelManager::instance();
++  static CppEditor::CppModelManager* modelManager = CppEditor::CppModelManager::instance();
+ 
+   QStringSet filesToUpdate;
+   size_t filesOutstanding;
+@@ -743,8 +743,8 @@ void CppDocumentParser::applySettingsToWords( const CppParserSettings& settings,
+ 
+     if( ( removeCurrentWord == false ) && ( settings.checkQtKeywords == false ) ) {
+       /* Remove the basic Qt Keywords using the isQtKeyword() function in the CppTools */
+-      if( ( CppTools::isQtKeyword( QStringRef( &currentWord ) ) == true )
+-          || ( CppTools::isQtKeyword( QStringRef( &currentWordCaps ) ) == true ) ) {
++      if( ( CppEditor::isQtKeyword( currentWord ) == true )
++          || ( CppEditor::isQtKeyword( currentWordCaps ) == true ) ) {
+         removeCurrentWord = true;
+       }
+       /* Remove words that Start with capital Q and the next char is also capital letter. This would
+@@ -778,7 +778,7 @@ void CppDocumentParser::applySettingsToWords( const CppParserSettings& settings,
+       if( websiteRe.match( currentWord ).hasMatch() == true ) {
+         removeCurrentWord = true;
+       } else if( currentWord.contains( websiteCharsRe ) == true ) {
+-        QStringList wordsSplitOnWebChars = currentWord.split( websiteCharsRe, QString::SkipEmptyParts );
++        QStringList wordsSplitOnWebChars = currentWord.split( websiteCharsRe, Qt::SkipEmptyParts );
+         if( wordsSplitOnWebChars.isEmpty() == false ) {
+           /* String is not a website, check each component now */
+           removeCurrentWord = true;
+@@ -811,7 +811,7 @@ void CppDocumentParser::applySettingsToWords( const CppParserSettings& settings,
+           removeCurrentWord = true;
+         } else if( settings.wordsWithNumberOption == CppParserSettings::SplitWordsOnNumbers ) {
+           removeCurrentWord = true;
+-          QStringList wordsSplitOnNumbers = currentWord.split( numberSplitRe, QString::SkipEmptyParts );
++          QStringList wordsSplitOnNumbers = currentWord.split( numberSplitRe, Qt::SkipEmptyParts );
+           WordList wordsFromSplit;
+           IDocumentParser::getWordsFromSplitString( wordsSplitOnNumbers, word, wordsFromSplit );
+           /* Apply the settings to the words that came from the split to filter out words that does
+@@ -835,7 +835,7 @@ void CppDocumentParser::applySettingsToWords( const CppParserSettings& settings,
+         } else if( settings.wordsWithUnderscoresOption == CppParserSettings::SplitWordsOnUnderscores ) {
+           removeCurrentWord = true;
+           static const QRegularExpression underscoreSplitRe( QStringLiteral( "_+" ) );
+-          QStringList wordsSplitOnUnderScores = currentWord.split( underscoreSplitRe, QString::SkipEmptyParts );
++          QStringList wordsSplitOnUnderScores = currentWord.split( underscoreSplitRe, Qt::SkipEmptyParts );
+           WordList wordsFromSplit;
+           IDocumentParser::getWordsFromSplitString( wordsSplitOnUnderScores, word, wordsFromSplit );
+           /* Apply the settings to the words that came from the split to filter out words that does
+@@ -919,7 +919,7 @@ void CppDocumentParser::applySettingsToWords( const CppParserSettings& settings,
+         } else if( settings.wordsWithDotsOption == CppParserSettings::SplitWordsOnDots ) {
+           removeCurrentWord = true;
+           static const QRegularExpression dotsSplitRe( QStringLiteral( "\\.+" ) );
+-          QStringList wordsSplitOnDots = currentWord.split( dotsSplitRe, QString::SkipEmptyParts );
++          QStringList wordsSplitOnDots = currentWord.split( dotsSplitRe, Qt::SkipEmptyParts );
+           WordList wordsFromSplit;
+           IDocumentParser::getWordsFromSplitString( wordsSplitOnDots, word, wordsFromSplit );
+           /* Apply the settings to the words that came from the split to filter out words that does
+diff --git a/src/Parsers/CppParser/cppdocumentprocessor.cpp b/src/Parsers/CppParser/cppdocumentprocessor.cpp
+index 033fbfcf..348fe143 100644
+--- a/src/Parsers/CppParser/cppdocumentprocessor.cpp
++++ b/src/Parsers/CppParser/cppdocumentprocessor.cpp
+@@ -24,7 +24,7 @@
+ 
+ #include <cplusplus/Overview.h>
+ #include <cppeditor/cppeditordocument.h>
+-#include <cpptools/cppdoxygen.h>
++#include <cppeditor/cppdoxygen.h>
+ 
+ using namespace SpellChecker;
+ using namespace SpellChecker::CppSpellChecker::Internal;
+@@ -348,8 +348,8 @@ WordList CppDocumentProcessor::extractWordsFromString( const QString& string, in
+             || ( charBeforeStart == QLatin1Char( '@' ) ) ) {
+           const QString& currentWord = word.text;
+           /* Classify it */
+-          const int32_t doxyClass = CppTools::classifyDoxygenTag( currentWord.unicode(), currentWord.size() );
+-          if( doxyClass != CppTools::T_DOXY_IDENTIFIER ) {
++          const int32_t doxyClass = CppEditor::classifyDoxygenTag( currentWord.unicode(), currentWord.size() );
++          if( doxyClass != CppEditor::T_DOXY_IDENTIFIER ) {
+             /* It is a doxygen tag, mark it as such so that it does not end up
+              * in the list of words from this string. */
+             isDoxygenTag = true;
+@@ -463,8 +463,8 @@ QVector<WordTokens> CppDocumentProcessor::parseMacros() const
+   if( macroUse.count() == 0 ) {
+     return {};
+   }
+-  static CppTools::CppModelManager* cppModelManager    = CppTools::CppModelManager::instance();
+-  CppTools::CppEditorDocumentHandle* cppEditorDocument = cppModelManager->cppEditorDocument( d->docPtr->fileName() );
++  static CppEditor::CppModelManager* cppModelManager    = CppEditor::CppModelManager::instance();
++  CppEditor::CppEditorDocumentHandle* cppEditorDocument = cppModelManager->cppEditorDocument( d->docPtr->fileName() );
+   if( cppEditorDocument == nullptr ) {
+     return {};
+   }
+diff --git a/src/outputpane.cpp b/src/outputpane.cpp
+index 61e21ae5..32fad271 100644
+--- a/src/outputpane.cpp
++++ b/src/outputpane.cpp
+@@ -100,7 +100,7 @@ OutputPane::OutputPane( SpellingMistakesModel* model, QObject* parent )
+    * This code was copied directly from {QtC}/src/plugins/texteditor/refactoroverlay.cpp
+    * An icon is created with the 2 parts with specific colors for each. */
+   d->buttonSuggest->setIcon(
+-    Utils::Icon( { { QLatin1String( ":/utils/images/lightbulbcap.png" ), Utils::Theme::PanelTextColorMid }, { QLatin1String( ":/utils/images/lightbulb.png" ), Utils::Theme::IconsWarningColor } }
++    Utils::Icon( { { ":/utils/images/lightbulbcap.png", Utils::Theme::PanelTextColorMid }, { ":/utils/images/lightbulb.png", Utils::Theme::IconsWarningColor } }
+                  , Utils::Icon::Tint ).icon() );
+   d->buttonSuggest->setText( tr( "Give Suggestions" ) );
+   d->buttonSuggest->setToolTip( tr( "Give suggestions for the word" ) );
+@@ -429,7 +429,7 @@ QWidget* OutputPaneDelegate::createEditor( QWidget* parent, const QStyleOptionVi
+     QWidget* widget     = new QWidget( parent );
+     QHBoxLayout* layout = new QHBoxLayout();
+     widget->setLayout( layout );
+-    layout->setMargin( 1 );
++    layout->setContentsMargins(1, 1, 1, 1);
+     layout->setSpacing( 3 );
+     Word word               = d->wordSelected;
+     QStringList suggestions = index.data().toString().split( QStringLiteral( ", " ) );
+diff --git a/src/spellcheckercore.cpp b/src/spellcheckercore.cpp
+index cd709ba7..d40b3066 100644
+--- a/src/spellcheckercore.cpp
++++ b/src/spellcheckercore.cpp
+@@ -40,7 +40,7 @@
+ #include <coreplugin/editormanager/ieditor.h>
+ #include <coreplugin/icore.h>
+ #include <coreplugin/idocument.h>
+-#include <cpptools/cppmodelmanager.h>
++#include <cppeditor/cppmodelmanager.h>
+ #include <texteditor/texteditor.h>
+ #include <utils/algorithm.h>
+ #include <utils/fadingindicator.h>
+@@ -725,7 +725,8 @@ void SpellCheckerCore::startupProjectChanged( ProjectExplorer::Project* startupP
+   if( startupProject != nullptr ) {
+     /* Check if the current project is not set to be ignored by the settings. */
+     if( d->settings->projectsToIgnore.contains( startupProject->displayName() ) == false ) {
+-      d->filesInStartupProject = Utils::transform( startupProject->files( ProjectExplorer::Project::SourceFiles ), &Utils::FilePath::toString ).toSet();
++      const auto fileList = Utils::transform( startupProject->files( ProjectExplorer::Project::SourceFiles ), &Utils::FilePath::toString );
++      d->filesInStartupProject = QSet(fileList.begin(), fileList.end());
+     } else {
+       /* The Project should be ignored and not be spell checked. */
+       d->startupProject = nullptr;
+@@ -748,7 +749,8 @@ void SpellCheckerCore::fileListChanged()
+   }
+ 
+   const QStringSet oldFiles = d->filesInStartupProject;
+-  const QStringSet newFiles = Utils::transform( d->startupProject->files( ProjectExplorer::Project::SourceFiles ), &Utils::FilePath::toString ).toSet();
++  const auto fileList = Utils::transform( d->startupProject->files( ProjectExplorer::Project::SourceFiles ), &Utils::FilePath::toString );
++  const QStringSet newFiles = QStringSet(fileList.begin(), fileList.end());
+ 
+   /* Compare the two sets with each other to get the lists of files
+    * added and removed.
+diff --git a/src/spellcheckercoreoptionspage.cpp b/src/spellcheckercoreoptionspage.cpp
+index 745bde82..e955d423 100644
+--- a/src/spellcheckercoreoptionspage.cpp
++++ b/src/spellcheckercoreoptionspage.cpp
+@@ -33,7 +33,7 @@ SpellCheckerCoreOptionsPage::SpellCheckerCoreOptionsPage( SpellCheckerCoreSettin
+   setDisplayName( tr( "SpellChecker" ) );
+   setCategory( "SpellChecker" );
+   setDisplayCategory( tr( "Spell Checker" ) );
+-  setCategoryIcon( Utils::Icon( QLatin1String( Constants::ICON_SPELLCHECKERPLUGIN_OPTIONS ) ) );
++  setCategoryIcon( Utils::Icon( Constants::ICON_SPELLCHECKERPLUGIN_OPTIONS ) );
+ }
+ // --------------------------------------------------
+ 
+diff --git a/src/spellcheckercoreoptionswidget.cpp b/src/spellcheckercoreoptionswidget.cpp
+index 6c4ba0a7..2d544e98 100644
+--- a/src/spellcheckercoreoptionswidget.cpp
++++ b/src/spellcheckercoreoptionswidget.cpp
+@@ -42,8 +42,8 @@ SpellCheckerCoreOptionsWidget::SpellCheckerCoreOptionsWidget( const SpellChecker
+    * icon also has a PLUS_TOOLBAR icon for toolbars, but the Minus icon
+    * does not have these two icons, it only has the one, and that one
+    * is for the toolbar since nowhere else is a normal one needed. */
+-  ui->toolButtonRemoveProject->setIcon( Utils::Icon( { { QLatin1String( ":/utils/images/minus.png" )
+-                                                       , Utils::Theme::PaletteText } }, Utils::Icon::Tint ).icon() );
++  ui->toolButtonRemoveProject->setIcon( Utils::Icon( { { ":/utils/images/minus.png"
++                                                       , Utils::Theme::PaletteText } }, Utils::Icon::Tint ).icon() );
+ 
+   QMap<QString, ISpellChecker*> availableSpellCheckers = SpellCheckerCore::instance()->addedSpellCheckers();
+   for( const QString& name: availableSpellCheckers.keys() ) {
+diff --git a/src/spellcheckquickfix.cpp b/src/spellcheckquickfix.cpp
+index 0fd8413b..6f0bf6c0 100644
+--- a/src/spellcheckquickfix.cpp
++++ b/src/spellcheckquickfix.cpp
+@@ -20,7 +20,6 @@
+ 
+ #include "spellcheckercore.h"
+ #include "spellcheckquickfix.h"
+-#include <cppeditor/cppeditor.h>
+ 
+ using namespace SpellChecker;
+ 
+diff --git a/src/NavigationWidget.cpp b/src/NavigationWidget.cpp
+index ab1a85fe..c735dfb7 100644
+--- a/src/NavigationWidget.cpp
++++ b/src/NavigationWidget.cpp
+@@ -59,8 +59,8 @@ void SpellingMistakeDelegate::paint( QPainter* painter, const QStyleOptionViewIt
+   painter->save();
+ 
+   int colLit   = opt.rect.right() - 4;
+-  int colMist  = colLit - 4 - fm.width( QStringLiteral( "\"000\"" ) );
+-  int textArea = colMist - 4 - fm.width( QStringLiteral( "000" ) );
++  int colMist  = colLit - 4 - fm.horizontalAdvance( QStringLiteral( "\"000\"" ) );
++  int textArea = colMist - 4 - fm.horizontalAdvance( QStringLiteral( "000" ) );
+ 
+   QString fileName = index.data( ProjectMistakesModel::COLUMN_FILE ).toString();
+   /* Elide the text to make it fit into the available space. */
+@@ -77,10 +77,10 @@ void SpellingMistakeDelegate::paint( QPainter* painter, const QStyleOptionViewIt
+   /* Write the File Name */
+   painter->drawText( 6, 2 + opt.rect.top() + fm.ascent(), fileName );
+   /* Write the number of mistakes */
+-  painter->drawText( colMist - fm.width( nrMistakes ), 2 + opt.rect.top() + fm.ascent(), nrMistakes );
++  painter->drawText( colMist - fm.horizontalAdvance( nrMistakes ), 2 + opt.rect.top() + fm.ascent(), nrMistakes );
+   /* Draw the number of String Literal Mistakes. */
+   painter->setPen( Qt::darkGreen );
+-  painter->drawText( colLit - fm.width( nrLiterals ), 2 + opt.rect.top() + fm.ascent(), nrLiterals );
++  painter->drawText( colLit - fm.horizontalAdvance( nrLiterals ), 2 + opt.rect.top() + fm.ascent(), nrLiterals );
+   painter->restore();
+ }
+ // --------------------------------------------------
+diff --git a/src/SpellCheckers/HunspellChecker/hunspellchecker.cpp b/src/SpellCheckers/HunspellChecker/hunspellchecker.cpp
+index 3613940d..8e7ddf84 100644
+--- a/src/SpellCheckers/HunspellChecker/hunspellchecker.cpp
++++ b/src/SpellCheckers/HunspellChecker/hunspellchecker.cpp
+@@ -34,6 +34,7 @@
+ #include <QMutex>
+ #include <QSharedPointer>
+ #include <QTextCodec>
++#include <QRegularExpression>
+ 
+ #include <memory>
+ 
+@@ -51,7 +51,7 @@ public:
+   HunspellWrapper( const QString& dictionary )
+   {
+     /* Get the affix dictionary path */
+-    QString affPath = QString( dictionary ).replace( QRegExp( QLatin1String( "\\.dic$" ) ), QLatin1String( ".aff" ) );
++    QString affPath = QString( dictionary ).replace( QRegularExpression("\\.dic$"), ".aff");
+     d_hunspell = HunspellPtr( new ::Hunspell( affPath.toLatin1(), dictionary.toLatin1() ) );
+     d_codec    = QTextCodec::codecForName( d_hunspell->get_dic_encoding() );
+   }
+@@ -273,7 +273,7 @@ bool HunspellChecker::addWord( const QString& word )
+   d->hunspell->addWord( word );
+ 
+   QTextStream stream( &dictionary );
+-  stream << word << endl;
++  stream << word << Qt::endl;
+   dictionary.close();
+   return true;
+ }
+diff --git a/src/SpellCheckers/HunspellChecker/hunspelloptionswidget.cpp b/src/SpellCheckers/HunspellChecker/hunspelloptionswidget.cpp
+index 533774fe..37accbb1 100644
+--- a/src/SpellCheckers/HunspellChecker/hunspelloptionswidget.cpp
++++ b/src/SpellCheckers/HunspellChecker/hunspelloptionswidget.cpp
+@@ -64,7 +64,7 @@ void HunspellOptionsWidget::applySettings()
+     return;
+   }
+   /* Check if the aff file is located along with the .dic file */
+-  QString affFIleName = QString( ui->lineEditDictionary->text() ).replace( QRegExp( QLatin1String( "\\.dic$" ) ), QLatin1String( ".aff" ) );
++  QString affFIleName = QString( ui->lineEditDictionary->text() ).replace( QRegularExpression( QLatin1String( "\\.dic$" ) ), QLatin1String( ".aff" ) );
+   QFileInfo affFile( affFIleName );
+   if( affFile.exists() == false ) {
+     emit optionsError( QLatin1String( "Hunspell Spellchecker" ), tr( "The *.aff File for selected dictionary does not exist" ) );
+@@ -140,9 +140,7 @@ void HunspellOptionsWidget::on_toolButtonBrowseUserDictionary_clicked()
+   QString userDictionary = QFileDialog::getSaveFileName( this,
+                                                          tr( "User Dictionary File" ),
+                                                          ui->lineEditUserDictionary->text(),
+-                                                         tr( "Dictionaries (*.udic)" ),
+-                                                         0,
+-                                                         0 );
++                                                         tr( "Dictionaries (*.udic)" ));
+   if( userDictionary.isEmpty() == false ) {
+     updateUserDictionary( userDictionary );
+   }
+diff --git a/.github/workflows/build.yaml b/.github/workflows/build.yaml
+index 2e9a7571..c6b61f9b 100644
+--- a/.github/workflows/build.yaml
++++ b/.github/workflows/build.yaml
+@@ -10,8 +10,8 @@ name: Build SpellChecker-Plugin
+ on: [push]
+ 
+ env:
+-  QT_VERSION: "5.15.0"
+-  QT_CREATOR_VERSION: "5.0"
++  QT_VERSION: "6.2.1"
++  QT_CREATOR_VERSION: "6.0"
+ 
+ # The Jobs
+ jobs:
+@@ -196,8 +196,8 @@ jobs:
+ 
+                 # Windows workaround for issue with libs not ending with 5.lib
+                 Get-ChildItem -Path .\qtcreator\lib\qtcreator\ -Recurse |
+-                  Where {$_.Name -Match '[^5].lib$'} |
+-                  Rename-Item -NewName {$_.name -replace '.lib$', '5.lib' }
++                  Where {$_.Name -Match '[^6].lib$'} |
++                  Rename-Item -NewName {$_.name -replace '.lib$', '6.lib' }
+               }
+               "Linux" {
+                 # Fix the case of the libClangSupport.so (thanks @rdnvndr)
+@@ -261,7 +261,7 @@ jobs:
+                 ${PLUGIN_DIR_BIN} = "${PLUGIN_DIR_BASE}/bin/"
+                 New-Item -ItemType Directory "${PLUGIN_DIR_OUT}" -Force
+                 New-Item -ItemType Directory "${PLUGIN_DIR_BIN}" -Force
+-                Copy-Item -Path "${env:QTC_BUILD}/lib/qtcreator/plugins/SpellChecker5.dll" -Destination "${PLUGIN_DIR_OUT}/"
++                Copy-Item -Path "${env:QTC_BUILD}/lib/qtcreator/plugins/SpellChecker6.dll" -Destination "${PLUGIN_DIR_OUT}/"
+                 Copy-Item -Path "${env:VCPKG_INSTALLED_DIR}/bin/libhunspell.dll" -Destination "${PLUGIN_DIR_BIN}/"
+                 Push-Location ${PLUGIN_DIR_BASE}
+                 ${env:PLUGIN_ARCHIVE_NAME} = "${PLUGIN_ARCHIVE}.zip"

@@ -1,9 +1,9 @@
 pkgname=qtcreator-spellchecker-plugin
-pkgver=2.0.10
-_commit=b65ecf2aec20aa24f502c14552d4f8eb8ccab344
+pkgver=2.0.11
+_commit=fb8b758
 pkgrel=1
 pkgdesc="Spell Checker plugin for the Qt Creator IDE"
-groups=('qt' 'qt5')
+groups=('qt' 'qt6')
 arch=('i686' 'x86_64')
 url="https://github.com/CJCombrink/SpellChecker-Plugin"
 license=('GPL3')
@@ -15,20 +15,20 @@ sha256sums=('SKIP' 'SKIP')
 
 build() {
     mkdir -p "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/"
-    ln -s /usr/lib/qtcreator/libAggregation.so.5 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libAggregation.so"
-    ln -s /usr/lib/qtcreator/libQtcSsh.so.5 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libQtcSsh.so"
-    ln -s /usr/lib/qtcreator/libCPlusPlus.so.5 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libCPlusPlus.so"
-    ln -s /usr/lib/qtcreator/libClangSupport.so.5 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libClangsupport.so"
-    ln -s /usr/lib/qtcreator/libExtensionSystem.so.5 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libExtensionSystem.so"
-    ln -s /usr/lib/qtcreator/libUtils.so.5 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libUtils.so"
-    ln -s /usr/lib/qtcreator/libSqlite.so.5 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libSqlite.so"
+    ln -s /usr/lib/qtcreator/libAggregation.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libAggregation.so"
+    ln -s /usr/lib/qtcreator/libQtcSsh.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libQtcSsh.so"
+    ln -s /usr/lib/qtcreator/libCPlusPlus.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libCPlusPlus.so"
+    ln -s /usr/lib/qtcreator/libClangSupport.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libClangsupport.so"
+    ln -s /usr/lib/qtcreator/libExtensionSystem.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libExtensionSystem.so"
+    ln -s /usr/lib/qtcreator/libUtils.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libUtils.so"
+    ln -s /usr/lib/qtcreator/libSqlite.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libSqlite.so"
 
     cd "${srcdir}/${pkgname}"
     git checkout ${_commit}
     
     patch -p1 -i ../hunspelloptionswidget.patch
 
-    QTC_SOURCE=/usr/src/qtcreator QTC_BUILD=build qmake \
+    QTC_SOURCE=/usr/src/qtcreator QTC_BUILD=build qmake6 \
         "LIBS+=-L/usr/lib/qtcreator -L/usr/lib/qtcreator/plugins" \
         "KSYNTAXHIGHLIGHTING_LIB_DIR=/usr/lib" "KSYNTAXHIGHLIGHTING_INCLUDE_DIR=/usr/include/KF5/KSyntaxHighlighting"
 

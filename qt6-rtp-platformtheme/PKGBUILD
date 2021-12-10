@@ -6,7 +6,7 @@ pkgdesc="A theme engine for Qt5"
 arch=(x86_64)
 url="https://github.com/rdnvndr/$pkgname"
 license=('GPL3')
-depends=('qt5-base')
+depends=('qt6-base')
 source=("$_pkgname-$pkgver.tar.gz::https://github.com/rdnvndr/$_pkgname/archive/v${pkgver}.tar.gz")
 sha512sums=('SKIP')
 

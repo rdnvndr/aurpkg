@@ -1,6 +1,6 @@
 pkgname=qtcreator-spellchecker-plugin
-pkgver=2.0.11
-_commit=fb8b758
+pkgver=2.0.12
+_commit=b9d5182
 pkgrel=1
 pkgdesc="Spell Checker plugin for the Qt Creator IDE"
 groups=('qt' 'qt6')
@@ -9,9 +9,8 @@ url="https://github.com/CJCombrink/SpellChecker-Plugin"
 license=('GPL3')
 depends=('qtcreator' 'hunspell')
 makedepends=('git' 'qtcreator-src')
-source=("$pkgname"::git+https://github.com/CJCombrink/SpellChecker-Plugin.git
-        "hunspelloptionswidget.patch")
-sha256sums=('SKIP' 'SKIP')
+source=("$pkgname"::git+https://github.com/CJCombrink/SpellChecker-Plugin.git)
+sha256sums=('SKIP')
 
 build() {
     mkdir -p "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/"
@@ -22,12 +21,11 @@ build() {
     ln -s /usr/lib/qtcreator/libExtensionSystem.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libExtensionSystem.so"
     ln -s /usr/lib/qtcreator/libUtils.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libUtils.so"
     ln -s /usr/lib/qtcreator/libSqlite.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libSqlite.so"
+    ln -s /usr/lib/qtcreator/libKSyntaxHighlighting.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libKSyntaxHighlighting.so"
 
     cd "${srcdir}/${pkgname}"
     git checkout ${_commit}
     
-    patch -p1 -i ../hunspelloptionswidget.patch
-
     QTC_SOURCE=/usr/src/qtcreator QTC_BUILD=build qmake6 \
         "LIBS+=-L/usr/lib/qtcreator -L/usr/lib/qtcreator/plugins" \
         "KSYNTAXHIGHLIGHTING_LIB_DIR=/usr/lib" "KSYNTAXHIGHLIGHTING_INCLUDE_DIR=/usr/include/KF5/KSyntaxHighlighting"

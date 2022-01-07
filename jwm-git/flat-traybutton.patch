@@ -36,15 +36,15 @@ diff -cr jwm-1271/src/traybutton.c jwm-roand/src/traybutton.c
      bp = (TrayButtonType*)cp->object;
   
      if(bp->label) {
-!       labelWidth = GetStringWidth(FONT_TRAY, bp->label) + 6;
-        labelHeight = GetStringHeight(FONT_TRAY) + 6;
+!       labelWidth = GetStringWidth(FONT_TRAY, bp->label);
+        labelHeight = GetStringHeight(FONT_TRAY);
      } else {
         labelWidth = 4;
 --- 187,193 ----
      bp = (TrayButtonType*)cp->object;
   
      if(bp->label) {
-!       labelWidth = GetStringWidth(FONT_TRAY, bp->label) + 8;
+!       labelWidth = GetStringWidth(FONT_TRAY, bp->label) + 3;
         labelHeight = GetStringHeight(FONT_TRAY) + 6;
      } else {
         labelWidth = 4;
@@ -76,17 +76,36 @@ diff -cr jwm-1271/src/traybutton.c jwm-roand/src/traybutton.c
      button.font = FONT_TRAY;
      button.text = bp->label;
      button.icon = bp->icon;
+*** jwm-1271/src/button.h        2015-09-12 02:46:52.000000000 +0300
+--- jwm-roand/src/button.h    2015-09-18 21:03:16.000000000 +0300
+***************
+*** 14,20 ****
+  #include "settings.h"
+ 
+  /** Number of pixels used for a border. */
+! #define BUTTON_BORDER 3
+ 
+  struct IconNode;
+ 
+--- 14,20 ----
+  #include "settings.h"
+ 
+  /** Number of pixels used for a border. */
+! #define BUTTON_BORDER 2
+ 
+  struct IconNode;
+ 
 diff -cr jwm-1271/src/button.c jwm-roand/src/button.c
 *** jwm-1271/src/button.c        2015-09-12 02:46:52.000000000 +0300
 --- jwm-roand/src/button.c    2015-09-18 21:03:16.000000000 +0300
 ***************
-*** 150,155 ****
---- 150,157 ----
+*** 169,174 ****
+--- 169,176 ----
         textHeight = GetStringHeight(bp->font);
-        if(iconWidth > 0 && textWidth + iconWidth + 7 > width) {
-           textWidth = width - iconWidth - 7;
+        if(textWidth + iconWidth + borderWidth > width) {
+           textWidth = width - iconWidth - borderWidth;
 +          if (bp->type==BUTTON_TASK || bp->type==BUTTON_TASK_ACTIVE)
 +              textWidth = textWidth - 3; 
-        } else if(iconWidth == 0 && textWidth + 5 > width) {
-           textWidth = width - 5;
         }
+        textWidth = textWidth < 0 ? 0 : textWidth;
+     }

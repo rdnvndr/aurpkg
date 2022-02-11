@@ -1,6 +1,6 @@
 # Maintainer: David Rodriguez <dissonant.tech@gmail.com>
 pkgname=tee-clc
-pkgver=14.135.0
+pkgver=14.136.0
 pkgrel=1
 epoch=
 pkgdesc="Team Explorer Everywhere Plug-in for Eclipse and Cross-platform Command-line Client for Team Foundation Server"
@@ -8,7 +8,7 @@ arch=(i686 x86_64)
 url="https://github.com/Microsoft/team-explorer-everywhere"
 license=('MIT')
 groups=()
-depends=('jre8')
+depends=()
 makedepends=()
 checkdepends=()
 optdepends=()

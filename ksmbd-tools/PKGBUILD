@@ -7,7 +7,7 @@ pkgdesc="Userspace tools for the ksmbd kernel SMB server"
 arch=('x86_64' 'i686' 'aarch64' 'armv7h' 'armv6h')
 url="https://github.com/cifsd-team/ksmbd-tools"
 license=('GPL2')
-depends=('KSMBD-MODULE' 'libnl')
+depends=('libnl')
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/${pkgver}.tar.gz")
 sha256sums=("cc7cc2fcbeed052176894a8dbbf290919c3735b320401c6492cf17f1ba1a3548")
 

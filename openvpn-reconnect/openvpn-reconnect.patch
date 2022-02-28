@@ -1,0 +1,14 @@
+*** a/openvpn-reconnect	2017-01-22 11:10:56.000000000 +0300
+--- b/openvpn-reconnect	2022-02-27 23:27:07.572276603 +0300
+***************
+*** 3,6 ****
+  	>&2 echo "$0 must be run with root privileges!"
+  	exit 1
+  fi
+! pkill --signal SIGHUP --exact openvpn
+--- 3,7 ----
+  	>&2 echo "$0 must be run with root privileges!"
+  	exit 1
+  fi
+! pkill --signal SIGHUP --exact openvpn > /dev/null
+! exit 0

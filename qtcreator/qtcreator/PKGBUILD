@@ -9,7 +9,7 @@
 pkgname=qtcreator
 pkgver=6.0.2
 _clangver=13.0.1
-pkgrel=4
+pkgrel=5
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -58,6 +58,7 @@ build() {
 }
 
 package() {
+  DESTDIR="$pkgdir" cmake --install build --component Devel
   DESTDIR="$pkgdir" cmake --install build
 # Install docs
   cp -r build/share/doc "$pkgdir"/usr/share

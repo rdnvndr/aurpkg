@@ -7,7 +7,7 @@
 # Contributor: delor <bartekpiech gmail com>
 
 pkgname=qtcreator
-pkgver=6.0.2
+pkgver=7.0.0
 _clangver=13.0.1
 pkgrel=5
 pkgdesc='Lightweight, cross-platform integrated development environment'
@@ -30,23 +30,21 @@ optdepends=('qt6-doc: integrated Qt documentation'
             'valgrind: analyze support'
             'perf: performer analyzer'
             'mlocate: locator filter')
-source=(https://download.qt.io/official_releases/qtcreator/${pkgver%.*}/$pkgver/qt-creator-opensource-src-$pkgver.tar.xz
-        QTCREATORBUG-26989.patch::https://code.qt.io/cgit/qt-creator/qt-creator.git/patch/?id=03a0ed07
+        
+source=(https://github.com/qt-creator/qt-creator/archive/refs/tags/v$pkgver-rc1.tar.gz
         "QTCREATORBUG-21681.patch"
         "projectmodels.patch")
-sha256sums=('3d173c1a02ce55137a23f294e1a840d7648656e97826067eb29d9df653351bfa'
-            'c64ff799179828159a6fb3db4d6e0a864457e632ba4c6a6d1761245275c0c5e8'
+sha256sums=(SKIP
             SKIP
             SKIP)
 
 prepare() {
-  patch -d qt-creator-opensource-src-$pkgver -p1 < QTCREATORBUG-26989.patch # Fix crashes in debugger
-  patch -d qt-creator-opensource-src-$pkgver -p1 < QTCREATORBUG-21681.patch
-  patch -d qt-creator-opensource-src-$pkgver -p1 < projectmodels.patch
+  patch -d qt-creator-$pkgver-rc1 -p1 < QTCREATORBUG-21681.patch
+  patch -d qt-creator-$pkgver-rc1 -p1 < projectmodels.patch
 }
 
 build() {
-  cmake -B build -S qt-creator-opensource-src-$pkgver \
+  cmake -B build -S qt-creator-$pkgver-rc1 \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBEXECDIR=lib \
     -DWITH_DOCS=ON \
@@ -63,5 +61,5 @@ package() {
 # Install docs
   cp -r build/share/doc "$pkgdir"/usr/share
 
-  install -Dm644 qt-creator-opensource-src-$pkgver/LICENSE.GPL3-EXCEPT "$pkgdir"/usr/share/licenses/qtcreator/LICENSE.GPL3-EXCEPT
+  install -Dm644 qt-creator-$pkgver-rc1/LICENSE.GPL3-EXCEPT "$pkgdir"/usr/share/licenses/qtcreator/LICENSE.GPL3-EXCEPT
 }

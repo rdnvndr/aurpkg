@@ -9,7 +9,7 @@
 pkgname=qtcreator
 pkgver=7.0.0
 _clangver=13.0.1
-pkgrel=5
+pkgrel=1
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -31,7 +31,7 @@ optdepends=('qt6-doc: integrated Qt documentation'
             'perf: performer analyzer'
             'mlocate: locator filter')
         
-source=(https://github.com/qt-creator/qt-creator/archive/refs/tags/v$pkgver-rc1.tar.gz
+source=(https://github.com/qt-creator/qt-creator/archive/refs/tags/v$pkgver.tar.gz
         "QTCREATORBUG-21681.patch"
         "projectmodels.patch")
 sha256sums=(SKIP
@@ -39,12 +39,12 @@ sha256sums=(SKIP
             SKIP)
 
 prepare() {
-  patch -d qt-creator-$pkgver-rc1 -p1 < QTCREATORBUG-21681.patch
-  patch -d qt-creator-$pkgver-rc1 -p1 < projectmodels.patch
+  patch -d qt-creator-$pkgver -p1 < QTCREATORBUG-21681.patch
+  patch -d qt-creator-$pkgver -p1 < projectmodels.patch
 }
 
 build() {
-  cmake -B build -S qt-creator-$pkgver-rc1 \
+  cmake -B build -S qt-creator-$pkgver \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBEXECDIR=lib \
     -DWITH_DOCS=ON \
@@ -61,5 +61,5 @@ package() {
 # Install docs
   cp -r build/share/doc "$pkgdir"/usr/share
 
-  install -Dm644 qt-creator-$pkgver-rc1/LICENSE.GPL3-EXCEPT "$pkgdir"/usr/share/licenses/qtcreator/LICENSE.GPL3-EXCEPT
+  install -Dm644 qt-creator-$pkgver/LICENSE.GPL3-EXCEPT "$pkgdir"/usr/share/licenses/qtcreator/LICENSE.GPL3-EXCEPT
 }

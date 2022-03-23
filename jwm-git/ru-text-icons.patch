@@ -4,45 +4,45 @@ diff -cr a/po/ru.po b/po/ru.po
 ***************
 *** 383,402 ****
   
-  #: src/taskbar.c:483 src/winmenu.c:48
+  #: src/taskbar.c:488 src/winmenu.c:48
   msgid "Close"
 ! msgstr "Закрыть"
   
-  #: src/taskbar.c:490 src/winmenu.c:66
+  #: src/taskbar.c:495 src/winmenu.c:66
   msgid "Minimize"
 ! msgstr "Свернуть"
   
-  #: src/taskbar.c:497 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
+  #: src/taskbar.c:502 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
   #: src/winmenu.c:106
   msgid "Restore"
 ! msgstr "Восстановить"
   
-  #: src/taskbar.c:504 src/winmenu.c:179
+  #: src/taskbar.c:509 src/winmenu.c:179
   msgid "Send To"
 ! msgstr "Переместить на рабочий стол"
   
-  #: src/taskbar.c:999
+  #: src/taskbar.c:1004
   #, c-format
 --- 383,402 ----
   
-  #: src/taskbar.c:483 src/winmenu.c:48
+  #: src/taskbar.c:488 src/winmenu.c:48
   msgid "Close"
 ! msgstr "  Закрыть"
   
-  #: src/taskbar.c:490 src/winmenu.c:66
+  #: src/taskbar.c:495 src/winmenu.c:66
   msgid "Minimize"
 ! msgstr "  Свернуть"
   
-  #: src/taskbar.c:497 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
+  #: src/taskbar.c:502 src/winmenu.c:95 src/winmenu.c:97 src/winmenu.c:99
   #: src/winmenu.c:106
   msgid "Restore"
 ! msgstr "  Восстановить"
   
-  #: src/taskbar.c:504 src/winmenu.c:179
+  #: src/taskbar.c:509 src/winmenu.c:179
   msgid "Send To"
 ! msgstr "  Переместить на"
   
-  #: src/taskbar.c:999
+  #: src/taskbar.c:1004
   #, c-format
 ***************
 *** 436,506 ****

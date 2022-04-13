@@ -14,14 +14,14 @@ sha256sums=('SKIP')
 
 build() {
     mkdir -p "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/"
-    ln -s /usr/lib/qtcreator/libAggregation.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libAggregation.so"
-    ln -s /usr/lib/qtcreator/libQtcSsh.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libQtcSsh.so"
-    ln -s /usr/lib/qtcreator/libCPlusPlus.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libCPlusPlus.so"
-    ln -s /usr/lib/qtcreator/libClangSupport.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libClangsupport.so"
-    ln -s /usr/lib/qtcreator/libExtensionSystem.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libExtensionSystem.so"
-    ln -s /usr/lib/qtcreator/libUtils.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libUtils.so"
-    ln -s /usr/lib/qtcreator/libSqlite.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libSqlite.so"
-    ln -s /usr/lib/qtcreator/libKSyntaxHighlighting.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libKSyntaxHighlighting.so"
+#    ln -s /usr/lib/qtcreator/libAggregation.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libAggregation.so"
+#    ln -s /usr/lib/qtcreator/libQtcSsh.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libQtcSsh.so"
+#    ln -s /usr/lib/qtcreator/libCPlusPlus.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libCPlusPlus.so"
+#    ln -s /usr/lib/qtcreator/libClangSupport.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libClangsupport.so"
+#    ln -s /usr/lib/qtcreator/libExtensionSystem.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libExtensionSystem.so"
+#    ln -s /usr/lib/qtcreator/libUtils.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libUtils.so"
+#    ln -s /usr/lib/qtcreator/libSqlite.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libSqlite.so"
+#    ln -s /usr/lib/qtcreator/libKSyntaxHighlighting.so.6 "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/libKSyntaxHighlighting.so"
 
     cd "${srcdir}/${pkgname}"
     git checkout ${_commit}

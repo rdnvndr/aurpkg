@@ -1,0 +1,23 @@
+pkgname=js-d3-flame-graph
+pkgver=4.0.7
+pkgrel=1
+pkgdesc="A D3.js plugin that produces flame graphs"
+arch=('any')
+url="https://github.com/spiermar/d3-flame-graph"
+license=("Apache-2.0")
+source=("http://mirror.centos.org/centos/8-stream/AppStream/aarch64/os/Packages/${pkgname}-${pkgver}-${pkgrel}.el8.noarch.rpm")
+sha256sums=('SKIP')
+depends=(nodejs)
+
+prepare(){
+  cd $srcdir
+
+  bsdtar -xvf ${pkgname}-${pkgver}-${pkgrel}.el8.noarch.rpm
+}
+
+package() {
+  cd $srcdir
+
+  cp -r ${srcdir}/usr ${pkgdir}/usr
+
+}

@@ -2,19 +2,19 @@
 # Contributor: Fabio 'Lolix' Loli <lolix@disroot.org> -> https://github.com/FabioLolix
 
 pkgname=strawberry
-pkgver=1.0.1
-pkgrel=1
+pkgver=1.0.4
+pkgrel=2
 pkgdesc='A music player aimed at audio enthusiasts and music collectors'
 arch=(x86_64)
 url='https://www.strawbs.org/'
 license=(GPL3)
-depends=(qt6-base chromaprint protobuf gst-plugins-base gst-plugins-good libcdio libmtp fftw)
-makedepends=(cmake boost qt6-tools)
+depends=(qt5-base chromaprint protobuf gst-plugins-base gst-plugins-good libcdio libmtp fftw)
+makedepends=(cmake boost qt5-tools)
 optdepends=('gst-libav: additional codecs'
             'gst-plugins-bad: additional codecs'
             'gst-plugins-ugly: additional codecs')
 source=(https://github.com/strawberrymusicplayer/strawberry/releases/download/$pkgver/$pkgname-$pkgver.tar.xz)
-sha256sums=('94fd3b506528e2cfb2dfc46e8a5120baafcd74e4705cfaae374709d30c269ecb')
+sha256sums=('SKIP')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -38,7 +38,7 @@ build() {
     -DENABLE_SUBSONIC=OFF \
     -DENABLE_TIDAL=OFF \
     -DENABLE_XINE=OFF \
-    -DBUILD_WITH_QT6=ON
+    -DBUILD_WITH_QT6=OFF
   cmake --build build
 }
 

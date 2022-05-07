@@ -1,7 +1,8 @@
-pkgname=qtcreator
+pkgbase=qtcreator
+pkgname=(qtcreator qtcreator-devel)
 pkgver=7.0.2
 _clangver=13.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -47,11 +48,18 @@ build() {
 #  cmake --build build --target docs
 }
 
-package() {
-  DESTDIR="$pkgdir" cmake --install build --component Devel
+package_qtcreator() {
   DESTDIR="$pkgdir" cmake --install build
 # Install docs
   cp -r build/share/doc "$pkgdir"/usr/share
 
   install -Dm644 qt-creator/LICENSE.GPL3-EXCEPT "$pkgdir"/usr/share/licenses/qtcreator/LICENSE.GPL3-EXCEPT
+}
+
+package_qtcreator-devel() {
+  pkgdesc+=' (development files)'
+  depends=(qtcreator)
+  optdepends=()
+
+  DESTDIR="$pkgdir" cmake --install build --component Devel
 }

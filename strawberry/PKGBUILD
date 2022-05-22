@@ -3,7 +3,7 @@
 
 pkgname=strawberry
 pkgver=1.0.4
-pkgrel=2
+pkgrel=3
 pkgdesc='A music player aimed at audio enthusiasts and music collectors'
 arch=(x86_64)
 url='https://www.strawbs.org/'
@@ -13,11 +13,14 @@ makedepends=(cmake boost qt5-tools)
 optdepends=('gst-libav: additional codecs'
             'gst-plugins-bad: additional codecs'
             'gst-plugins-ugly: additional codecs')
-source=(https://github.com/strawberrymusicplayer/strawberry/releases/download/$pkgver/$pkgname-$pkgver.tar.xz)
-sha256sums=('SKIP')
+source=(https://github.com/strawberrymusicplayer/strawberry/releases/download/$pkgver/$pkgname-$pkgver.tar.xz
+        https://github.com/strawberrymusicplayer/strawberry/commit/36eb1312.patch)
+sha256sums=('SKIP'
+            'SKIP')
 
 prepare() {
   cd $pkgname-$pkgver
+  patch -p1 < $startdir/36eb1312.patch 
   patch -p1 < $startdir/cle.patch
 }
 

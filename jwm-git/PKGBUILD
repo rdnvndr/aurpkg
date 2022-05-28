@@ -1,5 +1,5 @@
 pkgname=jwm-git
-pkgver=069e20f   
+pkgver=9c91589   
 pkgrel=1
 pkgdesc="A lightweight window manager for the X11 Window System"
 arch=('i686' 'x86_64')
@@ -32,7 +32,7 @@ build() {
   patch -p1 -i $startdir/change-size-of-maximized-x-y-window.patch || return 1
   patch -p1 -i $startdir/disable-pager-wheel.patch                 || return 1
   patch -p1 -i $startdir/disable-taskbar-wheel.patch               || return 1
-  patch -p1 -i $startdir/fix-am-init-automake.patch                || return 1
+#  patch -p1 -i $startdir/fix-am-init-automake.patch                || return 1
   patch -p1 -i $startdir/fix-minimize.patch                        || return 1
   patch -p1 -i $startdir/pango.patch                               || return 1
   

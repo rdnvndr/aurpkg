@@ -1,0 +1,19 @@
+*** a/panel.cpp	2013-10-02 02:38:05.000000000 +0400
+--- b/panel.cpp	2022-06-11 17:31:20.329411036 +0300
+***************
+*** 48,54 ****
+  		gcm = GCGraphicsExposures;
+  		gcv.graphics_exposures = False;
+  		WinGC = XCreateGC(Dpy, Win, gcm, &gcv);
+! 		if (WinGC < 0) {
+  			cerr << APPNAME
+  				<< ": failed to create pixmap\n.";
+  			exit(ERR_EXIT);
+--- 48,54 ----
+  		gcm = GCGraphicsExposures;
+  		gcv.graphics_exposures = False;
+  		WinGC = XCreateGC(Dpy, Win, gcm, &gcv);
+! 		if (WinGC == nullptr) {
+  			cerr << APPNAME
+  				<< ": failed to create pixmap\n.";
+  			exit(ERR_EXIT);

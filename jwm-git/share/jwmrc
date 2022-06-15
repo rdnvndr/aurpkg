@@ -3,48 +3,49 @@
    <!-- The root menu, if this is undefined you will not get a menu. -->
    <!-- Additional RootMenu attributes: onroot, labeled, label -->
    <RootMenu height="14" onroot="123" label="Arch" icon="jwm/16x16/os.png">
-        <Menu label="Аудио" icon="haiku-os/16x16/Prefs_Sounds.png">
-            <Program label="Audacity" icon="/usr/share/icons/hicolor/16x16/apps/audacity.png">LANG=C;audacity</Program>
-            <Program label="Clementine" icon="jwm/16x16/clementine_16.png">clementine</Program>
-        </Menu>
         <Menu label="Мультимедия" icon="haiku-os/16x16/File_Video.png">
-            <Program label="Nero" icon="/usr/share/icons/hicolor/16x16/apps/nerolinux.png"> nero </Program>
+            <!-- <Program label="Nero" icon="/usr/share/icons/hicolor/16x16/apps/nerolinux.png"> nero </Program>-->
             <!-- <Program label="DVDStyler" icon="Haiku/16x16/apps/brasero.png"> dvdstyler </Program>-->
             <!-- <Program label="SMPlayer" icon="local/fly_16x16.xpm"> smplayer </Program> -->
+            <!-- Program label="Audacity" icon="/usr/share/icons/hicolor/16x16/apps/audacity.png">LANG=C;audacity</Program -->
             <Program label="VLC Player" icon="/usr/share/icons/hicolor/16x16/apps/vlc.png"> vlc </Program>
+            <Program label="Strawberry" icon="/usr/share/icons/hicolor/48x48/apps/strawberry.png">strawberry.sh</Program>
         </Menu>
         <Menu label="Графика" icon="haiku-os/16x16/Misc_Marker.png">
             <!--<Program label="Blender" icon="jwm/16x16/blender.png"> blender </Program>-->
-            <Program label="Dia" icon="/usr/share/icons/hicolor/16x16/apps/dia.png"> dia</Program>
+            <!-- <Program label="Dia" icon="/usr/share/icons/hicolor/16x16/apps/dia.png"> dia</Program>-->
             <!-- <Program label="Evince" icon="local/evince_16x16.xpm"> evince2</Program>-->
-            <Program label="QPdfView" icon="local/evince_16x16.xpm">qpdfview --unique --instance qpdfview</Program>
+            <!-- <Program label="QPdfView" icon="local/evince_16x16.xpm">qpdfview --unique --instance qpdfview</Program> -->
             <!--<Program label="FontForge" icon="/usr/share/icons/ffanvil32.xpm"> /usr/bin/fontforge</Program> -->
-            <Program label="The GIMP" icon="/usr/share/icons/hicolor/16x16/apps/gimp.png"> gimp</Program>
+            <Program label="The GIMP" icon="/usr/share/icons/hicolor/16x16/apps/gimp.png">gimp --no-splash</Program>
             <Program label="GQview" icon="/usr/share/pixmaps/gqview.png"> gqview -r </Program>
-            <Program label="Inkscape" icon="/usr/share/icons/hicolor/16x16/apps/inkscape.png"> inkscape </Program>
-            <!-- <Program label="Shotwell" icon="haiku-os/16x16/File_Image_2.png"> shotwell </Program> -->
+            <Program label="Inkscape" icon="/usr/share/icons/hicolor/16x16/apps/org.inkscape.Inkscape.png"> inkscape </Program>
+            <Program label="Shotwell" icon="haiku-os/16x16/File_Image_2.png">~/.config/jwm/bin/shotwell.sh </Program>
             <Program label="ScanTailor" icon="haiku-os/16x16/Device_FlatbedScanner.png"> scantailor </Program>
         </Menu>
         <Menu label="Интернет" icon="haiku-os/16x16/Misc_LAN.png">
             <Program label="Ettercap" icon="jwm/16x16/ettercap.png">ettercap -G</Program>
-            <Program label="Ekiga" icon="/usr/share/icons/hicolor/16x16/apps/ekiga.png">ekiga</Program>
-            <Program label="Chromium" icon="/usr/share/icons/hicolor/16x16/apps/chromium.png">/usr/bin/chromium --start-maximized --disable-sync-preferences --ignore-certificate-errors --test-type </Program>
-            <!--<Program label="Opera" icon="/usr/share/icons/hicolor/16x16/apps/opera-legacy-browser.png">LD_PRELOAD=/usr/lib/libgtk-x11-2.0.so.0 /usr/bin/opera-legacy -noargb -nolirc -nomaillinks -nomail</Program>-->
-            <Program label="FileZilla" icon="/usr/share/pixmaps/filezilla.png"> filezilla</Program>
+            <!--Program label="Ekiga" icon="/usr/share/icons/hicolor/16x16/apps/ekiga.png">ekiga</Program>-->
+            <Program label="Chromium" icon="/usr/share/icons/hicolor/16x16/apps/chromium.png">jumpapp.sh -f chromium </Program>
+            <!--<Program label="FileZilla" icon="/usr/share/pixmaps/filezilla.png"> filezilla</Program>-->
             <!--<Program label="Psi" icon="jwm/16x16/psi.png">psi</Program> -->
-            <Program label="Vacuum" icon="myhaiku/3rd/16x16/jabber r2.png">vacuum</Program>
-            <!--<Program label="Skype" icon="/usr/share/pixmaps/skype.png">skype</Program>-->
-            <Program label="Skype" icon="/usr/share/pixmaps/skype.png">apulse32 skype</Program>
-            <Program label="Thunderbird" icon="jwm/16x16/thunderbird.png"> thunderbird </Program>
+            <!--<Program label="Vacuum" icon="myhaiku/3rd/16x16/jabber r2.png">vacuum</Program> -->
+            <!--Program label="Pidgin" icon="/usr/share/icons/hicolor/16x16/apps/pidgin.png">pidgin</Program-->
+            <Program label="Skype" icon="/usr/share/icons/hicolor/16x16/apps/skypeforlinux.png">skypeforlinux</Program>
+            <Program label="Zoom" icon="/usr/share/pixmaps/Zoom.png">pulseaudio --start;zoom</Program>
+            <Program label="Telegram" icon="/usr/share/icons/hicolor/16x16/apps/telegram.png">telegram-desktop</Program>
+            <Program label="Thunderbird" icon="jwm/16x16/thunderbird.png">jumpapp.sh swiftdove</Program>
+            <!-- <Program label="Evolution" icon="/usr/share/icons/hicolor/16x16/apps/evolution-mail.png">evolution</Program>-->
+            <!--Program label="TrueConf" icon="/usr/share/pixmaps/trueconf16.png">trueconf</Program-->
             <Program label="Transmission" icon="jwm/16x16/transmission.png">transmission-qt</Program>
             <Program label="Wireshark" icon="jwm/16x16/wireshark.png">/usr/bin/wireshark</Program>
         </Menu>
         <Menu label="Офис" icon="haiku-os/16x16/App_StyledEdit.png">
-          <Program label="GoldenDict" icon="/usr/share/pixmaps/goldendict.png">goldendict</Program>
+          <!-- <Program label="GoldenDict" icon="/usr/share/pixmaps/goldendict.png">goldendict</Program> -->
           <Program label="LibreOffice" icon="/usr/share/icons/hicolor/16x16/apps/libreoffice-main.png">libreoffice</Program>
-          <Program label="FreeMind" icon="local/freemind.png">/usr/bin/freemind</Program>
-          <Program label="HomeBank" icon="/usr/share/icons/hicolor/16x16/apps/homebank.png">homebank</Program>
-          <Program label="Maxima" icon="myhaiku/3rd/16x16/sum-it.png">wxmaxima</Program>
+          <!-- Program label="FreeMind" icon="local/freemind.png">/usr/bin/freemind</Program>-->
+          <!--Program label="HomeBank" icon="/usr/share/icons/hicolor/16x16/apps/homebank.png">homebank</Program-->
+          <!--<Program label="Maxima" icon="myhaiku/3rd/16x16/sum-it.png">wxmaxima</Program>-->
           <!--<Program label="CoolReader" icon="haiku-os/16x16/Misc_Book.png">cr3</Program>-->
           <Program label="Калькулятор" icon="haiku-os/16x16/App_Calculator_2.png">speedcrunch</Program>
           <!-- <Program label="Planner" icon="/usr/share/pixmaps/gnome-planner.png">planner</Program> -->
@@ -53,13 +54,13 @@
             <!-- <Program label="MySQL Admin" icon="/usr/share/mysql-gui/MySQLIcon_Admin_16x16.png"> /usr/bin/mysql-admin</Program>
             <Program label="MySQL Browser" icon="/usr/share/mysql-gui/MySQLIcon_QueryBrowser_16x16.png"> /usr/bin/mysql-query-browser</Program> -->
             <Program label="SqlDeveloper" icon="jwm/16x16/sqldeveloper.png">/usr/bin/oracle-sqldeveloper</Program>
-            <Program label="PGAdmin III" icon="jwm/16x16/pgadmin3.png"> pgadmin3</Program>
+            <!--Program label="PGAdmin IV" icon="jwm/16x16/pgadmin3.png">pgadmin4</Program-->
             <Program label="SQLite Browser" icon="jwm/16x16/os.png"> sqlitebrowser</Program>
             <!-- <Program label="Synaptic" icon="/usr/share/pixmaps/synaptic.png"> /usr/bin/sudo synaptic.sh</Program> -->
         </Menu>
         <Menu label="Разработка" icon="haiku-os/16x16/Misc_Hand.png">
-            <Program label="Geany" icon="Haiku/16x16/apps/geany.png"> geany </Program>
-            <Program label="Qt Creator"  icon="jwm/16x16/QtCreator.png">/usr/bin/qtcreator</Program>
+            <!-- <Program label="Geany" icon="Haiku/16x16/apps/geany.png"> geany </Program> -->
+            <Program label="Qt Creator"  icon="jwm/16x16/qtc.png">jumpapp.sh -f /usr/bin/qtcreator</Program>
             <Program label="Qt Assistant" icon="/usr/share/icons/hicolor/16x16/apps/QtProject-qtcreator.png"> /usr/bin/assistant</Program>
             <Program label="Qt Linguist" icon="/usr/share/icons/hicolor/16x16/apps/linguist.png"> /usr/bin/linguist</Program>
             <Program label="Qt Designer" icon="/usr/share/icons/hicolor/16x16/apps/QtProject-qtcreator.png"> /usr/bin/designer</Program>
@@ -70,17 +71,18 @@
             <Program label="Terminal" icon="jwm/16x16/xterm.png">  xterm  -T "Terminal"</Program>
         </Menu>
         <Menu label="Специальные" icon="myhaiku/system/16x16/loading.png">
-            <Program label="Windows 7" icon="virtualbox/os_win7.png">/usr/local/bin/seven.sh</Program>
+            <!--Program label="Windows" icon="virtualbox/os_win7.png">/usr/local/bin/seven.sh</Program-->
             <Program label="VirtualBox" icon="virtualbox/VirtualBox_16px.png">/usr/local/bin/virtualbox.sh</Program>
-            <Program label="Remote XP" icon="jwm/16x16/remote.png"> /home/andrey/bin/lena.sh</Program>
+            <Program label="Rodionov (ovpn)" icon="jwm/16x16/remote.png">/home/andrey/bin/ts_rdp.sh</Program>
+            <Program label="Rodionov (pptp)" icon="jwm/16x16/remote.png">/home/andrey/bin/ptpp_rdp.sh</Program>
             <Program label="GParted" icon="/usr/share/icons/hicolor/16x16/apps/gparted.png">/usr/bin/sudo gparted </Program>
-            <Program label="MEGASync" icon="/usr/share/icons/hicolor/32x32/apps/mega.png">megasync</Program>
-            <!--<Program label="Configure Wine" icon="/usr/share/icons/oxygen/16x16/apps/wine.png"> winecfg</Program> -->
+            <!--<Program label="MEGASync" icon="/usr/share/icons/hicolor/32x32/apps/mega.png">megasync</Program>
+            <Program label="Configure Wine" icon="/usr/share/icons/oxygen/16x16/apps/wine.png"> winecfg</Program> -->
         </Menu>
         <Menu label="Стандартные" icon="myhaiku/3rd/16x16/3dmov altcol.png">
             <!--<Program label="GNU Privacy Assistant" icon="/usr/share/pixmaps/gpa.png"> gpa</Program> -->
             <!--<Program label="Таблица символов" icon="/usr/share/icons/gnome/16x16/apps/gucharmap.png"> gucharmap</Program>-->
-            <Program label="Увелич. стекло" icon="/usr/share/icons/gnome/16x16/actions/system-search.png">pixeltool</Program>
+            <Program label="Увелич. стекло" icon="Haiku/16x16/actions/edit-find.png">pixeltool</Program>
             <Program label="Убить процесс" icon="jwm/16x16/clanbomber.png"> xkill</Program>
         </Menu>
         <Separator/>
@@ -93,125 +95,121 @@
             <Separator/>
             <Restart icon="Haiku/16x16/actions/reload.png" label="Перезапуск JWM" />
             <Exit    icon="Haiku/16x16/actions/window-close.png" label="Выход из JWM"  />
-            <Separator/>
-            <Program icon="virtualbox/os_win7.png" label="Microsoft Windows">/usr/bin/sudo /usr/bin/efibootmgr -n 000A; /usr/bin/sudo /sbin/reboot</Program>
+            <!--Separator/>
+            <Program icon="virtualbox/os_win7.png" label="Microsoft Windows">/usr/bin/sudo /usr/bin/efibootmgr -n 0000; /usr/bin/sudo /sbin/reboot</Program-->
         </Menu>
    </RootMenu>
    
-   <RootMenu dynamic="exec:/home/andrey/bin/jwm/umount_devices.sh" height="14" onroot="a" label="Извлечение накопителей" icon="jwm/eject.png"/>   
-   <RootMenu dynamic="exec:/home/andrey/bin/jwm/screen.sh" height="14" onroot="b" label="Режимы вывода изображения" icon="jwm/monitor.png"/>
+   <RootMenu dynamic="exec:/home/andrey/.config/jwm/menu/umount_devices.sh" height="14" onroot="a" label="Извлечение накопителей" icon="jwm/eject.png" timeout="1000"/>   
+   <RootMenu dynamic="exec:/home/andrey/.config/jwm/menu/screen.sh" height="14" onroot="b" label="Режимы вывода изображения" icon="jwm/monitor.png" timeout="1000"/>
 
+   <Group>
+      <Class>xfreerdp</Class>
+      <Option>noborder</Option>
+      <Option>nomove</Option>
+      <Option>maximized</Option>
+      <Option>icon:jwm/16x16/remote.png</Option>
+   </Group>
+   
    <Group>
       <Class>Vacuum</Class>
       <Option>sticky</Option>
       <Option>icon:myhaiku/3rd/16x16/jabber r2.png</Option>
+      <Option>minimized</Option>
    </Group>
    
    <Group>
-      <WmName>VirtualBox</WmName>
+      <Class>Pidgin</Class>
+      <Option>icon:/usr/share/icons/hicolor/16x16/apps/pidgin.png</Option>
+   </Group>
+   
+   <Group>
+      <Class>Pidgin</Class>
+      <Title>^Список собеседников$</Title>
+      <Option>icon:/usr/share/icons/hicolor/16x16/apps/pidgin.png</Option>
+      <Option>sticky</Option>
+      <Option>nolist</Option>
+      <Option>nomax</Option>
+      <Option>nomin</Option>
+   </Group>
+   
+   <Group>
+      <Title>VirtualBox</Title>
       <Option>icon:virtualbox/VirtualBox_16px.png</Option>
    </Group>
    
    <Group>
-      <WmName>- Oracle VM VirtualBox$</WmName>
-      <Option>notitle</Option>
+      <Title>- Oracle VM VirtualBox$</Title>
+      <Type>normal</Type>
       <Option>maximized</Option>
-      <Option>noborder</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
       <Option>icon:virtualbox/VirtualBox_16px.png</Option>
    </Group>
    
    <Group>
-      <WmName>ettercap NG-0.7.4.1</WmName>
+      <Title>ettercap NG-0.7.4.1</Title>
       <Option>icon:jwm/16x16/ettercap.png</Option>
    </Group>
    
    <Group>
-      <WmName>[\S\s]*- Qt Creator|^Qt Creator$</WmName>
-      <Option>notitle</Option>
+      <Class>QtCreator</Class>
+      <Type>normal</Type>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option>
+      <Option>nodrag</Option>
       <Option>maximized</Option>
-      <Option>noborder</Option>
-      <Option>icon:jwm/16x16/QtCreator.png</Option>
+      <Option>icon:jwm/16x16/qtc.png</Option>
    </Group>
    
    <Group>
-      <WmName>Geany</WmName>
-      <Option>notitle</Option>
+      <Title>^LibreOffice [0-9]\.[0-9]$|\S LibreOffice (Writer|Calc|Math|Impress|Draw|Base)</Title>
+      <Type>normal</Type>
       <Option>maximized</Option>
-      <Option>noborder</Option>
-   </Group>
-   
-   <Group>
-      <WmName>Nero Linux</WmName>
-      <Option>notitle</Option>
-      <Option>maximized</Option>
-      <Option>noborder</Option>
-   </Group>
-   
-   <Group>
-      <WmName>pgAdmin III</WmName>
-      <Option>notitle</Option>
-      <Option>maximized</Option>
-      <Option>noborder</Option>
-   </Group>
-   
-   <Group>
-      <WmName>^Query -[\S\s]*</WmName>
-      <Option>notitle</Option>
-      <Option>maximized</Option>
-      <Option>noborder</Option>
-   </Group>
-   
-   <Group>
-      <WmName>^LibreOffice [0-9]\.[0-9]$|\S LibreOffice (Writer|Calc|Math|Impress|Draw|Base)</WmName>
-      <Option>notitle</Option>
-      <Option>maximized</Option>
-      <Option>noborder</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
       <Option>icon:/usr/share/icons/hicolor/16x16/apps/libreoffice-main.png</Option>
    </Group>
    
    <Group>
       <Class>libreoffice-startcenter</Class>
-      <Option>notitle</Option>
+      <Type>normal</Type>
       <Option>maximized</Option>
-      <Option>noborder</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
       <Option>icon:/usr/share/icons/hicolor/16x16/apps/libreoffice-main.png</Option>
    </Group>
    
    <Group>
-      <WmName>^qpdfview$</WmName>
-      <Option>notitle</Option>
+      <Title>^Mozilla Thunderbird$</Title>
+      <Type>normal</Type>
       <Option>maximized</Option>
-      <Option>noborder</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
    </Group>
    
    <Group>
-      <WmName>^Mozilla Thunderbird$</WmName>
-      <Option>notitle</Option>
+      <Title>- Thunderbird$</Title>
+      <Type>normal</Type>
       <Option>maximized</Option>
-      <Option>noborder</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
    </Group>
    
    <Group>
-      <Name>atril</Name>
-      <Option>icon:local/evince_16x16.xpm</Option>
-      <Option>notitle</Option>
+      <Title>Evolution$</Title>
+      <Type>normal</Type>
       <Option>maximized</Option>
-      <Option>noborder</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
    </Group>
    
-   <!-- Group>
-      <WmName>Document Viewer</WmName>
-      <Option>notitle</Option>
-      <Option>maximized</Option>
-      <Option>noborder</Option>
-   </Group -->
-   
    <Group>
-      <WmName>^Shotwell$</WmName>
-      <Option>notitle</Option>
+      <Title>^Shotwell$</Title>
+      <Type>normal</Type>
       <Option>maximized</Option>
-      <Option>noborder</Option>
-      
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
    </Group>
    
    <Group>
@@ -220,36 +218,24 @@
    </Group>
    
    <Group>
-      <WmName>[\S\s]* GIMP</WmName>
-      <Option>notitle</Option>
+      <Class>Gimp</Class>
+      <Type>normal</Type>
       <Option>maximized</Option>
-      <Option>noborder</Option>
-   </Group>
-   
-   <Group>
-      <WmName>GNU Image Manipulation Program</WmName>
-      <Option>notitle</Option>
-      <Option>maximized</Option>
-      <Option>noborder</Option>
-   </Group>
-   
-   <Group>
-      <WmName>SMPlayer$</WmName>
-      <Option>notitle</Option>
-      <Option>noborder</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
    </Group>
    
    <Group>
       <Class>MPlayer</Class>
       <Option>icon:local/fly_16x16.xpm</Option>
-      <Option>notitle</Option>
+      <Option>noborder</Option>
       <Option>drag</Option>
    </Group>
    
    <Group>
-      <WmName>Midnight Commander</WmName>
+      <Title>Midnight Commander</Title>
       <Option>icon:jwm/16x16/far.png</Option>
-      <Option>aerosnap</Option>
+      <Option>iignore</Option>
    </Group>
    
    <Group>
@@ -259,56 +245,71 @@
    </Group>
    
    <Group>
-      <WmName>Transmission</WmName>
+      <Title>Transmission</Title>
       <Option>icon:jwm/16x16/transmission.png</Option>
    </Group>
    
    <Group>
-      <WmName>^Qt Designer$</WmName>
-      <Option>notitle</Option>
+      <Class>Designer</Class>
+      <Type>normal</Type>
+      <Option>maximized</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
+   </Group>
+   
+   <Group>
+      <Class>Chromium</Class>
+      <Type>normal</Type>
       <Option>maximized</Option>
       <Option>noborder</Option>
    </Group>
    
    <Group>
-      <WmName>^HomeBank$</WmName>
-      <Option>notitle</Option>
-      <Option>noborder</Option>
+      <Class>Zathura</Class>
+      <Type>normal</Type>
+      <Option>maximized</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
+   </Group>
+   
+   <Group>
+      <Title>^HomeBank$</Title>
+      <Type>normal</Type>
+      <Option>maximized</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
+   </Group>
+   
+   <Group>
+      <Title>[\S\s]*Inkscape$</Title>
+      <Type>normal</Type>
+      <Option>maximized</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
+   </Group>
+   
+   <Group>
+      <Title>[\S\s]*The Wireshark Network Analyzer[\S\s]*</Title>
+      <Type>normal</Type>
+      <Option>maximized</Option>
+      <Option>nomaxtitle</Option>
+      <Option>nomaxborder</Option
+   </Group>
+   
+   <Group>
+      <Class>Chromium</Class>
       <Option>maximized</Option>
    </Group>
    
    <Group>
-      <WmName>[\S\s]*Inkscape$</WmName>
-      <Option>notitle</Option>
-      <Option>noborder</Option>
-      <Option>maximized</Option>
-   </Group>
-   
-   <Group>
-      <WmName>[\S\s]*The Wireshark Network Analyzer[\S\s]*</WmName>
-      <Option>notitle</Option>
-      <Option>noborder</Option>
-      <Option>maximized</Option>
-   </Group>
-   
-   <Group>
-      <WmName>^Scribus[\S\s]*</WmName>
-      <Option>notitle</Option>
-      <Option>maximized</Option>
-      <Option>noborder</Option>
-   </Group>
-   
-   <Group>
-      <WmName>[\S\s]*Sweet Home 3D$</WmName>
-      <Option>notitle</Option>
-      <Option>noborder</Option>
+      <Class>Evince</Class>
       <Option>maximized</Option>
    </Group>
    
    <Group>
       <Class>Conky</Class>
       <Option>nolist</Option>
-      <Option>notitle</Option>
+      <Option>noborder</Option>
       <Option>sticky</Option>
    </Group>
    
@@ -320,17 +321,18 @@
    <!-- Additional tray attributes: autohide, width, border, layer, layout --> 
    <Tray  x="0" y="0" height="24" valign="top">
       <!-- Additional TrayButton attribute: label -->
-      <TrayButton label="Launch " icon="jwm/16x16/os.png" popup="Приложения">root:1</TrayButton>
+      <TrayButton label="Launch " icon="jwm/16x16/os.png" popup="Приложения">root:1</TrayButton>
       <!-- <TrayButton icon="jwm/16x16/win.xpm" popup="Свернуть все окна">showdesktop</TrayButton> -->
-      <TrayButton popup="Qt Creator" icon="jwm/16x16/QtCreator.png">exec: /usr/bin/qtcreator</TrayButton>
+      <TrayButton popup="Qt Creator" icon="jwm/16x16/qtc.png">exec:jumpapp.sh -f /usr/bin/qtcreator</TrayButton>
       <TrayButton popup="Midnight Commander" icon="jwm/16x16/far.png">exec: xterm  -T "Midnight Commander" -e mc </TrayButton>
       <!-- <TrayButton icon="jwm/16x16/psi.png" popup="Psi">exec:psi</TrayButton> -->
-      <TrayButton icon="myhaiku/3rd/16x16/jabber r2.png" popup="Vacuum">exec: vacuum</TrayButton>
-
-      <TrayButton icon="jwm/16x16/thunderbird.png" popup="Thundebird">exec: thunderbird </TrayButton>
+      <!-- <TrayButton icon="myhaiku/3rd/16x16/jabber r2.png" popup="Vacuum">exec: vacuum</TrayButton>-->
+      <!-- <TrayButton icon="/usr/share/icons/hicolor/16x16/apps/pidgin.png" popup="Pidgin">exec: pidgin</TrayButton> -->
+      <TrayButton icon="haiku-os/16x16/Misc_Paper_Plane.png" popup="Telegram Desktop">exec:telegram-desktop</TrayButton>
+      <TrayButton icon="jwm/16x16/thunderbird.png" popup="Thundebird">exec:jumpapp.sh swiftdove</TrayButton>
+      <!--<TrayButton icon="/usr/share/icons/hicolor/16x16/apps/evolution-mail.png" popup="Evolution">exec:evolution</TrayButton>-->
       <!-- <TrayButton icon="jwm/16x16/firefox.png" popup="Firefox">exec:/usr/bin/firefox </TrayButton> -->
-      <!-- <TrayButton popup="Opera" icon="/usr/share/icons/hicolor/16x16/apps/opera-legacy-browser.png">exec: LD_PRELOAD=/usr/lib/libgtk-x11-2.0.so.0 /usr/bin/opera-legacy  -noargb -nolirc -nomaillinks -nomail</TrayButton> -->
-      <TrayButton popup="Chromium" icon="/usr/share/icons/hicolor/16x16/apps/chromium.png">exec: /usr/bin/chromium  --start-maximized --disable-sync-preferences --ignore-certificate-errors --test-type </TrayButton>
+      <TrayButton popup="Chromium" icon="/usr/share/icons/hicolor/16x16/apps/chromium.png">exec:jumpapp.sh -f chromium</TrayButton>
       <!-- <TrayButton icon="jwm/16x16/folder.png" label="»">root:1</TrayButton> -->
       
       <!-- Additional Pager attributes; width, height -->
@@ -350,36 +352,40 @@
       
       
       <Spacer width="10"/>
-      <Clock format="%a %R"/> 
+      <Clock format="%a %R"/>
       <!-- <Battery> </Battery> -->
       <Spacer width="10"/>
       <!-- <TrayButton popup="Быстрый поиск" icon="jwm/find.png">exec: </TrayButton>  -->
       <TrayButton popup="Режимы вывода&NewLine;изображения" icon="jwm/monitor.png">root:b</TrayButton>
       <TrayButton popup="Панель статуса" icon="jwm/panel.png">
-          exec:~/bin/jwm/status_panel.sh
+          exec:$HOME/.config/jwm/status_panel/status_panel.sh
       </TrayButton>
       <Spacer width="12"/>
+      <!-- TrayButton popup="Свернуть всё" icon="jwm/showdesktop.png">
+          showdesktop
+      </TrayButton -->
    </Tray>
 
    <!-- Visual Styles -->
    <WindowStyle decorations="flat">
       <Foreground>#7e7e7e</Foreground>
-      <Background>#cacaca:#c0c0c0</Background>
+      <Background>#cacaca:#b0b0b0</Background>
       <Outline>#686868</Outline>
       <Opacity>1.0</Opacity>
-      <Font align="center">Verdana-8:bold</Font>
+      <Font align="center">Verdana-8:bold:antialias</Font>
       <Width>3</Width>
       <Height>20</Height>
+      <Corner>3</Corner>
       <Active>
          <Foreground>black</Foreground>
-         <Background>#cacaca:#c0c0c0</Background>
-         <Outline>#686868</Outline>
+         <Background>#cacaca:#b0b0b0</Background>
+         <Outline>#6f6f6f</Outline>
          <Opacity>1.0</Opacity>
       </Active>
    </WindowStyle>
 
    <TrayStyle decorations="motif">
-      <Font>Verdana-8:bold</Font>
+      <Font>Verdana-8:bold:antialias</Font>
       <Background>#d3d3d3</Background>
       <Foreground>black</Foreground>
       <Outline>#747474:#ffffff</Outline>
@@ -389,7 +395,7 @@
       </Active>
    </TrayStyle>
 
-   <TaskListStyle decorations="motif">
+   <TaskListStyle decorations="motif" group="false">
       <Font>Verdana-8:antialias</Font>
       <Background>#d3d3d3</Background>
       <Foreground>black</Foreground>
@@ -435,17 +441,17 @@
    </PopupStyle>
 
    <IconPath>
-      $HOME/.icons
+      $HOME/.config/jwm/icons
    </IconPath>
 
    <!-- Virtual Desktops -->
    <!-- Desktop tags can be contained within Desktops for desktop names. -->
-   <Desktops count="4">
+   <Desktops width="4"  backandforth="on">
       <!-- Default background. Note that a Background tag can be
            contained within a Desktop tag to give a specific background
            for that desktop.
       -->
-      <Background type="tile">/home/andrey/.icons/jwm/wallpaper/autumn.png</Background>
+      <Background type="tile">$HOME/.config/jwm/wallpaper/autumn_orig.png</Background>
       <!--<Background type="gradient">#464646:#0a0a0a</Background>-->
    </Desktops>
 
@@ -481,14 +487,21 @@
    <Key key="Escape">escape</Key>
    <Key mask="C" key="Escape">root:1</Key>
    
-   <Key key="Print">exec:/home/andrey/bin/jwm/screenshot.sh</Key>
+   <!--Key key="XF86Tools">exec:$HOME/.config/jwm/bin/touchpad.sh</Key-->
+   <Key mask="4" key="z">exec:$HOME/.config/jwm/bin/touchpadquiet.sh</Key>
+   <!--Key key="XF86Search">exec:$HOME/.config/jwm/bin/automute.sh</Key-->
+   <Key mask="C" key="XF86MonBrightnessDown">exec:$HOME/.config/jwm/bin/xgamma.sh down</Key>
+   <Key mask="C" key="XF86MonBrightnessUp">exec:$HOME/.config/jwm/bin/xgamma.sh up</Key>
+   <Key key="Print">exec:$HOME/.config/jwm/bin/scrot.sh</Key>
+   <Key mask="A" key="Print">exec:$HOME/.config/jwm/bin/screencast.sh</Key>
+   <!--Key mask="C" key="Print">exec:$HOME/.config/jwm/bin/win_screencast.sh</Key-->
    
    <!-- MAIN  -->
    <Key mask="A"  key="Tab">nextstacked</Key>
    <Key mask="AS" key="Tab">prevstacked</Key>
    <Key mask="CA" key="#">desktop#</Key>
    <Key mask="A"  key="F1">root:1</Key>
-   <Key mask=""   key="F11">fullscreen</Key>
+   <Key mask="A"  key="F11">fullscreen</Key>
    
    <!-- GNOME  -->
    <Key mask="A" key="F2">exec:/usr/bin/xterm</Key>
@@ -513,13 +526,15 @@
    <!-- Application  -->
    <Key mask="CA" key="z">exec:xterm  -T "Midnight Commander" -e mc</Key>
    <Key mask="CA" key="t">exec:xterm  -T "Terminal"</Key>
-   <Key mask="CA" key="w">exec:/bin/sh /home/andrey/bin/jwm/sync.sh  </Key>
-   <Key mask="CA" key="m">exec:/usr/bin/thunderbird </Key>
-   <Key mask="CA" key="e">exec:/bin/sh /home/andrey/bin/jwm/translation.sh </Key>
+   <Key mask="CA" key="w">exec:/bin/sh $HOME/.config/jwm/bin/sync.sh  </Key>
+   <Key mask="CA" key="m">exec:/usr/bin/evolution</Key>
+   <Key mask="CA" key="e">exec:/bin/sh $HOME/.config/jwm/bin/translation.sh </Key>
    
    <!-- Windows  -->
-   <Key mask="4"  key="l">exec:/bin/sh /home/andrey/bin/jwm/xlock.sh</Key>
+   <!--Key mask="4"  key="l">exec:/bin/sh $HOME/.config/jwm/bin/xlock.sh</Key-->
+   <Key mask="4"  key="l">exec:/usr/local/bin/slimlock</Key>
    <Key mask="4"  key="Down">restore</Key>
+   <Key mask="4A" key="Down">minimize</Key>
    <Key mask="4"  key="Up">maximize</Key>
    <Key mask="4"  key="Left">maxleft</Key>
    <Key mask="4"  key="Right">maxright</Key>
@@ -529,12 +544,43 @@
    <Key mask="4"  key="plus">exec:/usr/bin/pixeltool</Key>
    <Key mask="4"  key="minus">exec:/usr/bin/pixeltool</Key>
    
+   <!-- Mouse bindings -->
+   <Mouse context="title" button="1">move</Mouse>
+   <Mouse context="title" button="2">move</Mouse>
+   <Mouse context="title" mask="A" button="1">move</Mouse>
+   <Mouse context="title" mask="A" button="2">move</Mouse>
+   <Mouse context="title" button="3">window</Mouse>
+   <!-- Mouse context="title" button="4">shade</Mouse>
+   <Mouse context="title" button="5">shade</Mouse -->
+   <Mouse context="title" button="11">maximize</Mouse>
+
+   <Mouse context="icon" button="1">window</Mouse>
+   <Mouse context="icon" button="2">move</Mouse>
+   <Mouse context="icon" button="3">window</Mouse>
+   <Mouse context="icon" button="4">shade</Mouse>
+   <Mouse context="icon" button="5">shade</Mouse>
+
+   <Mouse context="border" button="1">resize</Mouse>
+   <Mouse context="border" button="2">move</Mouse>
+   <Mouse context="border" button="3">window</Mouse>
+
+   <Mouse context="close" button="-1">close</Mouse>
+   <Mouse context="close" button="2">move</Mouse>
+   <Mouse context="close" button="-3">close</Mouse>
+
+   <Mouse context="maximize" button="-1">maximize</Mouse>
+   <Mouse context="maximize" button="-2">maxv</Mouse>
+   <Mouse context="maximize" button="-3">maxh</Mouse>
+
+   <Mouse context="minimize" button="-1">minimize</Mouse>
+   <Mouse context="minimize" button="2">move</Mouse>
+   <Mouse context="minimize" button="-3">shade</Mouse>
+   
    <!-- window buttons -->
-   <ButtonClose>/home/andrey/.icons/jwm/title/close.xpm</ButtonClose>
-   <ButtonMax>/home/andrey/.icons/jwm/title/max.xpm</ButtonMax>
-   <ButtonMaxActive>/home/andrey/.icons/jwm/title/maxact.xpm</ButtonMaxActive>
-   <ButtonMenu>/home/andrey/.icons/jwm/16x16/os.png</ButtonMenu>
-   <ButtonMin>/home/andrey/.icons/jwm/title/min.xpm</ButtonMin>
-   <DefaultIcon>/home/andrey/.icons/jwm/16x16/os.png</DefaultIcon>
-   <!-- StartupCommand>exec xcompmgr -c -t-5 -l-5 -r4.2 -o.55</StartupCommand -->
+   <ButtonClose>jwm/title/close.xpm</ButtonClose>
+   <ButtonMax>jwm/title/max.xpm</ButtonMax>
+   <ButtonMaxActive>jwm/title/maxact.xpm</ButtonMaxActive>
+   <ButtonMenu>jwm/16x16/os.png</ButtonMenu>
+   <ButtonMin>jwm/title/min.xpm</ButtonMin>
+   <DefaultIcon>jwm/16x16/os.png</DefaultIcon>
 </JWM>

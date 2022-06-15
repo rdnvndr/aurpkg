@@ -21,7 +21,7 @@ build() {
   patch -p1 -i $startdir/border-of-window-title.patch              || return 1
   patch -p1 -i $startdir/battery.patch                             || return 1
 #  patch -p1 -i $startdir/click-middle-in-taskbar.patch             || return 1
-  patch -p1 -i $startdir/wmname-tag.patch                          || return 1
+#  patch -p1 -i $startdir/wmname-tag.patch                          || return 1
   patch -p1 -i $startdir/minimization-indicator.patch              || return 1
   patch -p1 -i $startdir/move-window-to-desktop.patch              || return 1
   patch -p1 -i $startdir/pager-border.patch                        || return 1

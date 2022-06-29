@@ -1,0 +1,13 @@
+--- a/slim.service
++++ b/slim.service
+@@ -2,6 +2,10 @@
+ Description=SLiM Simple Login Manager
+ After=systemd-user-sessions.service
+ 
++Requires=dev-dri-card0.device
++After=dev-dri-card0.device
++
++
+ [Service]
+ ExecStart=/usr/bin/slim -nodaemon
+ Restart=on-failure

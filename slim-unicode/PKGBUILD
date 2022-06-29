@@ -31,7 +31,9 @@ source=(https://sourceforge.net/projects/slim.berlios/files/slim-1.3.6.tar.gz/do
         slim-unicode.patch
         slim-utf8.patch
         slimlock-utf8.patch
-        compile.patch)
+        compile.patch
+        service.patch
+        99-drm.rules)
 
 sha256sums=('21defeed175418c46d71af71fd493cd0cbffd693f9d43c2151529125859810df'
             '3dfa697f8c058390c7e02e7aba769475057ef8ddde945dc43b8cb7f9724dbda0'
@@ -44,12 +46,15 @@ sha256sums=('21defeed175418c46d71af71fd493cd0cbffd693f9d43c2151529125859810df'
             '18b13bdbab3f756b10e7a5ab50a2f31e4a5f18aa412baf45fa623c75b7860e4b'
             '30d1b8e62d41457d9928d40a12078c169d46641604ca4ad0c26651aa5602a98a'
             'eb5fe51ab46c7d637d9ed639bd0aeb8567c639233819c4f933d8e49bed57a238'
+            SKIP
+            SKIP
             SKIP)
 
 prepare() {
   cd $_pkgname-$pkgver
   
   patch -p1 -i "$srcdir/compile.patch"
+  patch -p1 -i "$srcdir/service.patch"
 
   # Fix installation path of slim.service
   sed -i 's|set(LIBDIR "/lib")|set(LIBDIR "/usr/lib")|' CMakeLists.txt
@@ -86,6 +91,7 @@ package() {
   install -Dm644 "$srcdir/slimlock.pam" "$pkgdir/etc/pam.d/slimlock"
   install -Dm644 "$srcdir/slim.logrotate" "$pkgdir/etc/logrotate.d/slim"
   install -Dm644 slimlock.conf "$pkgdir/etc/slimlock.conf"
+  install -Dm644 "$srcdir/99-drm.rules" "$pkgdir/usr/lib/udev/rules.d/99-drm.rules"
 
   # Provide sane defaults
   sed -i -e 's|#xserver_arguments.*|xserver_arguments -nolisten tcp vt07|' \

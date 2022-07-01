@@ -1,0 +1,116 @@
+diff --git a/src/file.c b/src/file.c
+index 5300e5af..56a97b4f 100644
+--- a/src/file.c
++++ b/src/file.c
+@@ -538,6 +538,63 @@ unwrap(struct magic_set *ms, const char *fn)
+ 	return e;
+ }
+ 
++#if defined(HAVE_WCHAR_H) && defined(HAVE_MBRTOWC) && defined(HAVE_WCWIDTH) && \
++   defined(HAVE_WCTYPE_H)
++/*
++ * convert string to multibyte printable format.
++ */
++private char *
++file_name_wprintable(struct magic_set *ms, char *buf, size_t bufsiz,
++    const char *str, size_t slen)
++{
++	char *ptr, *eptr = buf + bufsiz - 1;
++	size_t n;
++	size_t bytesconsumed;
++	mbstate_t state;
++	wchar_t nextchar;
++	int valid;
++
++	if ((ms->flags & MAGIC_RAW) != 0) {
++		strncpy(buf, str, bufsiz);
++		return buf;
++	}
++
++	(void)memset(&state, 0, sizeof(mbstate_t));
++	n = strlen(str);
++
++	for (ptr = buf;  ptr < eptr && n && slen && *str;) {
++		valid = 1;
++		bytesconsumed = mbrtowc(&nextchar, str, n, &state);
++		if (bytesconsumed == CAST(size_t, -1) ||
++		    bytesconsumed == CAST(size_t, -2)) {
++			/* Something went wrong */
++			valid = 0;
++			bytesconsumed = 1;
++			(void)memset(&state, 0, sizeof(mbstate_t));
++		}
++		if (valid && iswprint(nextchar)) {
++			if (ptr >= eptr - bytesconsumed)
++				break;
++			memcpy(ptr, str, bytesconsumed);
++			ptr += bytesconsumed;
++			slen -= wcwidth(nextchar);
++		} else {
++			if (ptr >= eptr - 3)
++				break;
++			*ptr++ = '\\';
++			*ptr++ = ((CAST(unsigned int, *str) >> 6) & 7) + '0';
++			*ptr++ = ((CAST(unsigned int, *str) >> 3) & 7) + '0';
++			*ptr++ = ((CAST(unsigned int, *str) >> 0) & 7) + '0';
++			slen -= 4;
++		}
++		str += bytesconsumed;
++		n -= bytesconsumed;
++	}
++	*ptr = '\0';
++	return buf;
++}
++#endif
++
+ /*
+  * Called for each input file on the command line (or in a list of files)
+  */
+@@ -554,7 +611,12 @@ process(struct magic_set *ms, const char *inname, int wid)
+ 	    file_err(EXIT_FAILURE, "Can't allocate %zu bytes", plen);
+ 
+ 	if (wid > 0 && !bflag) {
++#if defined(HAVE_WCHAR_H) && defined(HAVE_MBRTOWC) && defined(HAVE_WCWIDTH) && \
++   defined(HAVE_WCTYPE_H)
++		pname = file_name_wprintable(ms, pbuf, plen, inname, wid);
++#else
+ 		pname = file_printable(ms, pbuf, plen, inname, wid);
++#endif
+ 		(void)printf("%s", std_in ? "/dev/stdin" : pname);
+ 		if (nulsep)
+ 			(void)putc('\0', stdout);
+@@ -584,22 +646,27 @@ file_mbswidth(struct magic_set *ms, const char *s)
+ 	size_t width = 0;
+ #if defined(HAVE_WCHAR_H) && defined(HAVE_MBRTOWC) && defined(HAVE_WCWIDTH) && \
+    defined(HAVE_WCTYPE_H)
+-	size_t bytesconsumed, old_n, n;
++	size_t bytesconsumed, n;
+ 	mbstate_t state;
+ 	wchar_t nextchar;
+ 	(void)memset(&state, 0, sizeof(mbstate_t));
+-	old_n = n = strlen(s);
++	n = strlen(s);
+ 
+ 	while (n > 0) {
+ 		bytesconsumed = mbrtowc(&nextchar, s, n, &state);
+ 		if (bytesconsumed == CAST(size_t, -1) ||
+ 		    bytesconsumed == CAST(size_t, -2)) {
+-			/* Something went wrong, return something reasonable */
+-			return old_n;
++			/* Something went wrong.
++			   Invalid code will be replaced with octal value
++			   unless raw mode.
++			   Try next byte in sequence */
++			width += ((ms->flags & MAGIC_RAW) != 0) ? 1 : 4;
++			bytesconsumed = 1;
++			(void)memset(&state, 0, sizeof(mbstate_t));
++		} else {
++			width += ((ms->flags & MAGIC_RAW) != 0
++			    || iswprint(nextchar)) ? wcwidth(nextchar) : 4;
+ 		}
+-		width += ((ms->flags & MAGIC_RAW) != 0
+-		    || iswprint(nextchar)) ? wcwidth(nextchar) : 4;
+-
+ 		s += bytesconsumed, n -= bytesconsumed;
+ 	}
+ 	return width;

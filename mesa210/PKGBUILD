@@ -16,7 +16,7 @@ fi
 pkgname=mesa210
 pkgdesc='An open-source implementation of the OpenGL specification. (stable release)'
 pkgver=21.0.2
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 url="https://mesa3d.org/"
 license=('MIT')
@@ -33,8 +33,10 @@ source=("https://archive.mesa3d.org/mesa-$pkgver.tar.xz"
         "swr-llvm13-patch2.patch"
         "ac_llvm_helper.patch"
         "aco_instruction_selection.patch"
-        "LICENSE")
+        "LICENSE"
+        "llvm14-build.patch")
 md5sums=("SKIP"
+         "SKIP"
          "SKIP"
          "SKIP"
          "SKIP"
@@ -90,19 +92,16 @@ fi
   -D sysconfdir=/etc \
   -Dplatforms=x11,wayland \
   -Ddri3=enabled \
-  -Ddri-drivers=i915,i965,r100,r200,nouveau \
-  -Dgallium-drivers=r300,r600,radeonsi,nouveau,virgl,svga,swrast,iris,zink \
+  -Ddri-drivers= \
+  -Dgallium-drivers=radeonsi \
   -Dgallium-extra-hud=true \
   -Dgallium-vdpau=enabled \
-  -Dgallium-xvmc=enabled \
   -Dgallium-omx=bellagio \
   -Dgallium-va=enabled \
-  -Dgallium-xa=enabled \
-  -Dgallium-nine=true \
   -Dgallium-opencl=icd \
   -Dopencl-spirv=false \
   -Dopencl-native=true \
-  -Dvulkan-drivers=amd,intel,swrast \
+  -Dvulkan-drivers=amd \
   -Dshader-cache=enabled \
   -Dvulkan-overlay-layer=true \
   -Dvulkan-device-select-layer=true \
@@ -122,7 +121,6 @@ fi
   -Dlibunwind=enabled \
   -Dlmsensors=enabled \
   -Dselinux=false \
-  -Dosmesa=true \
   -Dswr-arches=avx,avx2,knl,skx \
   -Dshared-swr=true \
   -Dxlib-lease=enabled \

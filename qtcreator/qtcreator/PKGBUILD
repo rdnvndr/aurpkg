@@ -1,8 +1,8 @@
 pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
-pkgver=7.0.3
-_clangver=13.0.1
-pkgrel=2
+pkgver=8.0.0
+_clangver=14.0.6
+pkgrel=1
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -24,14 +24,16 @@ optdepends=('qt5-doc: integrated Qt documentation'
             'perf: performer analyzer'
             'mlocate: locator filter')
         
-source=("QTCREATORBUG-21681.patch"
+source=(QTCREATORBUG-27096.patch::https://code.qt.io/cgit/qt-creator/qt-creator.git/patch/?id=449334e4
+         "QTCREATORBUG-21681.patch"
         "projectmodels.patch")
 sha256sums=(SKIP
+            SKIP
             SKIP)
 
 prepare() {
   cd $srcdir
-  git clone --branch 7.0 --depth 1 --recurse-submodules git@github.com:qt-creator/qt-creator.git
+  git clone --branch 8.0 --depth 1 --recurse-submodules git@github.com:qt-creator/qt-creator.git
   patch -d qt-creator -p1 < QTCREATORBUG-21681.patch
   patch -d qt-creator -p1 < projectmodels.patch
 }

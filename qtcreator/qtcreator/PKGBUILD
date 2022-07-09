@@ -24,12 +24,12 @@ optdepends=('qt5-doc: integrated Qt documentation'
             'perf: performer analyzer'
             'mlocate: locator filter')
         
-source=(QTCREATORBUG-27096.patch::https://code.qt.io/cgit/qt-creator/qt-creator.git/patch/?id=449334e4
-         "QTCREATORBUG-21681.patch"
+source=("QTCREATORBUG-21681.patch"
         "projectmodels.patch")
 sha256sums=(SKIP
-            SKIP
             SKIP)
+
+groups=('modified')
 
 prepare() {
   cd $srcdir

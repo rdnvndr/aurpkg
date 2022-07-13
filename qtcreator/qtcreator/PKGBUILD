@@ -50,7 +50,7 @@ build() {
     -DBUILD_QBS=OFF \
     -DQTC_CLANG_BUILDMODE_MATCH=ON
   cmake --build build
-  cmake --build build --target docs
+  export QT_QPA_PLATFORMTHEME=""; cmake --build build --target docs
 }
 
 package_qtcreator() {

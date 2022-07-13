@@ -25,8 +25,10 @@ optdepends=('qt5-doc: integrated Qt documentation'
             'mlocate: locator filter')
         
 source=("QTCREATORBUG-21681.patch"
-        "projectmodels.patch")
+        "projectmodels.patch"
+        "navigationwidget.patch")
 sha256sums=(SKIP
+            SKIP
             SKIP)
 
 groups=('modified')
@@ -36,6 +38,7 @@ prepare() {
   git clone --branch 8.0 --depth 1 --recurse-submodules git@github.com:qt-creator/qt-creator.git
   patch -d qt-creator -p1 < QTCREATORBUG-21681.patch
   patch -d qt-creator -p1 < projectmodels.patch
+  patch -d qt-creator -p1 < navigationwidget.patch
 }
 
 build() {
@@ -47,7 +50,7 @@ build() {
     -DBUILD_QBS=OFF \
     -DQTC_CLANG_BUILDMODE_MATCH=ON
   cmake --build build
-#  cmake --build build --target docs
+  cmake --build build --target docs
 }
 
 package_qtcreator() {

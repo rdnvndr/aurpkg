@@ -2,6 +2,30 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
 *** jwm-2.1.0/src/clock.c	2012-01-27 01:04:17.000000000 +0000
 --- jwm-roand/src/clock.c	2012-03-03 16:14:31.710077664 +0000
 ***************
+*** 22,27 ****
+--- 22,31 ----
+  #include "event.h"
+  #include "action.h"
+  
++ #include <X11/XKBlib.h>
++ #include <X11/extensions/XKBrules.h>
++ 
++ 
+  /** Structure to respresent a clock tray component. */
+  typedef struct ClockType {
+  
+***************
+*** 48,53 ****
+--- 52,59 ----
+  
+  static ClockType *clocks;
+  
++ static char lastLayout[2];
++ 
+  static void Create(TrayComponentType *cp);
+  static void Resize(TrayComponentType *cp);
+  static void Destroy(TrayComponentType *cp);
+***************
 *** 241,248 ****
         abs(cp->mousex - x) < settings.doubleClickDelta &&
         abs(cp->mousey - y) < settings.doubleClickDelta) {
@@ -11,7 +35,7 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
         }
      }
   
---- 241,298 ----
+--- 247,304 ----
         abs(cp->mousex - x) < settings.doubleClickDelta &&
         abs(cp->mousey - y) < settings.doubleClickDelta) {
         if(GetTimeDifference(now, &cp->mouseTime) >= settings.popupDelay) {
@@ -71,7 +95,9 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
      }
   
 ***************
-*** 258,266 ****
+*** 256,266 ****
+     const char *timeString;
+     int width;
      int rwidth;
   
      /* Only draw if the time changed. */
@@ -81,14 +107,25 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
   
      /* Clear the area. */
      cp = clk->cp;
---- 308,317 ----
+--- 312,332 ----
+     const char *timeString;
+     int width;
      int rwidth;
++    
++    XkbStateRec state;
++    XkbGetState(display, XkbUseCoreKbd, &state);
++ 
++    XkbDescPtr desc = XkbGetKeyboard(display, XkbAllComponentsMask, XkbUseCoreKbd);
++    char *group = XGetAtomName(display, desc->names->groups[state.group]);
++    char layout[2];
++    strncpy(layout, group, 2);
   
      /* Only draw if the time changed. */
-!    if((int)(now->seconds/60) == (int)(clk->lastTime.seconds/60)) {
+!    if((int)(now->seconds/60) == (int)(clk->lastTime.seconds/60) && layout == lastLayout) {
         return;
      }
 +    clk->lastTime.seconds = now->seconds;
++    strncpy(lastLayout, layout, 2);
   
      /* Clear the area. */
      cp = clk->cp;
@@ -102,7 +139,7 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
      width = GetStringWidth(FONT_CLOCK, timeString);
      rwidth = width + 4;
      if(rwidth == clk->cp->requestedWidth || clk->userWidth) {
---- 325,349 ----
+--- 340,364 ----
                                0, 0, cp->width, cp->height);
      }
   
@@ -122,7 +159,7 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
 +    }
 +    char *out = NULL;
 +    int perc = (lastFullCapacity != 0) ? ((float)remainingCapacity/(float)lastFullCapacity*100) : 0;
-+    asprintf(&out, " %d%% ", perc);
++    asprintf(&out, " %d%%  %s  ", perc, layout);
      /* Determine if the clock is the right size. */
 !    timeString = strcat(out, GetTimeString(clk->format, clk->zone));
      width = GetStringWidth(FONT_CLOCK, timeString);

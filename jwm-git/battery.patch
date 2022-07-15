@@ -11,36 +11,39 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
         }
      }
   
---- 241,295 ----
+--- 241,298 ----
         abs(cp->mousex - x) < settings.doubleClickDelta &&
         abs(cp->mousey - y) < settings.doubleClickDelta) {
         if(GetTimeDifference(now, &cp->mouseTime) >= settings.popupDelay) {
 !               longTime = GetTimeString("%d %B %Y%n%A %T", cp->zone);
 !               FILE *fp1;
+!               FILE *fp2;
+!               FILE *fp3; 
+!               FILE *fp4;
 !               int PresentRate = 0;
 !               int RemainingCapacity = 0;
 !               int DesignCapacity = 0;
-!               int LastFullCapacity =0;
+!               int LastFullCapacity = 0;
 !               char Charging[11];
 !               fp1 = fopen("/sys/class/power_supply/BAT0/power_now","r");
 !               if(fp1 != NULL) {
 !                  fscanf(fp1,"%d",&PresentRate);
 !                  fclose(fp1);
 !               }
-!               if(fp1 != NULL) {
-!                  fp1=fopen("/sys/class/power_supply/BAT0/energy_now","r");
-!                  fscanf(fp1,"%d",&RemainingCapacity);
-!                  fclose(fp1);
+!               fp2=fopen("/sys/class/power_supply/BAT0/energy_now","r");
+!               if(fp2 != NULL) {
+!                  fscanf(fp2,"%d",&RemainingCapacity);
+!                  fclose(fp2);
 !               }
-!               fp1 = fopen("/sys/class/power_supply/BAT0/energy_full","r");
-!               if(fp1 != NULL) {
-!                  fscanf(fp1,"%d",&LastFullCapacity);
-!                  fclose(fp1);
+!               fp3 = fopen("/sys/class/power_supply/BAT0/energy_full","r");
+!               if(fp3 != NULL) {
+!                  fscanf(fp3,"%d",&LastFullCapacity);
+!                  fclose(fp3);
 !               }
-!               fp1 = fopen("/sys/class/power_supply/BAT0/status","r");
-!               if(fp1 != NULL) {
-!                  fscanf(fp1,"%s",Charging);
-!                  fclose(fp1);
+!               fp4 = fopen("/sys/class/power_supply/BAT0/status","r");
+!               if(fp4 != NULL) {
+!                  fscanf(fp4,"%s",Charging);
+!                  fclose(fp4);
 !               }
 !               char *out = NULL;
 !               int Perc = (LastFullCapacity != 0)?((float)RemainingCapacity/(float)LastFullCapacity*100):0;
@@ -67,3 +70,61 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
         }
      }
   
+***************
+*** 258,266 ****
+     int rwidth;
+  
+     /* Only draw if the time changed. */
+!    if(now->seconds == clk->lastTime.seconds) {
+        return;
+     }
+  
+     /* Clear the area. */
+     cp = clk->cp;
+--- 308,317 ----
+     int rwidth;
+  
+     /* Only draw if the time changed. */
+!    if((int)(now->seconds/60) == (int)(clk->lastTime.seconds/60)) {
+        return;
+     }
++    clk->lastTime.seconds = now->seconds;
+  
+     /* Clear the area. */
+     cp = clk->cp;
+***************
+*** 274,281 ****
+                               0, 0, cp->width, cp->height);
+     }
+  
+     /* Determine if the clock is the right size. */
+!    timeString = GetTimeString(clk->format, clk->zone);
+     width = GetStringWidth(FONT_CLOCK, timeString);
+     rwidth = width + 4;
+     if(rwidth == clk->cp->requestedWidth || clk->userWidth) {
+--- 325,349 ----
+                               0, 0, cp->width, cp->height);
+     }
+  
++    FILE *fp1;
++    FILE *fp2;
++    int RemainingCapacity = 0;
++    int LastFullCapacity = 0;
++    fp1 = fopen("/sys/class/power_supply/BAT0/energy_now","r");
++    if(fp1 != NULL) {
++       fscanf(fp1,"%d",&RemainingCapacity);
++       fclose(fp1);
++    }
++    fp2 = fopen("/sys/class/power_supply/BAT0/energy_full","r");
++    if(fp2 != NULL) {
++       fscanf(fp2,"%d",&LastFullCapacity);
++       fclose(fp2);
++    }
++    char *out = NULL;
++    int Perc = (LastFullCapacity != 0)?((float)RemainingCapacity/(float)LastFullCapacity*100):0;
++    asprintf(&out," %d%% ", Perc);
+     /* Determine if the clock is the right size. */
+!    timeString = strcat(out, GetTimeString(clk->format, clk->zone));
+     width = GetStringWidth(FONT_CLOCK, timeString);
+     rwidth = width + 4;
+     if(rwidth == clk->cp->requestedWidth || clk->userWidth) {

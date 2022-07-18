@@ -1,0 +1,20 @@
+diff -cr src/pidgin-2.14.1/po/ru.po src/pidgin-2.14.1/po/ru.po
+*** a/po/ru.po	2020-06-10 06:13:22.000000000 +0300
+--- b/po/ru.po	2022-07-16 22:02:44.899899038 +0300
+***************
+*** 9090,9096 ****
+  
+  #. Accounts menu
+  msgid "/_Accounts"
+! msgstr "/_Уч.записи"
+  
+  msgid "/Accounts/Manage Accounts"
+  msgstr "/Уч.записи/Управление учётными записями"
+--- 9090,9096 ----
+  
+  #. Accounts menu
+  msgid "/_Accounts"
+! msgstr "Профили"
+  
+  msgid "/Accounts/Manage Accounts"
+  msgstr "/Уч.записи/Управление учётными записями"

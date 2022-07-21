@@ -48,7 +48,8 @@ build() {
     -DWITH_DOCS=ON \
     -DBUILD_DEVELOPER_DOCS=ON \
     -DBUILD_QBS=OFF \
-    -DQTC_CLANG_BUILDMODE_MATCH=ON
+    -DQTC_CLANG_BUILDMODE_MATCH=ON \
+    -DCLANGTOOLING_LINK_CLANG_DYLIB=ON
   cmake --build build
   export QT_QPA_PLATFORMTHEME=""; cmake --build build --target docs
 }

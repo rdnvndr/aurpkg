@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Written on вт дек. 27 20:51:26 2016 by Qt Creator 4.2.0-->
+<!--Written on Tue Mar 15 11:00:33 2022 by Qt Creator 7.0.0-rc1 (6.84.0)-->
 <externaltool id="Колончатое_форматирование">
-    <description>Колончатое форматирование выделеногомтекста</description>
+    <description>Колончатое форматирование выделеного текста</description>
     <displayname>Колончатое форматирование</displayname>
-    <category>Текст</category>
+    <category>Text</category>
     <executable output="replaceselection" error="ignore" modifiesdocument="no">
         <path>column</path>
         <arguments>-t -o &quot; &quot;</arguments>

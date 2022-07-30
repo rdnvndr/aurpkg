@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Written on пт июн. 3 00:40:27 2022 by Qt Creator 7.0.3-->
+<externaltool id="New_Tool">
+    <description>Diff Current File</description>
+    <displayname>Diff Current File</displayname>
+    <category>TFS</category>
+    <executable output="ignore" error="ignore" modifiesdocument="no">
+        <path>/usr/bin/sh</path>
+        <arguments>-c '/usr/local/bin/tf_diff.sh &quot;%{CurrentDocument:FilePath}&quot;'</arguments>
+    </executable>
+</externaltool>

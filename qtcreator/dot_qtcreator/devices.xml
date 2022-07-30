@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QtCreatorDevices>
+<!-- Written by QtCreator 8.0.1, 2022-07-30T16:30:26. -->
+<qtcreator>
+ <data>
+  <variable>DeviceManager</variable>
+  <valuemap type="QVariantMap">
+   <valuemap type="QVariantMap" key="DefaultDevices">
+    <value type="QString" key="Desktop">Desktop Device</value>
+    <value type="QString" key="DockerDeviceType">{b450302a-a048-43f2-a273-d89c715ecd09}</value>
+    <value type="QString" key="GenericLinuxOsType">{3478f449-618a-4386-9820-14109a020e45}</value>
+   </valuemap>
+   <valuelist type="QVariantList" key="DeviceList">
+    <valuemap type="QVariantMap">
+     <value type="int" key="Authentication">0</value>
+     <value type="QString" key="DebugServerKey"></value>
+     <valuemap type="QVariantMap" key="ExtraData"/>
+     <value type="QString" key="FreePortsSpec">30000-31000</value>
+     <value type="QString" key="Host"></value>
+     <value type="int" key="HostKeyChecking">2</value>
+     <value type="QString" key="InternalId">Desktop Device</value>
+     <value type="QString" key="KeyFile"></value>
+     <value type="int" key="Origin">1</value>
+     <value type="QString" key="OsType">Desktop</value>
+     <value type="QString" key="QmlsceneKey"></value>
+     <value type="int" key="SshPort">0</value>
+     <value type="int" key="Timeout">0</value>
+     <value type="int" key="Type">0</value>
+     <value type="QString" key="Uname"></value>
+     <value type="int" key="Version">0</value>
+    </valuemap>
+    <valuemap type="QVariantMap">
+     <value type="int" key="Authentication">0</value>
+     <value type="QString" key="DebugServerKey"></value>
+     <valuemap type="QVariantMap" key="ExtraData">
+      <value type="bool" key="RemoteLinux.SupportsRSync">false</value>
+     </valuemap>
+     <value type="QString" key="FreePortsSpec">10000-10100</value>
+     <value type="QString" key="Host">10.88.0.167</value>
+     <value type="int" key="HostKeyChecking">0</value>
+     <value type="QString" key="InternalId">{3478f449-618a-4386-9820-14109a020e45}</value>
+     <value type="QString" key="KeyFile"></value>
+     <value type="QString" key="Name">AstraLinux</value>
+     <value type="int" key="Origin">0</value>
+     <value type="QString" key="OsType">GenericLinuxOsType</value>
+     <value type="QString" key="QmlsceneKey"></value>
+     <value type="int" key="SshPort">22</value>
+     <value type="int" key="Timeout">10</value>
+     <value type="int" key="Type">0</value>
+     <value type="QString" key="Uname">andrey</value>
+     <value type="int" key="Version">0</value>
+    </valuemap>
+    <valuemap type="QVariantMap">
+     <value type="int" key="Authentication">0</value>
+     <value type="QString" key="DebugServerKey"></value>
+     <value type="QString" key="DockerDeviceDataImageId">83e15f66b273</value>
+     <value type="QString" key="DockerDeviceDataRepo">localhost/rplm</value>
+     <value type="QString" key="DockerDeviceDataSize">1.66 GB</value>
+     <value type="QString" key="DockerDeviceDataTag">latest</value>
+     <valuelist type="QVariantList" key="DockerDeviceMappedPaths">
+      <value type="QString">/usr/src/poco</value>
+      <value type="QString">/opt/qt</value>
+      <value type="QString">/home/andrey/projects</value>
+     </valuelist>
+     <value type="bool" key="DockerDeviceUseUidGid">true</value>
+     <valuemap type="QVariantMap" key="ExtraData"/>
+     <value type="QString" key="FreePortsSpec">10000-10100</value>
+     <value type="QString" key="Host"></value>
+     <value type="int" key="HostKeyChecking">2</value>
+     <value type="QString" key="InternalId">{b450302a-a048-43f2-a273-d89c715ecd09}</value>
+     <value type="QString" key="KeyFile"></value>
+     <value type="QString" key="Name">Docker Image &quot;localhost/rplm:latest&quot; (83e15f66b273)</value>
+     <value type="int" key="Origin">0</value>
+     <value type="QString" key="OsType">DockerDeviceType</value>
+     <value type="QString" key="QmlsceneKey"></value>
+     <value type="int" key="SshPort">0</value>
+     <value type="int" key="Timeout">0</value>
+     <value type="int" key="Type">0</value>
+     <value type="QString" key="Uname"></value>
+     <value type="int" key="Version">0</value>
+    </valuemap>
+   </valuelist>
+  </valuemap>
+ </data>
+</qtcreator>

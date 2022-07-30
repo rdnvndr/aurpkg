@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<snippets>
+    <snippet group="C++" trigger="class" id="cpp_genericclass" complement="" removed="false" modified="true">class $name$
+{
+public:
+    $name$() {}
+};</snippet>
+    <snippet group="C++" trigger="cmm" id="" complement="&lt;param&gt;...&lt;/param&gt;" removed="false" modified="false">/// &lt;param name=&quot;$name$&quot;&gt; $$ &lt;/param&gt;</snippet>
+    <snippet group="C++" trigger="cmm" id="" complement="&lt;returns&gt;...&lt;/returns&gt; " removed="false" modified="false">/// &lt;returns&gt; $$ &lt;/returns&gt;</snippet>
+    <snippet group="C++" trigger="cmm" id="" complement="&lt;summary&gt;...&lt;/summary&gt;" removed="false" modified="false">/// &lt;summary&gt; $$ &lt;/summary&gt;</snippet>
+    <snippet group="C++" trigger="cmm" id="" complement="&lt;value&gt;...&lt;/value&gt;" removed="false" modified="false">/// &lt;value&gt; $$ &lt;/value&gt;</snippet>
+</snippets>

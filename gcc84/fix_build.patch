@@ -1,0 +1,19 @@
+*** a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc	2022-08-09 12:16:41.162484876 +0300
+--- b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc	2022-08-09 12:16:12.142486584 +0300
+***************
+*** 52,58 ****
+  #endif
+  
+  #if !SANITIZER_ANDROID
+! #include <sys/mount.h>
+  #include <sys/timeb.h>
+  #include <utmpx.h>
+  #endif
+--- 52,58 ----
+  #endif
+  
+  #if !SANITIZER_ANDROID
+! //#include <sys/mount.h>
+  #include <sys/timeb.h>
+  #include <utmpx.h>
+  #endif

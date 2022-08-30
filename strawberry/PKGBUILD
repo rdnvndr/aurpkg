@@ -2,13 +2,13 @@
 # Contributor: Fabio 'Lolix' Loli <lolix@disroot.org> -> https://github.com/FabioLolix
 
 pkgname=strawberry
-pkgver=1.0.7
+pkgver=1.0.8
 pkgrel=1
 pkgdesc='A music player aimed at audio enthusiasts and music collectors'
 arch=(x86_64)
 url='https://www.strawbs.org/'
 license=(GPL3)
-depends=(qt5-base chromaprint protobuf gst-plugins-base gst-plugins-good libcdio libmtp fftw)
+depends=(qt5-base protobuf gst-plugins-base gst-plugins-good libcdio libmtp fftw)
 makedepends=(cmake boost qt5-tools)
 optdepends=('gst-libav: additional codecs'
             'gst-plugins-bad: additional codecs'

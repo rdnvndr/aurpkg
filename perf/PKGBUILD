@@ -1,0 +1,83 @@
+pkgbase=perf
+pkgname=perf
+pkgver=5.19
+pkgrel=1
+pkgdesc='Linux kernel performance auditing tool'
+arch=(x86_64)
+url='https://www.kernel.org'
+license=("GPL2")
+makedepends=('git')
+makedepends+=('asciidoc' 'xmlto')
+makedepends+=('perl' 'python' 'slang' 'elfutils' 'libunwind' 'numactl' 'audit' 'zstd' 'libcap')
+source=('perf.patch')
+validpgpkeys=(
+  'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
+  '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
+)
+sha256sums=('SKIP')
+
+groups=('modified')
+
+prepare() {
+  
+  git clone --branch v${pkgver//_/-} --depth 1 git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+  cd linux
+  # apply patch from the source array (should be a pacman feature)
+  local src
+  for src in "${source[@]}"; do
+    src="${src%%::*}"
+    src="${src##*/}"
+    src="${src%.xz}"
+    [[ $src = *.patch || $src = patch-* ]] || continue
+    echo ":: Applying patch $src"
+    patch -p1 -N -i "$srcdir/$src"
+  done
+  
+}
+
+build() {
+  echo ':: perf'
+  pushd linux/tools/perf
+  make -f Makefile.perf \
+    prefix=/usr \
+    lib=lib/perf \
+    perfexecdir=lib/perf \
+    EXTRA_CFLAGS=' -Wno-error=bad-function-cast -Wno-error=declaration-after-statement -Wno-error=switch-enum' \
+    NO_SDT=1 \
+    BUILD_BPF_SKEL=1 \
+    PYTHON=python \
+    PYTHON_CONFIG=python-config \
+    PERF_VERSION=$pkgver-$pkgrel \
+    DESTDIR="$pkgdir"
+    popd
+}
+
+package_perf() {
+  pkgdesc='Linux kernel performance auditing tool'
+  depends=('glibc' 'perl' 'python' 'slang' 'elfutils' 'libunwind' 'binutils'
+           'numactl' 'audit' 'coreutils' 'glib2' 'xz' 'zlib' 'libelf' 'bash'
+           'zstd' 'libcap')
+
+  cd linux/tools/perf
+  make -f Makefile.perf \
+    prefix=/usr \
+    lib=lib/perf \
+    perfexecdir=lib/perf \
+    EXTRA_CFLAGS=' -Wno-error=bad-function-cast -Wno-error=declaration-after-statement -Wno-error=switch-enum' \
+    NO_SDT=1 \
+    BUILD_BPF_SKEL=1 \
+    PYTHON=python \
+    PYTHON_CONFIG=python-config \
+    PERF_VERSION=$pkgver-$pkgrel \
+    DESTDIR="$pkgdir" \
+    install
+  cd "$pkgdir"
+  # add linker search path
+  mkdir "$pkgdir/etc/ld.so.conf.d"
+  echo '/usr/lib/perf' > "$pkgdir/etc/ld.so.conf.d/$pkgname.conf"
+  # move completion in new directory
+  install -Dm644 etc/bash_completion.d/perf usr/share/bash-completion/completions/perf
+  rm -r etc/bash_completion.d
+  # no exec on usr/share
+  find usr/share -type f -exec chmod a-x {} \;
+}

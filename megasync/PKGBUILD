@@ -6,7 +6,7 @@
 # Contributor: Hexchain Tong <i at hexchain dot org>
 
 pkgname=megasync
-pkgver=4.4.0.0
+pkgver=4.7.0.0
 pkgrel=1
 pkgdesc="Easy automated syncing between your computers and your MEGA cloud drive"
 arch=('i686' 'x86_64')
@@ -14,15 +14,15 @@ url="https://github.com/meganz/MEGAsync"
 license=('custom:MEGA LIMITED CODE REVIEW LICENCE')
 depends=('c-ares' 'crypto++' 'libsodium' 'hicolor-icon-theme' 'libuv'
          'qt5-svg' 'qt5-x11extras' 'libmediainfo' 'libraw' 'qt5-base'
-         'ffmpeg' 'libpdfium')
+         'ffmpeg' 'freeimage')
 makedepends=('qt5-tools' 'swig' 'doxygen' 'lsb-release' 'git')
-_extname="_Linux"
+_extname="_Win"
 source=("git+https://github.com/meganz/MEGAsync.git#tag=v${pkgver}${_extname}"
         "meganz-sdk::git+https://github.com/meganz/sdk.git"
-        "pdfium.patch")
+        "ffmpeg.patch")
 sha256sums=('SKIP'
             'SKIP'
-            '3a03d20165ebfb523644229bd650a2d0e51506c9555a1a9b28c61d07b8f28d7a')
+            '939a46fb0c54f900156e9e68ec4369926e9610b1ca6e9fd6ca09e538fbb84688')
 
 prepare() {
     cd "MEGAsync"
@@ -31,12 +31,16 @@ prepare() {
     git submodule update
 
     cd "src/MEGASync/mega"
-    patch -Np1 -i "../../../../pdfium.patch"
+    patch -Np1 -i "$srcdir/ffmpeg.patch"
+    
+    sed -i '/DEFINES += REQUIRE_HAVE_PDFIUM/d' ../MEGASync.pro
+    sed -i '/CONFIG += USE_PDFIUM/d' ../MEGASync.pro
 }
 
 build() {
     # build sdk
     cd "MEGAsync/src/MEGASync/mega"
+
     ./autogen.sh
     ./configure \
         --disable-shared \
@@ -44,13 +48,14 @@ build() {
         --disable-silent-rules \
         --disable-curl-checks \
         --disable-megaapi \
+        --with-ffmpeg \
         --with-cryptopp \
         --with-sodium \
         --with-zlib \
         --with-sqlite \
         --with-cares \
         --with-curl \
-        --without-freeimage \
+        --with-freeimage \
         --with-libuv \
         --disable-posix-threads \
         --disable-examples \
@@ -60,7 +65,9 @@ build() {
 
     # build megasync
     cd "../.."
-    qmake-qt5 "CONFIG += FULLREQUIREMENTS" MEGA.pro
+    qmake-qt5 \
+        "CONFIG += FULLREQUIREMENTS" \
+        MEGA.pro
     lrelease-qt5 MEGASync/MEGASync.pro
     make
 }
@@ -70,7 +77,7 @@ package () {
     install -Dm 644 LICENCE.md "${pkgdir}/usr/share/licenses/megasync/LICENCE"
     install -Dm 644 installer/terms.txt "${pkgdir}/usr/share/licenses/megasync/terms.txt"
     install -Dm 644 src/MEGASync/mega/LICENSE "${pkgdir}/usr/share/licenses/megasync/SDK-LICENCE"
-    
+
     cd "src"
     mkdir -pm 755 "${pkgdir}/usr/bin"
     make INSTALL_ROOT="${pkgdir}" TARGET="${pkgdir}/usr/bin/megasync" install

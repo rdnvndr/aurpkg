@@ -98,7 +98,7 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
      }
   
      /* Determine if the clock is the right size. */
-!    timeString = GetTimeString(clk->format, clk->zone);
+-    timeString = GetTimeString(clk->format, clk->zone);
      width = GetStringWidth(FONT_CLOCK, timeString);
      rwidth = width + 4;
      if(rwidth == clk->cp->requestedWidth || clk->userWidth) {
@@ -120,11 +120,11 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
 +       fscanf(fp2, "%d", &lastFullCapacity);
 +       fclose(fp2);
 +    }
-+    char *out = NULL;
++ 
 +    int perc = (lastFullCapacity != 0) ? ((float)remainingCapacity/(float)lastFullCapacity*100) : 0;
-+    asprintf(&out, " %d%% ", perc);
++    asprintf(&timeString, " %d%% %s", perc, GetTimeString(clk->format, clk->zone));
++ 
      /* Determine if the clock is the right size. */
-!    timeString = strcat(out, GetTimeString(clk->format, clk->zone));
      width = GetStringWidth(FONT_CLOCK, timeString);
      rwidth = width + 4;
      if(rwidth == clk->cp->requestedWidth || clk->userWidth) {

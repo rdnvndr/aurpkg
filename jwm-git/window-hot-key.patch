@@ -1,0 +1,107 @@
+diff -cr a/src/action.h b/src/action.h
+*** a/src/action.h	2022-10-01 10:12:39.725524618 +0300
+--- b/src/action.h	2022-10-01 09:20:56.667815594 +0300
+***************
+*** 64,69 ****
+--- 64,70 ----
+  #define ACTION_MAXH           41
+  #define ACTION_RESTORE        42
+  #define ACTION_CENTER         43
++ #define ACTION_WINDOW         44
+  #define ACTION_INVALID        255
+  #define ACTION_RESIZE_N       1  /* Extra value mask for resize north. */
+  #define ACTION_RESIZE_S       2  /* Extra value mask for resize south. */
+diff -cr a/src/binding.c b/src/binding.c
+*** a/src/binding.c	2022-10-01 10:12:39.725524618 +0300
+--- b/src/binding.c	2022-10-01 09:21:18.295158668 +0300
+***************
+*** 306,311 ****
+--- 306,312 ----
+     case ACTION_MAXH:
+     case ACTION_RESTORE:
+     case ACTION_CENTER:
++    case ACTION_WINDOW:
+        return 1;
+     default:
+        return 0;
+diff -cr a/src/event.c b/src/event.c
+*** a/src/event.c	2022-10-01 10:12:39.727524607 +0300
+--- b/src/event.c	2022-10-01 09:52:20.967791295 +0300
+***************
+*** 705,710 ****
+--- 705,714 ----
+           RequirePagerUpdate();
+        }
+        break;
++     case ACTION_WINDOW:
++       StartWindowWalk();
++       Focus(key.extra);
++       break;
+     default:
+        break;
+     }
+diff -cr a/src/parse.c b/src/parse.c
+*** a/src/parse.c	2022-10-01 10:12:39.729524596 +0300
+--- b/src/parse.c	2022-10-01 09:16:58.546006632 +0300
+***************
+*** 84,90 ****
+     { "stick",                 ACTION_STICK         },
+     { "udesktop",              ACTION_UDESKTOP      },
+     { "up",                    ACTION_UP            },
+!    { "window",                ACTION_WIN           }
+  };
+  static const unsigned int ACTION_MAP_COUNT = ARRAY_LENGTH(ACTION_MAP);
+  
+--- 84,91 ----
+     { "stick",                 ACTION_STICK         },
+     { "udesktop",              ACTION_UDESKTOP      },
+     { "up",                    ACTION_UP            },
+!    { "window",                ACTION_WIN           },
+!    { "window#",               ACTION_WINDOW        },
+  };
+  static const unsigned int ACTION_MAP_COUNT = ARRAY_LENGTH(ACTION_MAP);
+  
+diff -cr a/src/taskbar.c b/src/taskbar.c
+*** a/src/taskbar.c	2022-10-01 10:12:39.775524348 +0300
+--- b/src/taskbar.c	2022-10-01 10:04:36.059263614 +0300
+***************
+*** 938,943 ****
+--- 938,960 ----
+     }
+  }
+  
++ /** Focus the client in the task bar. */
++ void Focus(char n)
++ {
++    TaskEntry *tp;
++    int window = 0;
++    
++    for(tp = taskEntries; tp; tp = tp->next) {
++        if(ShouldFocusEntry(tp)) {
++           if(window == n) {
++              FocusGroup(tp);
++              break;
++           }
++           ++window;
++        }
++    }
++ }
++ 
+  /** Determine if there is anything to show for the specified entry. */
+  char ShouldShowEntry(const TaskEntry *tp)
+  {
+diff -cr a/src/taskbar.h b/src/taskbar.h
+*** a/src/taskbar.h	2022-10-01 10:12:39.729524596 +0300
+--- b/src/taskbar.h	2022-10-01 09:34:25.502723927 +0300
+***************
+*** 36,41 ****
+--- 36,44 ----
+  /** Update all task bars. */
+  void UpdateTaskBar(void);
+  
++ /** Focus the client in the task bar. */
++ void Focus(char n);
++ 
+  /** Focus the next client in the task bar. */
+  void FocusNext(void);
+  

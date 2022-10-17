@@ -1,0 +1,45 @@
+*** a/slimlock.cpp	2022-10-17 09:06:22.283348063 +0300
+--- b/slimlock.cpp	2022-10-17 08:57:39.753376728 +0300
+***************
+*** 77,84 ****
+--- 77,87 ----
+  	// We need to set the locale to get the input encoded in UTF-8
+  	setlocale (LC_ALL, "");
+  
++     bool is_dpms = true;
+  	if((argc == 2) && !strcmp("-v", argv[1]))
+  		die(APPNAME"-"VERSION", © 2010-2012 Joel Burget\n");
++ 	else if((argc == 2) && !strcmp("-dpms", argv[1]))
++ 	    is_dpms = false;
+  	else if(argc != 1)
+  		die("usage: "APPNAME" [-v]\n");
+  
+***************
+*** 203,209 ****
+  	unsigned int cfg_dpms_standby, cfg_dpms_off;
+  	cfg_dpms_standby = Cfg::string2int(cfg->getOption("dpms_standby_timeout").c_str());
+  	cfg_dpms_off = Cfg::string2int(cfg->getOption("dpms_off_timeout").c_str());
+! 	using_dpms = DPMSCapable(dpy) && (cfg_dpms_standby > 0);
+  	if (using_dpms) {
+  		DPMSGetTimeouts(dpy, &dpms_standby, &dpms_suspend, &dpms_off);
+  
+--- 206,212 ----
+  	unsigned int cfg_dpms_standby, cfg_dpms_off;
+  	cfg_dpms_standby = Cfg::string2int(cfg->getOption("dpms_standby_timeout").c_str());
+  	cfg_dpms_off = Cfg::string2int(cfg->getOption("dpms_off_timeout").c_str());
+! 	using_dpms = is_dpms && DPMSCapable(dpy) && (cfg_dpms_standby > 0);
+  	if (using_dpms) {
+  		DPMSGetTimeouts(dpy, &dpms_standby, &dpms_suspend, &dpms_off);
+  
+***************
+*** 222,227 ****
+--- 225,233 ----
+  
+  	pthread_t raise_thread;
+  	pthread_create(&raise_thread, NULL, RaiseWindow, NULL);
++ 	
++ 	if (fork())
++ 	    return 0;
+  
+  	// Main loop
+  	while (true)

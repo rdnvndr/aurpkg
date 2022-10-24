@@ -1,0 +1,112 @@
+diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger_new/debuggerplugin.cpp
+*** a/src/plugins/debugger/debuggerplugin.cpp	2022-10-25 00:00:23.378435033 +0300
+--- b/src/plugins/debugger/debuggerplugin.cpp	2022-10-24 23:56:32.034431011 +0300
+***************
+*** 657,662 ****
+--- 657,663 ----
+                              int lineNumber, QMenu *menu);
+  
+      void setOrRemoveBreakpoint();
++     void setMessageTracepoint();
+      void enableOrDisableBreakpoint();
+      void updateDebugWithoutDeployMenu();
+  
+***************
+*** 710,715 ****
+--- 711,717 ----
+      QAction m_setOrRemoveBreakpointAction{tr("Set or Remove Breakpoint")};
+      QAction m_enableOrDisableBreakpointAction{tr("Enable or Disable Breakpoint")};
+      QAction m_reloadDebuggingHelpersAction{tr("Reload Debugging Helpers")};
++     QAction m_setMessageTracepointAction{tr("Set Message Tracepoint...")};
+  
+      BreakpointManager m_breakpointManager;
+      QString m_lastPermanentStatusMessage;
+***************
+*** 1128,1133 ****
+--- 1119,1130 ----
+      connect(&m_setOrRemoveBreakpointAction, &QAction::triggered,
+              this, &DebuggerPluginPrivate::setOrRemoveBreakpoint);
+  
++     cmd = ActionManager::registerAction(&m_setMessageTracepointAction, "Debugger.SetMessageTracepoint");
++     debugMenu->addAction(cmd);
++     connect(&m_setMessageTracepointAction, &QAction::triggered,
++             this, &DebuggerPluginPrivate::setMessageTracepoint);
++ 
++ 
+      cmd = ActionManager::registerAction(&m_enableOrDisableBreakpointAction,
+                                          "Debugger.EnableOrDisableBreakpoint");
+      cmd->setDefaultKeySequence(QKeySequence(useMacShortcuts ? tr("Ctrl+F8") : tr("Ctrl+F9")));
+***************
+*** 1530,1535 ****
+--- 1527,1533 ----
+  
+      m_watchAction.setEnabled(state != DebuggerFinished && state != DebuggerNotReady);
+      m_setOrRemoveBreakpointAction.setEnabled(true);
++     m_setMessageTracepointAction.setEnabled(true);
+      m_enableOrDisableBreakpointAction.setEnabled(true);
+  }
+  
+***************
+*** 1863,1868 ****
+--- 1861,1867 ----
+  {
+      BaseTextEditor *textEditor = qobject_cast<BaseTextEditor *>(editor);
+      m_setOrRemoveBreakpointAction.setEnabled(textEditor != nullptr);
++     m_setMessageTracepointAction.setEnabled(textEditor != nullptr);
+      m_enableOrDisableBreakpointAction.setEnabled(textEditor != nullptr);
+  }
+  
+***************
+*** 1969,1974 ****
+--- 1968,2008 ----
+          BreakpointManager::setOrRemoveBreakpoint(location);
+  }
+  
++ void DebuggerPluginPrivate::setMessageTracepoint()
++ {
++     const BaseTextEditor *textEditor = BaseTextEditor::currentTextEditor();
++     QTC_ASSERT(textEditor, return);
++     const int lineNumber = textEditor->currentLine();
++     ContextData location = getLocationContext(textEditor->textDocument(), lineNumber);    
++     if (location.isValid()) {
++         GlobalBreakpoint gbp = BreakpointManager::findBreakpointFromContext(location);
++         if (gbp)
++             return;
++             
++         QString message;
++         if (location.type == LocationByAddress) {
++             //: Message tracepoint: Address hit.
++             message = tr("0x%1 hit").arg(location.address, 0, 16);
++         } else {
++             //: Message tracepoint: %1 file, %2 line %3 function hit.
++             message = tr("%1:%2 %3() hit").arg(location.fileName.fileName()).
++                     arg(location.lineNumber).
++                     arg(cppFunctionAt(location.fileName.toString(), location.lineNumber));
++         }
++         QInputDialog dialog; // Create wide input dialog.
++         dialog.setWindowFlags(dialog.windowFlags()
++           & ~(Qt::MSWindowsFixedSizeDialogHint));
++         dialog.resize(600, dialog.height());
++         dialog.setWindowTitle(tr("Add Message Tracepoint"));
++         dialog.setLabelText (tr("Message:"));
++         dialog.setTextValue(message);
++         if (dialog.exec() != QDialog::Accepted || dialog.textValue().isEmpty())
++             return;
++         message = dialog.textValue();
++         BreakpointManager::setOrRemoveBreakpoint(location, message);
++     }
++ }
++ 
+  void DebuggerPluginPrivate::enableOrDisableBreakpoint()
+  {
+      const BaseTextEditor *textEditor = BaseTextEditor::currentTextEditor();
+***************
+*** 2000,2005 ****
+--- 2034,2040 ----
+  
+      m_watchAction.setEnabled(false);
+      m_setOrRemoveBreakpointAction.setEnabled(false);
++     m_setMessageTracepointAction.setEnabled(false);
+      m_enableOrDisableBreakpointAction.setEnabled(false);
+      //m_snapshotAction.setEnabled(false);
+  

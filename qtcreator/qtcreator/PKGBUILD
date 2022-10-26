@@ -28,9 +28,11 @@ source=("QTCREATORBUG-21681.patch"
         "projectmodels.patch"
         "navigationwidget.patch"
         "tracepoint.patch"
+        "attach.patch"
         qtcreator-languageclient2.patch::https://code.qt.io/cgit/qt-creator/qt-creator.git/patch/?id=bd00cc8b
         qtcreator-languageclient3.patch::https://code.qt.io/cgit/qt-creator/qt-creator.git/patch/?id=8276bd26)
 sha256sums=(SKIP
+            SKIP
             SKIP
             SKIP
             SKIP
@@ -46,6 +48,7 @@ prepare() {
   patch -d qt-creator -p1 < projectmodels.patch
   patch -d qt-creator -p1 < navigationwidget.patch
   patch -d qt-creator -p1 < tracepoint.patch
+  patch -d qt-creator -p1 < attach.patch
   
   # Backport patches to mitigate clang language server crashes
   patch -d qt-creator -p1 <qtcreator-languageclient2.patch 

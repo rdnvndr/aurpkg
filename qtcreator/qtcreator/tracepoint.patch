@@ -2,8 +2,8 @@ diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger_new/de
 *** a/src/plugins/debugger/debuggerplugin.cpp	2022-10-25 00:00:23.378435033 +0300
 --- b/src/plugins/debugger/debuggerplugin.cpp	2022-10-24 23:56:32.034431011 +0300
 ***************
-*** 657,662 ****
---- 657,663 ----
+*** 635,640 ****
+--- 635,641 ----
                               int lineNumber, QMenu *menu);
   
       void setOrRemoveBreakpoint();
@@ -12,18 +12,18 @@ diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger_new/de
       void updateDebugWithoutDeployMenu();
   
 ***************
-*** 710,715 ****
---- 711,717 ----
-      QAction m_setOrRemoveBreakpointAction{tr("Set or Remove Breakpoint")};
-      QAction m_enableOrDisableBreakpointAction{tr("Enable or Disable Breakpoint")};
-      QAction m_reloadDebuggingHelpersAction{tr("Reload Debugging Helpers")};
+*** 688,693 ****
+--- 689,695 ----
+      QAction m_setOrRemoveBreakpointAction{Tr::tr("Set or Remove Breakpoint")};
+      QAction m_enableOrDisableBreakpointAction{Tr::tr("Enable or Disable Breakpoint")};
+      QAction m_reloadDebuggingHelpersAction{Tr::tr("Reload Debugging Helpers")};
 +     QAction m_setMessageTracepointAction{tr("Set Message Tracepoint...")};
   
       BreakpointManager m_breakpointManager;
       QString m_lastPermanentStatusMessage;
 ***************
-*** 1128,1133 ****
---- 1119,1130 ----
+*** 1092,1097 ****
+--- 1094,1105 ----
       connect(&m_setOrRemoveBreakpointAction, &QAction::triggered,
               this, &DebuggerPluginPrivate::setOrRemoveBreakpoint);
   
@@ -35,10 +35,10 @@ diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger_new/de
 + 
       cmd = ActionManager::registerAction(&m_enableOrDisableBreakpointAction,
                                           "Debugger.EnableOrDisableBreakpoint");
-      cmd->setDefaultKeySequence(QKeySequence(useMacShortcuts ? tr("Ctrl+F8") : tr("Ctrl+F9")));
+      cmd->setDefaultKeySequence(QKeySequence(useMacShortcuts ? Tr::tr("Ctrl+F8") : Tr::tr("Ctrl+F9")));
 ***************
-*** 1530,1535 ****
---- 1527,1533 ----
+*** 1494,1499 ****
+--- 1502,1508 ----
   
       m_watchAction.setEnabled(state != DebuggerFinished && state != DebuggerNotReady);
       m_setOrRemoveBreakpointAction.setEnabled(true);
@@ -47,8 +47,8 @@ diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger_new/de
   }
   
 ***************
-*** 1863,1868 ****
---- 1861,1867 ----
+*** 1827,1832 ****
+--- 1836,1842 ----
   {
       BaseTextEditor *textEditor = qobject_cast<BaseTextEditor *>(editor);
       m_setOrRemoveBreakpointAction.setEnabled(textEditor != nullptr);
@@ -57,8 +57,8 @@ diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger_new/de
   }
   
 ***************
-*** 1969,1974 ****
---- 1968,2008 ----
+*** 1933,1938 ****
+--- 1943,1983 ----
           BreakpointManager::setOrRemoveBreakpoint(location);
   }
   
@@ -101,8 +101,8 @@ diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger_new/de
   {
       const BaseTextEditor *textEditor = BaseTextEditor::currentTextEditor();
 ***************
-*** 2000,2005 ****
---- 2034,2040 ----
+*** 1964,1969 ****
+--- 2009,2015 ----
   
       m_watchAction.setEnabled(false);
       m_setOrRemoveBreakpointAction.setEnabled(false);

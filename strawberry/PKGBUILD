@@ -2,8 +2,8 @@
 # Contributor: Fabio 'Lolix' Loli <lolix@disroot.org> -> https://github.com/FabioLolix
 
 pkgname=strawberry
-pkgver=1.0.9
-pkgrel=1
+pkgver=1.0.10
+pkgrel=2
 pkgdesc='A music player aimed at audio enthusiasts and music collectors'
 arch=(x86_64)
 url='https://www.strawbs.org/'
@@ -41,7 +41,7 @@ build() {
     -DENABLE_SUBSONIC=OFF \
     -DENABLE_TIDAL=OFF \
     -DENABLE_XINE=OFF \
-    -DBUILD_WITH_QT6=OFF
+    -DBUILD_WITH_QT6=ON
   cmake --build build
 }
 

@@ -15,9 +15,9 @@ index 27bdbcd8..aff12b75 100644
  {
      if (!pro)
          return;
-+        
 +    for (auto *rc : ProjectExplorerPlugin::instance()->allRunControls()) {
-+        if (rc->isRunning() && rc->project() == pro) {
++        if (rc->isRunning() && rc->project() == pro && 
++            mode == ProjectExplorer::Constants::DEBUG_RUN_MODE) {
 +            ExtensionSystem::Invoker<void>(
 +                ExtensionSystem::PluginManager::getObjectByName("DebuggerPlugin"), 
 +                "attachExternalApplication", rc);

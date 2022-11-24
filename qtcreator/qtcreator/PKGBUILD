@@ -1,6 +1,6 @@
 pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
-pkgver=9.0.0
+pkgver=9.0.1
 _clangver=14.0.6
 pkgrel=1
 pkgdesc='Lightweight, cross-platform integrated development environment'

@@ -101,6 +101,7 @@ build() {
       --enable-cet=auto \
       --disable-werror \
       --program-suffix=-${_pkgver} \
+      --disable-nls \
       --enable-version-specific-runtime-libs
 
   make
@@ -187,6 +188,4 @@ package_gcc8() {
   ln -s /usr/share/licenses/gcc8-libs/RUNTIME.LIBRARY.EXCEPTION \
     "$pkgdir/usr/share/licenses/$pkgname/"
 
-  # Remove conflicting files
-  rm -r "$pkgdir"/usr/share/locale
 }

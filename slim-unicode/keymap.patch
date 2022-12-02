@@ -1,0 +1,22 @@
+*** a/slimlock.cpp	2022-12-03 00:43:09.032580140 +0300
+--- b/slimlock.cpp	2022-12-03 01:15:54.295922672 +0300
+***************
+*** 17,22 ****
+--- 17,23 ----
+  #include <X11/Xlib.h>
+  #include <X11/Xutil.h>
+  #include <X11/extensions/dpms.h>
++ #include <X11/XKBlib.h>
+  #include <security/pam_appl.h>
+  #include <pthread.h>
+  #include <err.h>
+***************
+*** 217,222 ****
+--- 218,224 ----
+  		if (!dpms_state)
+  			DPMSEnable(dpy);
+  	}
++ 	XkbLockGroup(dpy, XkbUseCoreKbd, 0);
+  
+  	// Get password timeout
+  	cfg_passwd_timeout = Cfg::string2int(cfg->getOption("wrong_passwd_timeout").c_str());

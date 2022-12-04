@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorCodeStyle>
-<!-- Written by QtCreator 8.0.2, 2022-10-30T23:54:27. -->
+<!-- Written by QtCreator 8.0.84, 2022-11-06T12:02:47. -->
 <qtcreator>
  <data>
   <variable>CodeStyleData</variable>
@@ -24,17 +24,17 @@
    <value type="bool" key="IndentFunctionBraces">false</value>
    <value type="bool" key="IndentNamespaceBody">false</value>
    <value type="bool" key="IndentNamespaceBraces">false</value>
-   <value type="int" key="IndentSize">4</value>
+   <value type="int" key="IndentSize">3</value>
    <value type="bool" key="IndentStatementsRelativeToSwitchLabels">false</value>
    <value type="bool" key="IndentSwitchLabels">false</value>
    <value type="int" key="PaddingMode">2</value>
    <value type="bool" key="ShortGetterName">true</value>
    <value type="bool" key="SpacesForTabs">true</value>
-   <value type="int" key="TabSize">4</value>
+   <value type="int" key="TabSize">3</value>
   </valuemap>
  </data>
  <data>
   <variable>DisplayName</variable>
-  <value type="QString">RPLM</value>
+  <value type="QString">jwm</value>
  </data>
 </qtcreator>

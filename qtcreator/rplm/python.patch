@@ -1,0 +1,14 @@
+diff --git a/RPLM.IP/Main/Source/RPLM.IP.Python/CMakeLists.txt b/RPLM.IP/Main/Source/RPLM.IP.Python/CMakeLists.txt
+index af347384..dc8a2686 100644
+--- a/RPLM.IP/Main/Source/RPLM.IP.Python/CMakeLists.txt
++++ b/RPLM.IP/Main/Source/RPLM.IP.Python/CMakeLists.txt
+@@ -31,8 +31,8 @@ target_compile_definitions(${PROJECT_NAME}
+     PRIVATE
+         RPLM_IP_PYTHON_EXPORTS
+ )
++find_package (Python3 3.7 EXACT REQUIRED COMPONENTS Interpreter Development)
+ 
+-find_package (Python3 COMPONENTS Interpreter Development)
+ 
+ message("CMAKE_CONFIGURATION_TYPES = ${CMAKE_CONFIGURATION_TYPES}")
+ 

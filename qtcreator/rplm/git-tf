@@ -1,0 +1,163 @@
+#!/bin/sh
+
+action=$1
+
+collection=http://stfs.tsdomain.ru:23333/tfs/
+workspace=ROAND
+
+case "${action}" in
+fetch)
+    branch=`git branch --show-current`
+    stash=`LANG=C git stash push -u`
+    toplevel=$(git rev-parse --show-toplevel)
+    if [ "$branch" != "tfs" ]; then
+       git switch tfs
+    fi
+    
+    
+    tf workfold -collection:$collection -workspace:$workspace | tail -n +4 |  sed -E 's/.*:(.*)/\1/' | xargs tf undo -recursive  > /dev/null 2>/dev/null
+    tf workfold -collection:$collection -workspace:$workspace | tail -n +4 |  sed -E 's/.*:(.*)/\1/' | xargs tf uu -recursive  > /dev/null 2>/dev/null
+    
+    if [ "$2" == "" ]; then
+        version=$(tf history -collection:$collection -recursive -stopafter:1 $/ | tail -n +3 | head -n 1 | grep -o -P '^[0-9]+')
+    else
+        version=$2
+    fi
+    
+    newpath=`tf workfold -collection:$collection -workspace:$workspace | tail -n +4 |  sed -E 's/.*:(.*)/\1/' | head -n 1`
+    oldpath=$(pwd)
+    cd $newpath
+    
+    last=`git log -n 1 tfs --pretty=format:"%B"| grep git-tf-id | sed -E 's/git-tf-id:\s*C{0,1}(.*)/\1/'`
+
+    IFS=
+    user=()
+    date=()
+    comment=()
+    changeset=()
+    tmpdate=""
+    tmpcomment=""
+    tmpuser=""
+    tmpchangeset=""
+    a=()
+    iscomment="false"
+    count=-2
+
+    if [ "$last" == "" ]; then
+       rangeversion="$version~$version"
+    else
+       rangeversion="$last~$version"
+    fi
+
+    while read row
+    do
+        if [ "$iscomment" == "true" ]; then
+            if [ "${row:0:6}" == "Items:" ]; then
+                IFS=" " read D m Y g T  <<< ${tmpdate//[.,]/ }
+                M=$(
+                case $m in
+                  ("янв")  echo "01" ;;
+                  ("февр") echo "02" ;;
+                  ("мар")  echo "03" ;;
+                  ("апр")  echo "04" ;;
+                  ("мая")  echo "05" ;;
+                  ("июн")  echo "06" ;;
+                  ("июл")  echo "07" ;;
+                  ("авг")  echo "08" ;;
+                  ("сент") echo "09" ;;
+                  ("окт")  echo "10" ;;
+                  ("нояб") echo "11" ;;
+                  ("дек")  echo "12" ;;
+                esac)
+                
+                if [ "$tmpcomment" == "" ]; then
+                    tmpcomment="Комментарий не указан"
+                fi
+                
+                comment+=($tmpcomment)
+                user+=($tmpuser)
+                changeset+=($tmpchangeset)
+                date+=($(date -d "$Y-$M-$D $T" --iso-8601="seconds"))
+                ((count+=1))
+                tmpdate=""
+                tmpcomment=""
+                tmpuser=""
+                tmpchangeset=""
+                iscomment="false"
+           else
+                shopt -s extglob
+                row=${row##*( )}
+                shopt -u extglob
+                if [ "$row" != "***NO_CI***" ]; then
+                    if [ "$tmpcomment" == "" ]; then
+                        tmpcomment="${row}"
+                    else
+                        tmpcomment+=$'\n'"${row}"
+                    fi
+                fi
+            fi
+        elif [ "${row:0:10}" == "Changeset:" ]; then
+            tmpchangeset=${row:11}
+        elif [ "${row:0:5}" == "User:" ]; then
+            tmpuser=${row:6}
+        elif [ "${row:0:5}" == "Date:" ]; then
+            tmpdate=${row:6}
+        elif [ "${row:0:8}" == "Comment:" ]; then
+            iscomment="true"
+        fi
+    done < <(tf history  $/ -version:$rangeversion -noprompt -format:detailed -recursive)
+
+    git ls-files --full-name $toplevel | xargs -I {} chmod 444 $toplevel/{}
+    for (( i=$count; i>=0; i-- )) 
+    do
+        tf get -recursive -overwrite -version:${changeset[$i]}
+#        tf get -recursive -force -version:${changeset[$i]}
+        git add $toplevel
+        git commit -n -m "${comment[$i]}"$'\n'$'\n'"git-tf-id: ${changeset[$i]}" --date="${date[$i]}" --author="${user[$i]} <noreply@topsystems.ru>"
+    done
+
+    cd $oldpath
+    if [ "$branch" != "tfs" ]; then
+        git switch $branch
+    fi
+
+    if [ "$stash" != "No local changes to save" ]; then
+        git stash pop
+    fi
+    ;;
+
+patch)
+    branch=`git branch --show-current`
+    commit=`git merge-base tfs $branch`
+    last=`git log -n 1 tfs --pretty=format:"%B"| grep git-tf-id | sed -E 's/git-tf-id:\s*C{0,1}(.*)/\1/'`
+    git diff $commit..$last | git apply
+    ;;
+
+push)
+    tf workfold -collection:$collection -workspace:$workspace | tail -n +4 |  sed -E 's/.*:(.*)/\1/' | xargs tf undo -recursive  > /dev/null 2>/dev/null
+    last=`git log -n 1 tfs --pretty=format:"%H"`
+    branch=`git branch --show-current`
+    commitbranch=`git branch --contains $last | grep $branch`
+    echo $commitbranch
+    if [ "$commitbranch" != "" ]; then
+        toplevel=$(git rev-parse --show-toplevel)
+        branch=`git branch --show-current`
+        git diff tfs $branch -b --name-status | grep -P "M[\s]+[\S][\s\S]+" | sed -E 's/M[[:space:]]+([^[:space:]].[^[:space:][:space:]]+)/\1/' | xargs -I '{}' tf checkout "$toplevel/{}"
+        git diff tfs $branch -b --name-status | grep -P "A[\s]+[\S][\s\S]+" | sed -E 's/A[[:space:]]+([^[:space:]].[^[:space:][:space:]]+)/\1/' | xargs -I '{}' tf add "$toplevel/{}"
+        git diff tfs $branch -b --name-status | grep -P "D[\s]+[\S][\s\S]+" | sed -E 's/D[[:space:]]+([^[:space:]].[^[:space:][:space:]]+)/\1/' | xargs -I '{}' tf delete "$toplevel/{}"
+
+        newpath=`tf workfold -collection:$collection -workspace:$workspace | tail -n +4 |  sed -E 's/.*:(.*)/\1/' | head -n 1`
+        oldpath=$(pwd)
+        cd $newpath
+        if [ "$2" == "" ]; then
+            msg=`git log -n 1 --pretty=format:"%B"`
+            tf checkin -comment:"$msg"
+        else
+            tf checkin -comment:"$2"
+        fi        
+        cd $oldpath
+    else
+        echo "В текущую ветку не слиты изменения ветки TFS"
+    fi
+    ;;
+esac

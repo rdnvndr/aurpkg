@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProfiles>
-<!-- Written by QtCreator 9.0.1, 2022-12-03T20:48:44. -->
+<!-- Written by QtCreator 9.0.1, 2022-12-06T21:42:26. -->
 <qtcreator>
  <data>
   <variable>Kit.IrrelevantAspects</variable>
@@ -12,18 +12,19 @@
    <value type="bool" key="PE.Profile.AutoDetected">false</value>
    <value type="QString" key="PE.Profile.AutoDetectionSource"></value>
    <valuemap type="QVariantMap" key="PE.Profile.Data">
-    <value type="QString" key="CMake.AdditionalConfigurationParameters">-Wno-dev</value>
+    <value type="QString" key="CMake.AdditionalConfigurationParameters">-Wno-dev ''</value>
     <valuelist type="QVariantList" key="CMake.ConfigurationKitInformation">
      <value type="QString">CMAKE_CONFIGURATION_TYPES:INTERNAL=%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
-     <value type="QString">CMAKE_CXX_COMPILER_LAUNCHER:STRING=distcc</value>
+     <value type="QString">CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache</value>
      <value type="QString">CMAKE_CXX_FLAGS:STRING=-B/usr/local/bin/mold/ -Wno-attributes -pipe</value>
      <value type="QString">CMAKE_C_COMPILER:STRING=%{Compiler:Executable:C}</value>
-     <value type="QString">CMAKE_C_COMPILER_LAUNCHER:STRING=distcc</value>
+     <value type="QString">CMAKE_C_COMPILER_LAUNCHER:STRING=ccache</value>
      <value type="QString">CMAKE_INSTALL_CONFIG_NAME:INTERNAL=%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_INSTALL_PREFIX:STRING=/home/andrey/projects/tfs/install/unix/%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}</value>
      <value type="QString">QT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}</value>
+     <value type="QString">CMAKE_CXX_LINK_FLAGS:STRING='-ggnu-pubnames -Wl,--gdb-index,--compress-debug-sections=zlib-gabi</value>
     </valuelist>
     <valuemap type="QVariantMap" key="CMake.GeneratorKitInformation">
      <value type="QString" key="ExtraGenerator">CodeBlocks</value>
@@ -39,8 +40,8 @@
      <value type="QString">LD_LIBRARY_PATH=/opt/mesa210/lib/:/opt/qt/5.15.2/gcc_64/lib/./:/opt/qt/5.15.2/gcc_64/plugins/./iconengines/:/opt/qt/5.15.2/gcc_64/plugins/./imageformats/:/opt/qt/5.15.2/gcc_64/plugins/./platforms/:/opt/qt/5.15.2/gcc_64/plugins/./printsupport/:/opt/qt/5.15.2/gcc_64/./translations/:/opt/qt/5.15.2/gcc_64/plugins/./xcbglintegrations:%{ActiveProject:RunConfig:Executable:Path}:${LD_LIBRARY_PATH}POCO_ENABLE_DEBUGGER=true</value>
     </valuelist>
     <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
-     <value type="QByteArray" key="C">{aa3866e5-5a4c-44cd-bf80-7a075a32e58c}</value>
-     <value type="QByteArray" key="Cxx">{4d22890d-31ba-43de-bf5d-fb0910149cbf}</value>
+     <value type="QByteArray" key="C">{8ba14955-060a-4517-8834-138e0906e01a}</value>
+     <value type="QByteArray" key="Cxx">{ba710b8f-7b18-4137-bd2f-a88b5714ffdb}</value>
     </valuemap>
     <value type="int" key="QtSupport.QtInformation">5</value>
    </valuemap>
@@ -82,8 +83,8 @@
     <value type="QString" key="PE.Profile.Device">Desktop Device</value>
     <value type="QByteArray" key="PE.Profile.DeviceType">Desktop</value>
     <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
-     <value type="QByteArray" key="C">{f25bdd84-7863-439b-b617-1a00ddf60ca3}</value>
-     <value type="QByteArray" key="Cxx">{f3dd7778-54c6-4e84-be22-be859f4d0f5a}</value>
+     <value type="QByteArray" key="C">{e6fc9938-766d-4be3-8558-60272e7fc7c9}</value>
+     <value type="QByteArray" key="Cxx">{529c3b90-7706-4ebb-82a1-215ebdcbaac8}</value>
     </valuemap>
     <value type="int" key="QtSupport.QtInformation">4</value>
    </valuemap>
@@ -98,52 +99,6 @@
  </data>
  <data>
   <variable>Profile.2</variable>
-  <valuemap type="QVariantMap">
-   <value type="bool" key="PE.Profile.AutoDetected">false</value>
-   <value type="QString" key="PE.Profile.AutoDetectionSource"></value>
-   <valuemap type="QVariantMap" key="PE.Profile.Data">
-    <value type="QString" key="CMake.AdditionalConfigurationParameters"></value>
-    <valuelist type="QVariantList" key="CMake.ConfigurationKitInformation">
-     <value type="QString">CMAKE_CONFIGURATION_TYPES:INTERNAL=%{CurrentBuild:Name}</value>
-     <value type="QString">CMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
-     <value type="QString">CMAKE_CXX_FLAGS:STRING=-Wno-attributes -pipe -gdwarf-5</value>
-     <value type="QString">CMAKE_C_COMPILER:STRING=%{Compiler:Executable:C}</value>
-     <value type="QString">CMAKE_INSTALL_CONFIG_NAME:INTERNAL=%{CurrentBuild:Name}</value>
-     <value type="QString">CMAKE_INSTALL_PREFIX:STRING=/home/andrey/projects/tfs/install/unix/%{CurrentBuild:Name}</value>
-     <value type="QString">CMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}</value>
-     <value type="QString">QT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}</value>
-    </valuelist>
-    <valuemap type="QVariantMap" key="CMake.GeneratorKitInformation">
-     <value type="QString" key="ExtraGenerator">CodeBlocks</value>
-     <value type="QString" key="Generator">Ninja</value>
-     <value type="QString" key="Platform"></value>
-     <value type="QString" key="Toolset"></value>
-    </valuemap>
-    <value type="QString" key="CMakeProjectManager.CMakeKitInformation">{4f4c6877-5c2e-4939-bdca-51f4e9a93004}</value>
-    <value type="QString" key="Debugger.Information">{606b3199-16ee-4249-87c9-ac29ad4d881d}</value>
-    <value type="QString" key="PE.Profile.BuildDevice">{b450302a-a048-43f2-a273-d89c715ecd09}</value>
-    <value type="QString" key="PE.Profile.Device"></value>
-    <value type="QString" key="PE.Profile.DeviceType">DockerDeviceType</value>
-    <valuelist type="QVariantList" key="PE.Profile.Environment">
-     <value type="QString">LD_LIBRARY_PATH=/opt/qt/5.15.2/gcc_64/lib/./:/opt/qt/5.15.2/gcc_64/plugins/./iconengines/:/opt/qt/5.15.2/gcc_64/plugins/./imageformats/:/opt/qt/5.15.2/gcc_64/plugins/./platforms/:/opt/qt/5.15.2/gcc_64/plugins/./printsupport/:/opt/qt/5.15.2/gcc_64/./translations/:/opt/qt/5.15.2/gcc_64/plugins/./xcbglintegrations:%{ActiveProject:RunConfig:Executable:Path}:${LD_LIBRARY_PATH}</value>
-    </valuelist>
-    <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
-     <value type="QByteArray" key="C">{f25bdd84-7863-439b-b617-1a00ddf60ca3}</value>
-     <value type="QByteArray" key="Cxx">{f3dd7778-54c6-4e84-be22-be859f4d0f5a}</value>
-    </valuemap>
-    <value type="int" key="QtSupport.QtInformation">5</value>
-   </valuemap>
-   <value type="QString" key="PE.Profile.DeviceTypeForIcon"></value>
-   <value type="QString" key="PE.Profile.Icon"></value>
-   <value type="QString" key="PE.Profile.Id">{e85d3b40-b137-44c5-b7b3-2dd3a1083d28}</value>
-   <valuelist type="QVariantList" key="PE.Profile.MutableInfo"/>
-   <value type="QString" key="PE.Profile.Name">Docker RPLM</value>
-   <value type="bool" key="PE.Profile.SDK">false</value>
-   <valuelist type="QVariantList" key="PE.Profile.StickyInfo"/>
-  </valuemap>
- </data>
- <data>
-  <variable>Profile.3</variable>
   <valuemap type="QVariantMap">
    <value type="bool" key="PE.Profile.AutoDetected">false</value>
    <value type="QString" key="PE.Profile.AutoDetectionSource"></value>
@@ -177,8 +132,8 @@
      <value type="QString">LD_LIBRARY_PATH=/opt/mesa210/lib/:/opt/qt/5.15.2/gcc_64/lib/./:/opt/qt/5.15.2/gcc_64/plugins/./iconengines/:/opt/qt/5.15.2/gcc_64/plugins/./imageformats/:/opt/qt/5.15.2/gcc_64/plugins/./platforms/:/opt/qt/5.15.2/gcc_64/plugins/./printsupport/:/opt/qt/5.15.2/gcc_64/./translations/:/opt/qt/5.15.2/gcc_64/plugins/./xcbglintegrations:%{ActiveProject:RunConfig:Executable:Path}:${LD_LIBRARY_PATH}</value>
     </valuelist>
     <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
-     <value type="QByteArray" key="C">{aa3866e5-5a4c-44cd-bf80-7a075a32e58c}</value>
-     <value type="QByteArray" key="Cxx">{4d22890d-31ba-43de-bf5d-fb0910149cbf}</value>
+     <value type="QByteArray" key="C">{e6fc9938-766d-4be3-8558-60272e7fc7c9}</value>
+     <value type="QByteArray" key="Cxx">{529c3b90-7706-4ebb-82a1-215ebdcbaac8}</value>
     </valuemap>
     <value type="int" key="QtSupport.QtInformation">5</value>
    </valuemap>
@@ -192,7 +147,7 @@
   </valuemap>
  </data>
  <data>
-  <variable>Profile.4</variable>
+  <variable>Profile.3</variable>
   <valuemap type="QVariantMap">
    <value type="bool" key="PE.Profile.AutoDetected">false</value>
    <value type="QString" key="PE.Profile.AutoDetectionSource"></value>
@@ -220,8 +175,8 @@
     <value type="QString" key="PE.Profile.Device">Desktop Device</value>
     <value type="QByteArray" key="PE.Profile.DeviceType">Desktop</value>
     <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
-     <value type="QByteArray" key="C">{f25bdd84-7863-439b-b617-1a00ddf60ca3}</value>
-     <value type="QByteArray" key="Cxx">{f3dd7778-54c6-4e84-be22-be859f4d0f5a}</value>
+     <value type="QByteArray" key="C">{e6fc9938-766d-4be3-8558-60272e7fc7c9}</value>
+     <value type="QByteArray" key="Cxx">{529c3b90-7706-4ebb-82a1-215ebdcbaac8}</value>
     </valuemap>
     <value type="int" key="QtSupport.QtInformation">6</value>
    </valuemap>
@@ -235,7 +190,7 @@
   </valuemap>
  </data>
  <data>
-  <variable>Profile.5</variable>
+  <variable>Profile.4</variable>
   <valuemap type="QVariantMap">
    <value type="bool" key="PE.Profile.AutoDetected">false</value>
    <value type="QString" key="PE.Profile.AutoDetectionSource"></value>
@@ -244,14 +199,15 @@
     <valuelist type="QVariantList" key="CMake.ConfigurationKitInformation">
      <value type="QString">CMAKE_CONFIGURATION_TYPES:INTERNAL=%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
-     <value type="QString">CMAKE_CXX_COMPILER_LAUNCHER:STRING=distcc</value>
-     <value type="QString">CMAKE_CXX_FLAGS:STRING=-B/usr/local/bin/mold/ -Wno-attributes -pipe</value>
+     <value type="QString">CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache;distcc</value>
      <value type="QString">CMAKE_C_COMPILER:STRING=%{Compiler:Executable:C}</value>
-     <value type="QString">CMAKE_C_COMPILER_LAUNCHER:STRING=distcc</value>
+     <value type="QString">CMAKE_C_COMPILER_LAUNCHER:STRING=ccache;distcc</value>
      <value type="QString">CMAKE_INSTALL_CONFIG_NAME:INTERNAL=%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_INSTALL_PREFIX:STRING=/home/andrey/projects/tfs/install/unix/%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}</value>
      <value type="QString">QT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}</value>
+     <value type="QString">CMAKE_CXX_FLAGS:STRING=-B/usr/local/bin/mold/ -Wno-attributes -pipe</value>
+     <value type="QString">CMAKE_CXX_LINK_FLAGS:STRING='-ggnu-pubnames -Wl,--gdb-index,--compress-debug-sections=zlib-gabi'</value>
     </valuelist>
     <valuemap type="QVariantMap" key="CMake.GeneratorKitInformation">
      <value type="QString" key="ExtraGenerator">CodeBlocks</value>
@@ -260,15 +216,15 @@
      <value type="QString" key="Toolset"></value>
     </valuemap>
     <value type="QString" key="CMakeProjectManager.CMakeKitInformation">{4f4c6877-5c2e-4939-bdca-51f4e9a93004}</value>
-    <value type="QString" key="Debugger.Information">{d866a117-9e5e-4b48-8ab9-eef81042d5fd}</value>
+    <value type="QString" key="Debugger.Information">{606b3199-16ee-4249-87c9-ac29ad4d881d}</value>
     <value type="QString" key="PE.Profile.Device">Desktop Device</value>
     <value type="QString" key="PE.Profile.DeviceType">Desktop</value>
     <valuelist type="QVariantList" key="PE.Profile.Environment">
      <value type="QString">LD_LIBRARY_PATH=/opt/mesa210/lib/:/opt/qt/5.15.2/gcc_64/lib/./:/opt/qt/5.15.2/gcc_64/plugins/./iconengines/:/opt/qt/5.15.2/gcc_64/plugins/./imageformats/:/opt/qt/5.15.2/gcc_64/plugins/./platforms/:/opt/qt/5.15.2/gcc_64/plugins/./printsupport/:/opt/qt/5.15.2/gcc_64/./translations/:/opt/qt/5.15.2/gcc_64/plugins/./xcbglintegrations:%{ActiveProject:RunConfig:Executable:Path}:${LD_LIBRARY_PATH}POCO_ENABLE_DEBUGGER=true</value>
     </valuelist>
     <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
-     <value type="QByteArray" key="C">{aa3866e5-5a4c-44cd-bf80-7a075a32e58c}</value>
-     <value type="QByteArray" key="Cxx">{4d22890d-31ba-43de-bf5d-fb0910149cbf}</value>
+     <value type="QByteArray" key="C">{b50f9276-62be-497f-ba77-c6b7f2222504}</value>
+     <value type="QByteArray" key="Cxx">{c80957c3-22d9-4220-b180-9f9ab0a749b1}</value>
     </valuemap>
     <value type="int" key="QtSupport.QtInformation">5</value>
    </valuemap>
@@ -283,11 +239,11 @@
  </data>
  <data>
   <variable>Profile.Count</variable>
-  <value type="int">6</value>
+  <value type="int">5</value>
  </data>
  <data>
   <variable>Profile.Default</variable>
-  <value type="QString">{36b5c5fc-f78c-4711-97b0-fb342f291e68}</value>
+  <value type="QString">{284bc8ed-0d7b-4b75-a9d9-9acad0e6db39}</value>
  </data>
  <data>
   <variable>Version</variable>

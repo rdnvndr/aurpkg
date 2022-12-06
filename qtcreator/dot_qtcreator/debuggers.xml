@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QtCreatorDebuggers>
+<!-- Written by QtCreator 9.0.1, 2022-12-06T21:42:26. -->
+<qtcreator>
+ <data>
+  <variable>DebuggerItem.0</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">x86-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">true</value>
+   <value type="QString" key="Binary">/usr/sbin/lldb</value>
+   <value type="QString" key="DetectionSource"></value>
+   <value type="QString" key="DisplayName">System LLDB at /usr/sbin/lldb</value>
+   <value type="int" key="EngineType">256</value>
+   <value type="QString" key="Id">{fa5752f0-bb3f-402b-baf5-e04f515f4770}</value>
+   <value type="QDateTime" key="LastModified">2022-06-25T13:44:39.000</value>
+   <value type="QString" key="Version">14.0.6</value>
+   <value type="QString" key="WorkingDirectory"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>DebuggerItem.1</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">x86-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">true</value>
+   <value type="QString" key="Binary">/usr/bin/lldb</value>
+   <value type="QString" key="DetectionSource"></value>
+   <value type="QString" key="DisplayName">System LLDB at /usr/bin/lldb</value>
+   <value type="int" key="EngineType">256</value>
+   <value type="QString" key="Id">{d866a117-9e5e-4b48-8ab9-eef81042d5fd}</value>
+   <value type="QDateTime" key="LastModified">2022-06-25T13:44:39.000</value>
+   <value type="QString" key="Version">14.0.6</value>
+   <value type="QString" key="WorkingDirectory"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>DebuggerItem.2</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">x86-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">true</value>
+   <value type="QString" key="Binary">/sbin/lldb</value>
+   <value type="QString" key="DetectionSource"></value>
+   <value type="QString" key="DisplayName">System LLDB at /sbin/lldb</value>
+   <value type="int" key="EngineType">256</value>
+   <value type="QString" key="Id">{84be6af3-0991-414a-8144-7d957e55ace0}</value>
+   <value type="QDateTime" key="LastModified">2022-06-25T13:44:39.000</value>
+   <value type="QString" key="Version">14.0.6</value>
+   <value type="QString" key="WorkingDirectory"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>DebuggerItem.3</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">x86-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">true</value>
+   <value type="QString" key="Binary">/bin/lldb</value>
+   <value type="QString" key="DetectionSource"></value>
+   <value type="QString" key="DisplayName">System LLDB at /bin/lldb</value>
+   <value type="int" key="EngineType">256</value>
+   <value type="QString" key="Id">{66871261-2497-4e8e-8824-91414c0a7c3f}</value>
+   <value type="QDateTime" key="LastModified">2022-06-25T13:44:39.000</value>
+   <value type="QString" key="Version">14.0.6</value>
+   <value type="QString" key="WorkingDirectory"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>DebuggerItem.4</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">x86-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">true</value>
+   <value type="QString" key="Binary">/usr/sbin/gdb</value>
+   <value type="QString" key="DetectionSource"></value>
+   <value type="QString" key="DisplayName">System GDB at /usr/sbin/gdb</value>
+   <value type="int" key="EngineType">1</value>
+   <value type="QString" key="Id">{606b3199-16ee-4249-87c9-ac29ad4d881d}</value>
+   <value type="QDateTime" key="LastModified">2022-11-10T04:25:36.000</value>
+   <value type="QString" key="Version">12.1.0</value>
+   <value type="QString" key="WorkingDirectory"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>DebuggerItem.5</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">x86-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">true</value>
+   <value type="QString" key="Binary">/usr/bin/gdb</value>
+   <value type="QString" key="DetectionSource"></value>
+   <value type="QString" key="DisplayName">System GDB at /usr/bin/gdb</value>
+   <value type="int" key="EngineType">1</value>
+   <value type="QString" key="Id">{5d6c3ecb-2763-48d2-bd88-b11e2ed02a03}</value>
+   <value type="QDateTime" key="LastModified">2022-11-10T04:25:36.000</value>
+   <value type="QString" key="Version">12.1.0</value>
+   <value type="QString" key="WorkingDirectory"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>DebuggerItem.6</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">x86-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">true</value>
+   <value type="QString" key="Binary">/sbin/gdb</value>
+   <value type="QString" key="DetectionSource"></value>
+   <value type="QString" key="DisplayName">System GDB at /sbin/gdb</value>
+   <value type="int" key="EngineType">1</value>
+   <value type="QString" key="Id">{a21789a6-53e7-4654-8a3a-c70e1ae87fa1}</value>
+   <value type="QDateTime" key="LastModified">2022-11-10T04:25:36.000</value>
+   <value type="QString" key="Version">12.1.0</value>
+   <value type="QString" key="WorkingDirectory"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>DebuggerItem.7</variable>
+  <valuemap type="QVariantMap">
+   <valuelist type="QVariantList" key="Abis">
+    <value type="QString">x86-linux-generic-elf-64bit</value>
+   </valuelist>
+   <value type="bool" key="AutoDetected">true</value>
+   <value type="QString" key="Binary">/bin/gdb</value>
+   <value type="QString" key="DetectionSource"></value>
+   <value type="QString" key="DisplayName">System GDB at /bin/gdb</value>
+   <value type="int" key="EngineType">1</value>
+   <value type="QString" key="Id">{7e75082b-cd14-4085-94ba-50fd0d589a1e}</value>
+   <value type="QDateTime" key="LastModified">2022-11-10T04:25:36.000</value>
+   <value type="QString" key="Version">12.1.0</value>
+   <value type="QString" key="WorkingDirectory"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>DebuggerItem.Count</variable>
+  <value type="int">8</value>
+ </data>
+ <data>
+  <variable>Version</variable>
+  <value type="int">1</value>
+ </data>
+</qtcreator>

@@ -4,40 +4,40 @@
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 
 pkgname=chromium
-pkgver=105.0.5195.125
+pkgver=108.0.5359.94
 pkgrel=2
 _launcher_ver=8
-_gcc_patchset=1
+_gcc_patchset=2
 pkgdesc="A web browser built for speed, simplicity, and security"
 arch=('x86_64')
 url="https://www.chromium.org/Home"
 license=('BSD')
 depends=('gtk3' 'nss' 'alsa-lib' 'xdg-utils' 'libxss' 'libcups' 'libgcrypt'
          'ttf-liberation' 'systemd' 'dbus' 'libpulse' 'pciutils' 'libva'
-         'desktop-file-utils' 'hicolor-icon-theme')
+         'wayland' 'desktop-file-utils' 'hicolor-icon-theme')
 makedepends=('python' 'gn' 'ninja' 'clang' 'lld' 'gperf' 'nodejs' 'pipewire'
              'java-runtime-headless' 'git')
 optdepends=('pipewire: WebRTC desktop sharing under Wayland'
             'kdialog: support for native dialogs in Plasma'
             'org.freedesktop.secrets: password storage backend on GNOME / Xfce'
             'kwallet: support for storing passwords in KWallet on Plasma')
-options=('!lto') # Chromium adds its own flags for ThinLTO
+options=('debug' '!lto') # Chromium adds its own flags for ThinLTO
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$pkgver.tar.xz
         https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver/chromium-launcher-$_launcher_ver.tar.gz
         https://github.com/stha09/chromium-patches/releases/download/chromium-${pkgver%%.*}-patchset-$_gcc_patchset/chromium-${pkgver%%.*}-patchset-$_gcc_patchset.tar.xz
-        fix-TFLite-build-on-linux-with-system-zlib.patch
-        fix-debug-crash-and-log-spam-with-GTK3-Wayland.patch
-        enable-GlobalMediaControlsCastStartStop.patch
-        roll-src-third_party-ffmpeg.patch
+        re-fix-TFLite-build-error-on-linux-with-system-zlib.patch
+        REVERT-roll-src-third_party-ffmpeg-m102.patch
+        REVERT-roll-src-third_party-ffmpeg-m106.patch
+        disable-GlobalMediaControlsCastStartStop.patch
         angle-wayland-include-protocol.patch
         use-oauth2-client-switches-as-default.patch)
-sha256sums=('201b5c44668a415e3e05c0a806ab43a0904024340531332fc3ce39eb0cf10a66'
+sha256sums=('0607518481a8a5b993fb371eec544f7d20e43c2eb706ca7bf40ef584496cb6fe'
             '213e50f48b67feb4441078d50b0fd431df34323be15be97c55302d3fdac4483a'
-            'f0c437c02cab7a6efc958f82fbb4ea35d5440f73d65731bad7c0dcaecb932121'
-            '5db1fae8a452774b5b177e493a2d1a435b980137b16ed74616d1fb86fe342ec7'
-            'a9a30d16ad6b0689c2c4a85a3c508f49254fc8e69e791a45302673812461eb58'
-            '779fb13f2494209d3a7f1f23a823e59b9dded601866d3ab095937a1a04e19ac6'
+            '40ef8af65e78901bb8554eddbbb5ebc55c0b8e7927f6ca51b2a353d1c7c50652'
+            '9015b9d6d5b4c1e7248d6477a4b4b6bd6a3ebdc57225d2d8efcd79fc61790716'
             '30df59a9e2d95dcb720357ec4a83d9be51e59cc5551365da4c0073e68ccdec44'
+            '4c12d31d020799d31355faa7d1fe2a5a807f7458e7f0c374adf55edb37032152'
+            '7f3b1b22d6a271431c1f9fc92b6eb49c6d80b8b3f868bdee07a6a1a16630a302'
             'cd0d9d2a1d6a522d47c3c0891dabe4ad72eabbebc0fe5642b9e22efa3d5ee572'
             'e393174d7695d0bafed69e868c5fbfecf07aa6969f3b64596d0bae8b067e1711')
 
@@ -102,25 +102,23 @@ prepare() {
   patch -Np1 -i ../use-oauth2-client-switches-as-default.patch
 
   # Upstream fixes
-  patch -Np1 -i ../fix-TFLite-build-on-linux-with-system-zlib.patch
-  patch -Np1 -i ../fix-debug-crash-and-log-spam-with-GTK3-Wayland.patch
-
-  # Revert kGlobalMediaControlsCastStartStop enabled by default
-  # https://crbug.com/1314342
-  patch -Rp1 -F3 -i ../enable-GlobalMediaControlsCastStartStop.patch
+  patch -Np1 -i ../re-fix-TFLite-build-error-on-linux-with-system-zlib.patch
 
   # Revert ffmpeg roll requiring new channel layout API support
   # https://crbug.com/1325301
-  patch -Rp1 -i ../roll-src-third_party-ffmpeg.patch
+  patch -Rp1 -i ../REVERT-roll-src-third_party-ffmpeg-m102.patch
+  # Revert switch from AVFrame::pkt_duration to AVFrame::duration
+  patch -Rp1 -i ../REVERT-roll-src-third_party-ffmpeg-m106.patch
+
+  # Disable kGlobalMediaControlsCastStartStop by default
+  # https://crbug.com/1314342
+  patch -Np1 -i ../disable-GlobalMediaControlsCastStartStop.patch
 
   # https://crbug.com/angleproject/7582
   patch -Np0 -i ../angle-wayland-include-protocol.patch
 
   # Fixes for building with libstdc++ instead of libc++
   patch -Np1 -i ../patches/chromium-103-VirtualCursor-std-layout.patch
-  patch -Np1 -i ../patches/chromium-105-Bitmap-include.patch
-  patch -Np1 -i ../patches/chromium-105-browser_finder-include.patch
-  patch -Np1 -i ../patches/chromium-105-AdjustMaskLayerGeometry-ceilf.patch
 
   # Link to system tools required by the build
   mkdir -p third_party/node/linux/node-linux-x64/bin
@@ -157,6 +155,7 @@ build() {
   local _flags=(
     'custom_toolchain="//build/toolchain/linux/unbundle:default"'
     'host_toolchain="//build/toolchain/linux/unbundle:default"'
+    'clang_base_path="/usr"'
     'clang_use_chrome_plugins=false'
     'is_official_build=true' # implies is_cfi=true on x86_64
     'symbol_level=0' # sufficient for backtraces on x86(_64)
@@ -168,9 +167,12 @@ build() {
     'proprietary_codecs=true'
     'rtc_use_pipewire=true'
     'link_pulseaudio=true'
-    'use_gnome_keyring=false'
-    'use_sysroot=false'
     'use_custom_libcxx=false'
+    'use_gnome_keyring=false'
+    'use_qt=false' # look into enabling this
+    'use_sysroot=false'
+    'use_system_libwayland=true'
+    'use_system_wayland_scanner=true'
     'enable_hangout_services_extension=true'
     'enable_widevine=true'
     'enable_nacl=false'

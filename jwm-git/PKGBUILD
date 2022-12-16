@@ -1,5 +1,5 @@
 pkgname=jwm-git
-pkgver=6e5e528
+pkgver=4640d3b
 pkgrel=1
 pkgdesc="A lightweight window manager for the X11 Window System"
 arch=('i686' 'x86_64')
@@ -35,7 +35,6 @@ build() {
 #  patch -p1 -i $startdir/fix-am-init-automake.patch                || return 1
   patch -p1 -i $startdir/fix-minimize.patch                        || return 1
   patch -p1 -i $startdir/pango.patch                               || return 1
-  patch -p1 -i $startdir/window-hot-key.patch                      || return 1
   
   cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
   ./autogen.sh

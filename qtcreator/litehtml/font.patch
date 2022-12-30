@@ -1,0 +1,20 @@
+diff -cr a/src/html_tag.cpp b/src/html_tag.cpp
+*** a/src/html_tag.cpp	2022-04-05 23:49:06.000000000 +0300
+--- b/src/html_tag.cpp	2022-12-30 21:10:32.454237383 +0300
+***************
+*** 2011,2017 ****
+  	const tchar_t* style		= get_style_property(_t("font-style"),		true,	_t("normal"));
+  	const tchar_t* decoration	= get_style_property(_t("text-decoration"),	true,	_t("none"));
+  
+! 	m_font = get_document()->get_font(name, m_font_size, weight, style, decoration, &m_font_metrics);
+  }
+  
+  bool litehtml::html_tag::is_break() const
+--- 2011,2017 ----
+  	const tchar_t* style		= get_style_property(_t("font-style"),		true,	_t("normal"));
+  	const tchar_t* decoration	= get_style_property(_t("text-decoration"),	true,	_t("none"));
+  
+! 	m_font = get_document()->get_font(_t("Carlito"), m_font_size, weight, style, decoration, &m_font_metrics);
+  }
+  
+  bool litehtml::html_tag::is_break() const

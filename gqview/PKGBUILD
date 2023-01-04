@@ -14,7 +14,7 @@ md5sums=('7196deab04db94cec2167637cddc02f9')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  CPPFLAGS="-D_FILE_OFFSET_BITS=64" LDFLAGS="-lm" ./configure --prefix=/usr --mandir=/usr/share/man
+  LDFLAGS="-lm" ./configure --prefix=/usr --mandir=/usr/share/man
   make
 }
 

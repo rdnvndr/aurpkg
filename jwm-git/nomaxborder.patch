@@ -1,0 +1,74 @@
+*** a/src/border.c	2023-01-05 23:00:10.160432048 +0300
+--- b/src/border.c	2023-01-05 22:59:26.710670476 +0300
+***************
+*** 301,307 ****
+           JXFillRectangle(display, shapePixmap, shapeGC, 0, 0, width, height);
+        } else {
+           const int radius
+!             = (np->state.maxFlags && (np->state.border & BORDER_NOMAX))
+              ? 0 : (settings.cornerRadius - 1);
+           FillRoundedRectangle(shapePixmap, shapeGC, 0, 0, width, height,
+                                radius);
+--- 301,308 ----
+           JXFillRectangle(display, shapePixmap, shapeGC, 0, 0, width, height);
+        } else {
+           const int radius
+!             = ((np->state.maxFlags & MAX_HORIZ) && (np->state.maxFlags & MAX_VERT)
+!                && (np->state.border & BORDER_NOMAX))
+              ? 0 : (settings.cornerRadius - 1);
+           FillRoundedRectangle(shapePixmap, shapeGC, 0, 0, width, height,
+                                radius);
+***************
+*** 511,517 ****
+        DrawBorderHandles(np, np->parent, gc);
+     } else {
+        const int radius
+!          = (np->state.maxFlags && (np->state.border & BORDER_NOMAX))
+           ? 0 : settings.cornerRadius;
+        JXSetForeground(display, gc, outlineColor);
+        if(np->state.status & STAT_SHADED) {
+--- 512,519 ----
+        DrawBorderHandles(np, np->parent, gc);
+     } else {
+        const int radius
+!          = ((np->state.maxFlags & MAX_HORIZ) && (np->state.maxFlags & MAX_VERT)
+!             && (np->state.border & BORDER_NOMAX))
+           ? 0 : settings.cornerRadius;
+        JXSetForeground(display, gc, outlineColor);
+        if(np->state.status & STAT_SHADED) {
+***************
+*** 539,545 ****
+     unsigned starty = 0;
+     unsigned titleHeight;
+  
+!    if(np->state.maxFlags && (np->state.border & BORDER_NOMAX)) {
+        return;
+     }
+  
+--- 541,548 ----
+     unsigned starty = 0;
+     unsigned titleHeight;
+  
+!    if((np->state.maxFlags & MAX_HORIZ) && (np->state.maxFlags & MAX_VERT)
+!       && (np->state.border & BORDER_NOMAX)) {
+        return;
+     }
+  
+***************
+*** 1210,1216 ****
+  
+     if(state->border & BORDER_OUTLINE) {
+        const char show_border =
+!          !state->maxFlags || !(state->border & BORDER_NOMAX);
+  
+        if((state->border & BORDER_TITLE) &&
+           !(state->maxFlags && (state->border & TITLE_NOMAX))) {
+--- 1213,1220 ----
+  
+     if(state->border & BORDER_OUTLINE) {
+        const char show_border =
+!          !((state->maxFlags & MAX_HORIZ) && (state->maxFlags & MAX_VERT))
+!               || !(state->border & BORDER_NOMAX);
+  
+        if((state->border & BORDER_TITLE) &&
+           !(state->maxFlags && (state->border & TITLE_NOMAX))) {

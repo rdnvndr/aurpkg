@@ -1,0 +1,22 @@
+# Maintainer: Jiachen YANG <farseerfc@archlinux.org>
+# Contributor: Gavin Lloyd <gavinhungry@gmail.com>
+# Contributor: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: Hexchain Tong <i@hexchain.org>
+
+pkgname=ttf-opensans
+pkgver=1.101
+pkgrel=3
+pkgdesc='Sans-serif typeface commissioned by Google'
+arch=('any')
+url='https://fonts.google.com/specimen/Open+Sans'
+license=('Apache')
+
+source=("https://github.com/googlefonts/opensans/archive/refs/heads/main.zip")
+
+sha256sums=('SKIP')
+
+package() {
+  cd opensans-main/fonts/ttf
+  install -dm 755 "${pkgdir}/usr/share/fonts/TTF"
+  install -m 644 *.ttf "${pkgdir}/usr/share/fonts/TTF/"
+}

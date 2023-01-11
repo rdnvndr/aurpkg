@@ -2,7 +2,7 @@ pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
 pkgver=9.0.2
 _clangver=14.0.6
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -27,7 +27,7 @@ optdepends=('qt6-doc: integrated Qt documentation'
 source=("QTCREATORBUG-21681.patch"
         "projectmodels.patch"
         "navigationwidget.patch"
-        "tracepoint.patch"
+        "breakpoint.patch"
         "attach.patch")
 sha256sums=(SKIP
             SKIP
@@ -44,7 +44,7 @@ prepare() {
   patch -d qt-creator -p1 < QTCREATORBUG-21681.patch
   patch -d qt-creator -p1 < projectmodels.patch
   patch -d qt-creator -p1 < navigationwidget.patch
-  patch -d qt-creator -p1 < tracepoint.patch
+  patch -d qt-creator -p1 < breakpoint.patch
   patch -d qt-creator -p1 < attach.patch  
 }
 

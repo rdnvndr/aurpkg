@@ -23,10 +23,12 @@ source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         https://mirror.sobukus.de/files/src/isl/isl-${_islver}.tar.bz2
         GCCcore-9.2.0-fix-glibc-2.31-libsanitizer.patch
         fix_asan_against_glibc_234.patch
-        fix_build.patch)
+        fix_build.patch
+        bug56549.patch)
 validpgpkeys=(13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
               D3A93CAD751C2AF4F8C7AD516C35B99309B5FA62) # Jakub Jelinek <jakub@redhat.com>
 sha512sums=('SKIP'
+            'SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
@@ -55,6 +57,7 @@ prepare() {
 #  patch -p1 < ../GCCcore-9.2.0-fix-glibc-2.31-libsanitizer.patch
   patch -p1 < ../fix_asan_against_glibc_234.patch
   patch -p1 < ../fix_build.patch
+  patch -p1 < ../bug56549.patch
 }
 
 build() {

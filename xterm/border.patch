@@ -1,0 +1,209 @@
+diff -cr a/charproc.c b/charproc.c
+*** a/charproc.c	2023-01-09 03:26:45.000000000 +0300
+--- b/charproc.c	2023-01-16 14:44:51.240122789 +0300
+***************
+*** 6018,6024 ****
+  	    stat = REQ_RESIZE((Widget) xw,
+  			      ((Dimension) FontWidth(screen)
+  			       * (tt_width)
+! 			       + 2 * screen->border
+  			       + screen->fullVwin.sb_info.width),
+  			      ((Dimension) FontHeight(screen)
+  			       * (tt_length)
+--- 6018,6024 ----
+  	    stat = REQ_RESIZE((Widget) xw,
+  			      ((Dimension) FontWidth(screen)
+  			       * (tt_width)
+! 			       + 4 * screen->border
+  			       + screen->fullVwin.sb_info.width),
+  			      ((Dimension) FontHeight(screen)
+  			       * (tt_length)
+***************
+*** 8950,8956 ****
+  	    if (cols < 0)
+  		value = (unsigned long) MaxCols(screen);
+  	    value *= (unsigned long) FontWidth(screen);
+! 	    value += (unsigned long) ((2 * screen->border)
+  				      + ScrollbarWidth(screen));
+  	    if (!okDimension(value, askedWidth))
+  		goto give_up;
+--- 8950,8956 ----
+  	    if (cols < 0)
+  		value = (unsigned long) MaxCols(screen);
+  	    value *= (unsigned long) FontWidth(screen);
+! 	    value += (unsigned long) ((4 * screen->border)
+  				      + ScrollbarWidth(screen));
+  	    if (!okDimension(value, askedWidth))
+  		goto give_up;
+diff -cr a/fontutils.c b/fontutils.c
+*** a/fontutils.c	2023-01-09 02:42:23.000000000 +0300
+--- b/fontutils.c	2023-01-16 14:40:01.418379837 +0300
+***************
+*** 3702,3708 ****
+  	win->f_ascent = font->ascent;
+  	win->f_descent = font->descent;
+      }
+!     i = 2 * screen->border + sbwidth;
+      j = 2 * screen->border;
+      width = MaxCols(screen) * win->f_width + i;
+      height = MaxRows(screen) * win->f_height + j;
+--- 3702,3708 ----
+  	win->f_ascent = font->ascent;
+  	win->f_descent = font->descent;
+      }
+!     i = 4 * screen->border + sbwidth;
+      j = 2 * screen->border;
+      width = MaxCols(screen) * win->f_width + i;
+      height = MaxRows(screen) * win->f_height + j;
+diff -cr a/ptyx.h b/ptyx.h
+*** a/ptyx.h	2023-01-02 16:24:41.000000000 +0300
+--- b/ptyx.h	2023-01-16 14:39:39.091835686 +0300
+***************
+*** 3552,3560 ****
+  #define PrinterOf(screen) (screen)->printer_state
+  
+  #ifdef SCROLLBAR_RIGHT
+! #define OriginX(screen) (((term->misc.useRight)?0:ScrollbarWidth(screen)) + screen->border)
+  #else
+! #define OriginX(screen) (ScrollbarWidth(screen) + screen->border)
+  #endif
+  
+  #define OriginY(screen) (screen->border)
+--- 3552,3560 ----
+  #define PrinterOf(screen) (screen)->printer_state
+  
+  #ifdef SCROLLBAR_RIGHT
+! #define OriginX(screen) (((term->misc.useRight)?0:ScrollbarWidth(screen)) + screen->border*2)
+  #else
+! #define OriginX(screen) (ScrollbarWidth(screen) + screen->border*2)
+  #endif
+  
+  #define OriginY(screen) (screen->border)
+diff -cr a/screen.c b/screen.c
+*** a/screen.c	2022-10-24 01:57:40.000000000 +0300
+--- b/screen.c	2023-01-16 14:41:59.624397854 +0300
+***************
+*** 1406,1412 ****
+  		       VDrawable(screen),
+  		       MakeMarkGC(xw, set),
+  		       x, y,
+! 		       (unsigned) screen->border,
+  		       (unsigned) FontHeight(screen));
+      }
+  }
+--- 1406,1412 ----
+  		       VDrawable(screen),
+  		       MakeMarkGC(xw, set),
+  		       x, y,
+! 		       (unsigned) 2*screen->border,
+  		       (unsigned) FontHeight(screen));
+      }
+  }
+***************
+*** 1978,1984 ****
+  	   (double) (width - border - ScrollbarWidth(screen)) / FontWidth(screen)));
+  
+      rows = (height - border) / FontHeight(screen);
+!     cols = (width - border - ScrollbarWidth(screen)) / FontWidth(screen);
+      if (rows < 1)
+  	rows = 1;
+      if (cols < 1)
+--- 1978,1984 ----
+  	   (double) (width - border - ScrollbarWidth(screen)) / FontWidth(screen)));
+  
+      rows = (height - border) / FontHeight(screen);
+!     cols = (width - 2*border - ScrollbarWidth(screen)) / FontWidth(screen);
+      if (rows < 1)
+  	rows = 1;
+      if (cols < 1)
+***************
+*** 2197,2203 ****
+  	    set_cur_col(screen, screen->max_col);
+  
+  	screen->fullVwin.height = height - border;
+! 	screen->fullVwin.width = width - border - screen->fullVwin.sb_info.width;
+  
+  	scroll_displayed_graphics(xw, -move_down_by);
+      } else if (FullHeight(screen) == height && FullWidth(screen) == width) {
+--- 2197,2203 ----
+  	    set_cur_col(screen, screen->max_col);
+  
+  	screen->fullVwin.height = height - border;
+! 	screen->fullVwin.width = width - 2*border - screen->fullVwin.sb_info.width;
+  
+  	scroll_displayed_graphics(xw, -move_down_by);
+      } else if (FullHeight(screen) == height && FullWidth(screen) == width) {
+***************
+*** 2928,2934 ****
+  set_resize_increments(XtermWidget xw)
+  {
+      TScreen *screen = TScreenOf(xw);
+!     int min_width = (2 * screen->border) + screen->fullVwin.sb_info.width;
+      int min_height = (2 * screen->border);
+      XSizeHints sizehints;
+  
+--- 2928,2934 ----
+  set_resize_increments(XtermWidget xw)
+  {
+      TScreen *screen = TScreenOf(xw);
+!     int min_width = (4 * screen->border) + screen->fullVwin.sb_info.width;
+      int min_height = (2 * screen->border);
+      XSizeHints sizehints;
+  
+diff -cr a/scrollbar.c b/scrollbar.c
+*** a/scrollbar.c	2022-01-01 02:35:02.000000000 +0300
+--- b/scrollbar.c	2023-01-16 14:42:57.154082163 +0300
+***************
+*** 103,109 ****
+      TScreen *screen = TScreenOf(xw);
+  
+      int border = 2 * screen->border;
+!     int min_wide = border + screen->fullVwin.sb_info.width;
+      int min_high = border;
+      XtGeometryResult geomreqresult;
+      Dimension reqWidth, reqHeight, repWidth, repHeight;
+--- 103,109 ----
+      TScreen *screen = TScreenOf(xw);
+  
+      int border = 2 * screen->border;
+!     int min_wide = border*2 + screen->fullVwin.sb_info.width;
+      int min_high = border;
+      XtGeometryResult geomreqresult;
+      Dimension reqWidth, reqHeight, repWidth, repHeight;
+diff -cr a/util.c b/util.c
+*** a/util.c	2023-01-04 12:21:31.000000000 +0300
+--- b/util.c	2023-01-16 14:40:37.904846286 +0300
+***************
+*** 2390,2396 ****
+      GC gc;
+  
+      if ((gc = vwin->border_gc) != 0) {
+! 	int vmark1 = screen->border;
+  	int vmark2 = vwin->height + vmark1;
+  	int hmark1 = OriginX(screen);
+  	int hmark2 = vwin->width + hmark1;
+--- 2390,2396 ----
+      GC gc;
+  
+      if ((gc = vwin->border_gc) != 0) {
+! 	int vmark1 = screen->border*2;
+  	int vmark2 = vwin->height + vmark1;
+  	int hmark1 = OriginX(screen);
+  	int hmark2 = vwin->width + hmark1;
+***************
+*** 4695,4701 ****
+      TRACE(("   border    %d\n", xw->core.border_width));
+      TRACE(("   scrollbar %d\n", scrollbarWidth));
+  
+!     xw->hints.base_width = 2 * screen->border + scrollbarWidth;
+      xw->hints.base_height = 2 * screen->border;
+  
+  #if OPT_TOOLBAR
+--- 4695,4701 ----
+      TRACE(("   border    %d\n", xw->core.border_width));
+      TRACE(("   scrollbar %d\n", scrollbarWidth));
+  
+!     xw->hints.base_width = 4 * screen->border + scrollbarWidth;
+      xw->hints.base_height = 2 * screen->border;
+  
+  #if OPT_TOOLBAR

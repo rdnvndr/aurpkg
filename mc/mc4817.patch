@@ -1,9 +1,9 @@
-diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
-*** mc-4.8.17/src/filemanager/panel.c	2016-05-07 18:42:52.000000000 +0300
---- mc-roand/src/filemanager/panel.c	2016-06-11 00:27:09.000000000 +0300
+diff -cr a/src/filemanager/panel.c b/src/filemanager/panel.c
+*** a/src/filemanager/panel.c	2016-05-07 18:42:52.000000000 +0300
+--- b/src/filemanager/panel.c	2016-06-11 00:27:09.000000000 +0300
 ***************
-*** 79,84 ****
---- 79,128 ----
+*** 80,85 ****
+--- 80,129 ----
   
   #include "panel.h"
   
@@ -55,8 +55,8 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
   
   /* The hook list for the select file function */
 ***************
-*** 445,450 ****
---- 489,630 ----
+*** 457,462 ****
+--- 501,642 ----
       }
   }
   
@@ -64,20 +64,20 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
 + static void
 + panel_update_hline (WPanel *panel) {
 + 
-+     int orignx = panel->widget.x;
-+     int origny = panel->widget.y;
++     int orignx = panel->widget.rect.x;
++     int origny = panel->widget.rect.y;
 + 	
 + 	//tty_setcolor (COLOR_NORMAL);
 + 
 +     if (panel->list_format==list_full) {
-+ 	mclib_v_draw_object (origny, orignx+panel->widget.cols-22, MCLIB_V_UTEE_CHAR);
-+ 	mclib_v_draw_object (origny, orignx+panel->widget.cols-14, MCLIB_V_UTEE_CHAR);
++ 	mclib_v_draw_object (origny, orignx+panel->widget.rect.cols-22, MCLIB_V_UTEE_CHAR);
++ 	mclib_v_draw_object (origny, orignx+panel->widget.rect.cols-14, MCLIB_V_UTEE_CHAR);
 +     }
 + 
 +     if (panel->list_format==list_brief) {
 +        int brief_cols = panel->brief_cols;
 +        for (int i=1;i<brief_cols;i++) 
-+           mclib_v_draw_object (origny, orignx+((int)((panel->widget.cols-2)/brief_cols))*i, MCLIB_V_UTEE_CHAR);
++           mclib_v_draw_object (origny, orignx+((int)((panel->widget.rect.cols-2)/brief_cols))*i, MCLIB_V_UTEE_CHAR);
 +     }
 + 
 +     if (panel->list_format==list_user) {
@@ -86,7 +86,7 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
 + 
 + 	length     = 1;
 + 	home     = panel->format;
-+ 	int width = panel->widget.cols;
++ 	int width = panel->widget.rect.cols;
 + 
 + 	for (format = home; format != NULL; format = g_slist_next (format)) {
 + 
@@ -135,20 +135,20 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
 +     
 +     //tty_setcolor(COLOR_NORMAL);
 + 
-+     int orignx = panel->widget.x;
-+     int origny = panel->widget.y;
++     int orignx = panel->widget.rect.x;
++     int origny = panel->widget.rect.y;
 +     
 +     if (panel->list_format==list_full)
 +     {
-+        mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+panel->widget.cols-22, MCLIB_V_DTEE_CHAR);
-+        mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+panel->widget.cols-14, MCLIB_V_DTEE_CHAR);
++        mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+panel->widget.rect.cols-22, MCLIB_V_DTEE_CHAR);
++        mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+panel->widget.rect.cols-14, MCLIB_V_DTEE_CHAR);
 +     }
 +     
 +     if (panel->list_format==list_brief)
 +     {
 +        int brief_cols = panel->brief_cols;
 +        for (int i=1;i<brief_cols;i++) 
-+           mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+((int)((panel->widget.cols-2)/brief_cols))*i, MCLIB_V_DTEE_CHAR);
++           mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+((int)((panel->widget.rect.cols-2)/brief_cols))*i, MCLIB_V_DTEE_CHAR);
 +     }
 +     
 +     
@@ -159,7 +159,7 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
 +            
 +  	 length    = 1;
 +           home      = panel->format;
-+  	 int width = panel->widget.cols;
++  	 int width = panel->widget.rect.cols;
 +  
 +           for (format = home; format != NULL; format = g_slist_next (format)) {
 +  
@@ -180,7 +180,7 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
 +  	        length += len;
 +  		
 +  	    } else {
-+  		mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+length, MCLIB_V_DTEE_CHAR);
++  		mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+length, MCLIB_V_DTEE_CHAR);
 +  		
 +  		
 +  		//if (panel->split){
@@ -200,9 +200,9 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
   /** String representations of various file attributes name */
   
 ***************
-*** 1119,1124 ****
---- 1299,1305 ----
-          tty_draw_hline (w->y + y, w->x + 1, ACS_HLINE, w->cols - 2);
+*** 1131,1136 ****
+--- 1311,1317 ----
+          tty_draw_hline (w->rect.y + y, w->rect.x + 1, ACS_HLINE, w->rect.cols - 2);
           /* Status displays total marked size.
            * Centered in panel, full format. */
 +         panel_update_fline (panel);
@@ -210,7 +210,7 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
       }
   }
 ***************
-*** 1273,1290 ****
+*** 1285,1302 ****
       }
   
       widget_gotoyx (w, 0, 1);
@@ -220,7 +220,7 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
 !     tmp = g_strdup_printf ("%s[%s]%s", tmp, panel_history_show_list_char,
 !                            panel_history_next_item_char);
   
-!     widget_gotoyx (w, 0, w->cols - 6);
+!     widget_gotoyx (w, 0, w->rect.cols - 6);
       tty_print_string (tmp);
   
       g_free (tmp);
@@ -229,15 +229,16 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
   
       if (panel->is_panelized)
           tty_printf (" %s ", _("Panelize"));
---- 1454,1469 ----
+--- 1466,1482 ----
       }
   
       widget_gotoyx (w, 0, 1);
   
       tmp = panels_options.show_dot_files ? panel_hiddenfiles_show_char : panel_hiddenfiles_hide_char;
-!     tmp = g_strdup_printf("%s%s%s%s",panel_history_prev_item_char,tmp,panel_history_show_list_char,panel_history_next_item_char);
+!     tmp = g_strdup_printf ("%s%s%s%s", panel_history_prev_item_char, tmp,
+!                            panel_history_show_list_char,panel_history_next_item_char);
   
-!     widget_gotoyx (w, 0, w->cols - 5);
+!     widget_gotoyx (w, 0, w->rect.cols - 5);
       tty_print_string (tmp);
   
       g_free (tmp);
@@ -247,8 +248,8 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
       if (panel->is_panelized)
           tty_printf (" %s ", _("Panelize"));
 ***************
-*** 1335,1340 ****
---- 1515,1521 ----
+*** 1346,1351 ****
+--- 1526,1532 ----
       }
   
       show_free_space (panel);
@@ -257,16 +258,16 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
       if (panel->active)
           tty_set_normal_attrs ();
 ***************
-*** 1517,1523 ****
-              panel->sort_info.reverse ? panel_sort_up_sign : panel_sort_down_sign;
+*** 1533,1539 ****
+              panel->sort_info.reverse ? panel_sort_up_char : panel_sort_down_char;
           char *str;
   
 !         str = g_strdup_printf ("%s%s", sort_sign, Q_ (panel->sort_field->hotkey));
           widget_gotoyx (panel, 1, 1);
           tty_print_string (str);
           g_free (str);
---- 1698,1704 ----
-              panel->sort_info.reverse ? panel_sort_up_sign : panel_sort_down_sign;
+--- 1714,1720 ----
+              panel->sort_info.reverse ? panel_sort_up_char : panel_sort_down_char;
           char *str;
   
 !         str = g_strdup_printf ("%s", Q_ (panel->sort_field->hotkey));
@@ -274,42 +275,42 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
           tty_print_string (str);
           g_free (str);
 ***************
-*** 3823,3838 ****
+*** 3941,3956 ****
           if (event->y == 0)
           {
               /* top frame */
 !             if (event->x == 1)
                   /* "<" button */
                   directory_history_prev (panel);
-              else if (event->x == w->cols - 2)
+              else if (event->x == w->rect.cols - 2)
                   /* ">" button */
                   directory_history_next (panel);
-!             else if (event->x >= w->cols - 5 && event->x <= w->cols - 3)
+!             else if (event->x >= w->rect.cols - 5 && event->x <= w->rect.cols - 3)
                   /* "^" button */
                   directory_history_list (panel);
-!             else if (event->x == w->cols - 6)
+!             else if (event->x == w->rect.cols - 6)
                   /* "." button show/hide hidden files */
-                  send_message (midnight_dlg, NULL, MSG_ACTION, CK_ShowHidden, NULL);
+                  send_message (filemanager, NULL, MSG_ACTION, CK_ShowHidden, NULL);
               else
---- 4004,4019 ----
+--- 4122,4137 ----
           if (event->y == 0)
           {
               /* top frame */
-!             if (event->x == w->cols - 5)
+!             if (event->x == w->rect.cols - 5)
                   /* "<" button */
                   directory_history_prev (panel);
-              else if (event->x == w->cols - 2)
+              else if (event->x == w->rect.cols - 2)
                   /* ">" button */
                   directory_history_next (panel);
-!             else if (event->x == w->cols - 3)
+!             else if (event->x == w->rect.cols - 3)
                   /* "^" button */
                   directory_history_list (panel);
-!             else if (event->x == w->cols - 4)
+!             else if (event->x == w->rect.cols - 4)
                   /* "." button show/hide hidden files */
-                  send_message (midnight_dlg, NULL, MSG_ACTION, CK_ShowHidden, NULL);
+                  send_message (filemanager, NULL, MSG_ACTION, CK_ShowHidden, NULL);
               else
 ***************
-*** 3845,3851 ****
+*** 3963,3969 ****
               break;
           }
   
@@ -317,7 +318,7 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
           {
               /* sort on clicked column */
               mouse_sort_col (panel, event->x + 1);
---- 4026,4032 ----
+--- 4144,4150 ----
               break;
           }
   
@@ -326,14 +327,14 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
               /* sort on clicked column */
               mouse_sort_col (panel, event->x + 1);
 ***************
-*** 3882,3887 ****
---- 4062,4089 ----
+*** 3972,3977 ****
+--- 4153,4180 ----
   
           if (!is_active)
               (void) change_panel ();
 +         if (event->y <= 1)
 +         {
-+             mark_if_marking (panel, event);
++             mark_if_marking (panel, event, panel->selected);
 +             if (panels_options.mouse_move_pages)
 +                 prev_page (panel);
 +             else
@@ -344,7 +345,7 @@ diff -cr mc-4.8.17/src/filemanager/panel.c mc-roand/src/filemanager/panel.c
 +    
 +         if (!((panel->top_file + event->y-1 <= panel->dir.len) && event->y-1 <= panel_lines (panel)))
 +         {
-+             mark_if_marking (panel, event);
++             mark_if_marking (panel, event, panel->selected);
 +             if (panels_options.mouse_move_pages)
 +                 next_page (panel);
 +             else

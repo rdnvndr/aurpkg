@@ -1,0 +1,28 @@
+pkgbase=plog-converter-git
+pkgname=plog-converter-git
+pkgver=b4fda14
+pkgrel=1
+pkgdesc='PVS Studio analyzer log conversion tool'
+arch=(x86_64)
+url='https://github.com/viva64/plog-converter'
+license=("Apache-2.0")
+depends=(gcc-libs)
+makedepends=(cmake git gcc)
+groups=('modified')
+
+prepare() {
+  cd $srcdir
+  git clone --depth 1 https://github.com/viva64/plog-converter.git
+}
+
+build() {
+  cmake -B build -S plog-converter \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBEXECDIR=lib
+  cmake --build build
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}
+

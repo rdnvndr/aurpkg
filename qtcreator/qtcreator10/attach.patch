@@ -1,0 +1,29 @@
+diff --git a/src/plugins/projectexplorer/projectexplorer.cpp b/src/plugins/projectexplorer/projectexplorer.cpp
+index 27bdbcd8..aff12b75 100644
+--- a/src/plugins/projectexplorer/projectexplorer.cpp
++++ b/src/plugins/projectexplorer/projectexplorer.cpp
+@@ -134,6 +134,8 @@
+ #include <texteditor/textdocument.h>
+ #include <texteditor/texteditorconstants.h>
+ 
++#include <extensionsystem/invoker.h>
++
+ #include <utils/algorithm.h>
+ #include <utils/fileutils.h>
+ #include <utils/macroexpander.h>
+@@ -3203,6 +3205,15 @@ void ProjectExplorerPlugin::runProject(Project *pro, Id mode, const bool forceSk
+ {
+     if (!pro)
+         return;
++    for (auto *rc : ProjectExplorerPlugin::instance()->allRunControls()) {
++        if (rc->isRunning() && rc->project() == pro && 
++            mode == ProjectExplorer::Constants::DEBUG_RUN_MODE) {
++            ExtensionSystem::Invoker<void>(
++                ExtensionSystem::PluginManager::getObjectByName("DebuggerPlugin"), 
++                "attachExternalApplication", rc);
++            return;
++        }
++    }
+ 
+     if (Target *target = pro->activeTarget())
+         if (RunConfiguration *rc = target->activeRunConfiguration())

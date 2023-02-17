@@ -1,0 +1,41 @@
+diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger/debuggerplugin.cpp
+*** a/src/plugins/debugger/debuggerplugin.cpp	2018-12-03 15:39:29.000000000 +0300
+--- b/src/plugins/debugger/debuggerplugin.cpp	2018-12-11 23:26:55.952660986 +0300
+***************
+*** 774,788 ****
+  
+      m_debuggerSettings.readSettings();
+  
+-     const auto addLabel = [](QWidget *widget, const QString &text) {
+-         auto vbox = qobject_cast<QVBoxLayout *>(widget->layout());
+-         QTC_ASSERT(vbox, return);
+-         auto label = new QLabel(widget);
+-         label->setText(text);
+-         label->setContentsMargins(6, 6, 6, 6);
+-         vbox->insertWidget(0, label);
+-     };
+- 
+      const auto addFontSizeAdaptation = [this](QWidget *widget) {
+          QObject::connect(TextEditorSettings::instance(), &TextEditorSettings::fontSettingsChanged,
+                           this, [widget](const FontSettings &settings) {
+--- 774,779 ----
+***************
+*** 845,851 ****
+      auto breakpointManagerWindow = addSearch(breakpointManagerView);
+      breakpointManagerWindow->setWindowTitle(tr("Breakpoint Preset"));
+      breakpointManagerWindow->setObjectName("Debugger.Docks.BreakpointManager");
+-     addLabel(breakpointManagerWindow, breakpointManagerWindow->windowTitle());
+      addFontSizeAdaptation(breakpointManagerWindow);
+  
+      // Snapshot
+--- 836,841 ----
+***************
+*** 860,866 ****
+      auto engineManagerWindow = addSearch(engineManagerView);
+      engineManagerWindow->setWindowTitle(tr("Debugger Perspectives"));
+      engineManagerWindow->setObjectName("Debugger.Docks.Snapshots");
+-     addLabel(engineManagerWindow, engineManagerWindow->windowTitle());
+      addFontSizeAdaptation(engineManagerWindow);
+  
+      // Logging
+--- 850,855 ----

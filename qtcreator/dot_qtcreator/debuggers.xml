@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorDebuggers>
-<!-- Written by QtCreator 9.0.1, 2022-12-06T21:42:26. -->
+<!-- Written by QtCreator 9.0.2, 2023-01-22T13:49:29. -->
 <qtcreator>
  <data>
   <variable>DebuggerItem.0</variable>
@@ -14,8 +14,8 @@
    <value type="QString" key="DisplayName">System LLDB at /usr/sbin/lldb</value>
    <value type="int" key="EngineType">256</value>
    <value type="QString" key="Id">{fa5752f0-bb3f-402b-baf5-e04f515f4770}</value>
-   <value type="QDateTime" key="LastModified">2022-06-25T13:44:39.000</value>
-   <value type="QString" key="Version">14.0.6</value>
+   <value type="QDateTime" key="LastModified">2023-01-13T01:05:25.000</value>
+   <value type="QString" key="Version">15.0.7</value>
    <value type="QString" key="WorkingDirectory"></value>
   </valuemap>
  </data>
@@ -31,8 +31,8 @@
    <value type="QString" key="DisplayName">System LLDB at /usr/bin/lldb</value>
    <value type="int" key="EngineType">256</value>
    <value type="QString" key="Id">{d866a117-9e5e-4b48-8ab9-eef81042d5fd}</value>
-   <value type="QDateTime" key="LastModified">2022-06-25T13:44:39.000</value>
-   <value type="QString" key="Version">14.0.6</value>
+   <value type="QDateTime" key="LastModified">2023-01-13T01:05:25.000</value>
+   <value type="QString" key="Version">15.0.7</value>
    <value type="QString" key="WorkingDirectory"></value>
   </valuemap>
  </data>
@@ -48,8 +48,8 @@
    <value type="QString" key="DisplayName">System LLDB at /sbin/lldb</value>
    <value type="int" key="EngineType">256</value>
    <value type="QString" key="Id">{84be6af3-0991-414a-8144-7d957e55ace0}</value>
-   <value type="QDateTime" key="LastModified">2022-06-25T13:44:39.000</value>
-   <value type="QString" key="Version">14.0.6</value>
+   <value type="QDateTime" key="LastModified">2023-01-13T01:05:25.000</value>
+   <value type="QString" key="Version">15.0.7</value>
    <value type="QString" key="WorkingDirectory"></value>
   </valuemap>
  </data>
@@ -65,8 +65,8 @@
    <value type="QString" key="DisplayName">System LLDB at /bin/lldb</value>
    <value type="int" key="EngineType">256</value>
    <value type="QString" key="Id">{66871261-2497-4e8e-8824-91414c0a7c3f}</value>
-   <value type="QDateTime" key="LastModified">2022-06-25T13:44:39.000</value>
-   <value type="QString" key="Version">14.0.6</value>
+   <value type="QDateTime" key="LastModified">2023-01-13T01:05:25.000</value>
+   <value type="QString" key="Version">15.0.7</value>
    <value type="QString" key="WorkingDirectory"></value>
   </valuemap>
  </data>

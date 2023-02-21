@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProfiles>
-<!-- Written by QtCreator 9.0.1, 2022-12-06T21:42:26. -->
+<!-- Written by QtCreator 9.0.2, 2023-01-22T13:49:29. -->
 <qtcreator>
  <data>
   <variable>Kit.IrrelevantAspects</variable>
@@ -12,7 +12,7 @@
    <value type="bool" key="PE.Profile.AutoDetected">false</value>
    <value type="QString" key="PE.Profile.AutoDetectionSource"></value>
    <valuemap type="QVariantMap" key="PE.Profile.Data">
-    <value type="QString" key="CMake.AdditionalConfigurationParameters">-Wno-dev ''</value>
+    <value type="QString" key="CMake.AdditionalConfigurationParameters">-Wno-dev  -ESRGKPROJECT=RGK</value>
     <valuelist type="QVariantList" key="CMake.ConfigurationKitInformation">
      <value type="QString">CMAKE_CONFIGURATION_TYPES:INTERNAL=%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
@@ -24,7 +24,7 @@
      <value type="QString">CMAKE_INSTALL_PREFIX:STRING=/home/andrey/projects/tfs/install/unix/%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}</value>
      <value type="QString">QT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}</value>
-     <value type="QString">CMAKE_CXX_LINK_FLAGS:STRING='-ggnu-pubnames -Wl,--gdb-index,--compress-debug-sections=zlib-gabi</value>
+     <value type="QString">CMAKE_CXX_LINK_FLAGS:STRING='-ggnu-pubnames -Wl,--gdb-index,--compress-debug-sections=zlib-gabi'</value>
     </valuelist>
     <valuemap type="QVariantMap" key="CMake.GeneratorKitInformation">
      <value type="QString" key="ExtraGenerator">CodeBlocks</value>
@@ -38,6 +38,7 @@
     <value type="QString" key="PE.Profile.DeviceType">Desktop</value>
     <valuelist type="QVariantList" key="PE.Profile.Environment">
      <value type="QString">LD_LIBRARY_PATH=/opt/mesa210/lib/:/opt/qt/5.15.2/gcc_64/lib/./:/opt/qt/5.15.2/gcc_64/plugins/./iconengines/:/opt/qt/5.15.2/gcc_64/plugins/./imageformats/:/opt/qt/5.15.2/gcc_64/plugins/./platforms/:/opt/qt/5.15.2/gcc_64/plugins/./printsupport/:/opt/qt/5.15.2/gcc_64/./translations/:/opt/qt/5.15.2/gcc_64/plugins/./xcbglintegrations:%{ActiveProject:RunConfig:Executable:Path}:${LD_LIBRARY_PATH}POCO_ENABLE_DEBUGGER=true</value>
+     <value type="QString">SRGKPROJECT=RGK</value>
     </valuelist>
     <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
      <value type="QByteArray" key="C">{8ba14955-060a-4517-8834-138e0906e01a}</value>
@@ -103,7 +104,7 @@
    <value type="bool" key="PE.Profile.AutoDetected">false</value>
    <value type="QString" key="PE.Profile.AutoDetectionSource"></value>
    <valuemap type="QVariantMap" key="PE.Profile.Data">
-    <value type="QString" key="CMake.AdditionalConfigurationParameters"></value>
+    <value type="QString" key="CMake.AdditionalConfigurationParameters"> -ESRGKPROJECT=RGK</value>
     <valuelist type="QVariantList" key="CMake.ConfigurationKitInformation">
      <value type="QString">CMAKE_CONFIGURATION_TYPES:INTERNAL=%{CurrentBuild:Name}</value>
      <value type="QString">CMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
@@ -208,6 +209,8 @@
      <value type="QString">QT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}</value>
      <value type="QString">CMAKE_CXX_FLAGS:STRING=-B/usr/local/bin/mold/ -Wno-attributes -pipe</value>
      <value type="QString">CMAKE_CXX_LINK_FLAGS:STRING='-ggnu-pubnames -Wl,--gdb-index,--compress-debug-sections=zlib-gabi'</value>
+     <value type="QString">CMAKE_C_FLAGS:STRING=-B/usr/local/bin/mold/ -Wno-attributes -pipe</value>
+     <value type="QString">CMAKE_C_LINK_FLAGS:STRING='-ggnu-pubnames -Wl,--gdb-index,--compress-debug-sections=zlib-gabi'</value>
     </valuelist>
     <valuemap type="QVariantMap" key="CMake.GeneratorKitInformation">
      <value type="QString" key="ExtraGenerator">CodeBlocks</value>
@@ -220,7 +223,9 @@
     <value type="QString" key="PE.Profile.Device">Desktop Device</value>
     <value type="QString" key="PE.Profile.DeviceType">Desktop</value>
     <valuelist type="QVariantList" key="PE.Profile.Environment">
-     <value type="QString">LD_LIBRARY_PATH=/opt/mesa210/lib/:/opt/qt/5.15.2/gcc_64/lib/./:/opt/qt/5.15.2/gcc_64/plugins/./iconengines/:/opt/qt/5.15.2/gcc_64/plugins/./imageformats/:/opt/qt/5.15.2/gcc_64/plugins/./platforms/:/opt/qt/5.15.2/gcc_64/plugins/./printsupport/:/opt/qt/5.15.2/gcc_64/./translations/:/opt/qt/5.15.2/gcc_64/plugins/./xcbglintegrations:%{ActiveProject:RunConfig:Executable:Path}:${LD_LIBRARY_PATH}POCO_ENABLE_DEBUGGER=true</value>
+     <value type="QString">LD_LIBRARY_PATH=/opt/qt/5.15.2/gcc_64/lib/./:/opt/qt/5.15.2/gcc_64/plugins/./iconengines/:/opt/qt/5.15.2/gcc_64/plugins/./imageformats/:/opt/qt/5.15.2/gcc_64/plugins/./platforms/:/opt/qt/5.15.2/gcc_64/plugins/./printsupport/:/opt/qt/5.15.2/gcc_64/./translations/:/opt/qt/5.15.2/gcc_64/plugins/./xcbglintegrations:%{ActiveProject:RunConfig:Executable:Path}:${LD_LIBRARY_PATH}POCO_ENABLE_DEBUGGER=true</value>
+     <value type="QString">SRGKPROJECT=RGK</value>
+     <value type="QString">MESA_GL_VERSION_OVERRIDE=3.2COMPAT</value>
     </valuelist>
     <valuemap type="QVariantMap" key="PE.Profile.ToolChainsV3">
      <value type="QByteArray" key="C">{b50f9276-62be-497f-ba77-c6b7f2222504}</value>

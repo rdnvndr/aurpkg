@@ -1,0 +1,24 @@
+*** a/src/tools/perfparser/app/CMakeLists.txt	2023-02-23 13:11:26.806668375 +0300
+--- b/src/tools/perfparser/app/CMakeLists.txt	2023-02-22 00:12:19.276813730 +0300
+***************
+*** 31,40 ****
+      target_compile_definitions(perfparser_lib PUBLIC HAVE_ZSTD=1)
+  endif()
+  
+! if (HAVE_DWFL_GET_DEBUGINFOD_CLIENT)
+!     target_link_libraries(perfparser_lib PRIVATE elfutils::debuginfod)
+!     target_compile_definitions(perfparser_lib PRIVATE HAVE_DWFL_GET_DEBUGINFOD_CLIENT=1)
+! endif()
+  
+  add_qtc_executable(perfparser
+    DEPENDS
+--- 31,39 ----
+      target_compile_definitions(perfparser_lib PUBLIC HAVE_ZSTD=1)
+  endif()
+  
+! include(CheckSymbolExists)
+! set(CMAKE_REQUIRED_LIBRARIES elfutils::dw elfutils::elf)
+! check_symbol_exists(dwfl_get_debuginfod_client "libdwfl.h" HAVE_DWFL_GET_DEBUGINFOD_CLIENT)
+  
+  add_qtc_executable(perfparser
+    DEPENDS

@@ -48,7 +48,7 @@ prepare() {
   patch -d qt-creator -p1 < navigationwidget.patch
   patch -d qt-creator -p1 < breakpoint.patch
   patch -d qt-creator -p1 < attach.patch  
-  patch -d qt-creator -p1 < qtc10.patch  
+#  patch -d qt-creator -p1 < qtc10.patch  
 }
 
 build() {

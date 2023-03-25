@@ -1,33 +1,85 @@
-diff -cr old/qt/FileTreeDelegate.cc new/qt/FileTreeDelegate.cc
-*** old/qt/FileTreeDelegate.cc	2020-05-22 14:04:23.455805338 +0300
---- new/qt/FileTreeDelegate.cc	2020-05-23 13:46:45.355543618 +0300
+diff -cr a/qt/IconCache.cc b/qt/IconCache.cc
+*** a/qt/IconCache.cc	2023-02-22 22:12:15.000000000 +0300
+--- b/qt/IconCache.cc	2023-03-25 10:02:28.374231415 +0300
 ***************
-*** 8,13 ****
---- 8,14 ----
+*** 98,126 ****
   
-  #include <QApplication>
-  #include <QPainter>
-+ #include <QStyleFactory>
+          return icon;
+      }
+! 
+!     auto const mime_icon = getMimeTypeIcon(mime_type_name, false);
+!     for (auto const& size : { QSize(24, 24), QSize(32, 32), QSize(48, 48) })
+!     {
+!         // upper left corner
+!         auto const folder_size = size / 2;
+!         auto const folder_rect = QRect(QPoint(), folder_size);
+! 
+!         // fullsize
+!         auto const mime_size = size;
+!         auto const mime_rect = QRect(QPoint(), mime_size);
+! 
+!         // build the icon
+!         auto pixmap = QPixmap(size);
+!         pixmap.fill(Qt::transparent);
+!         QPainter painter(&pixmap);
+!         painter.setRenderHints(QPainter::SmoothPixmapTransform);
+!         painter.drawPixmap(folder_rect, folder_icon_.pixmap(folder_size));
+!         painter.drawPixmap(mime_rect, mime_icon.pixmap(mime_size));
+!         icon.addPixmap(pixmap);
+!     }
+! 
+!     return icon;
+  }
   
-  #include "FileTreeDelegate.h"
-  #include "FileTreeModel.h"
+  QIcon IconCache::getThemeIcon(QString const& name, std::optional<QStyle::StandardPixmap> const& fallback) const
+--- 98,105 ----
+  
+          return icon;
+      }
+!     
+!     return folder_icon_;
+  }
+  
+  QIcon IconCache::getThemeIcon(QString const& name, std::optional<QStyle::StandardPixmap> const& fallback) const
+diff -cr a/qt/Application.cc b/qt/Application.cc
+*** a/qt/Application.cc	2023-02-22 22:12:15.000000000 +0300
+--- b/qt/Application.cc	2023-03-25 09:32:10.190853355 +0300
 ***************
-*** 61,67 ****
-          p.textVisible = true;
-          p.progress = int(100.0 * index.data().toDouble());
-          p.text = QString::fromLatin1("%1%").arg(p.progress);
-!         style->drawControl(QStyle::CE_ProgressBar, &p, painter);
+*** 87,93 ****
       }
-      else if (column == FileTreeModel::COL_WANTED)
-      {
---- 62,68 ----
-          p.textVisible = true;
-          p.progress = int(100.0 * index.data().toDouble());
-          p.text = QString::fromLatin1("%1%").arg(p.progress);
-!         QStyleFactory::create(QString::fromLatin1 ("Fusion"))->drawControl(QStyle::CE_ProgressBar, &p, painter);
+  
+      // if that fails, use our own as the fallback
+!     return QIcon{ QStringLiteral(":/icons/transmission.svg") };
+  }
+  
+  } // namespace
+--- 87,93 ----
       }
-      else if (column == FileTreeModel::COL_WANTED)
-      {
+  
+      // if that fails, use our own as the fallback
+!     return QIcon{ QStringLiteral(":/icons/transmission.png") };
+  }
+  
+  } // namespace
+diff -cr a/qt/application.qrc b/qt/application.qrc
+*** a/qt/application.qrc	2023-02-22 22:12:15.000000000 +0300
+--- b/qt/application.qrc	2023-03-25 09:32:00.100853105 +0300
+***************
+*** 5,10 ****
+        <file alias="encrypted.svg">icons/lock.svg</file>
+        <file alias="hamburger-menu.svg">icons/hamburger-menu.svg</file>
+        <file alias="ratio.svg">icons/yin-yang.svg</file>
+!       <file alias="transmission.svg">icons/transmission.svg</file>
+    </qresource>
+  </RCC>
+--- 5,10 ----
+        <file alias="encrypted.svg">icons/lock.svg</file>
+        <file alias="hamburger-menu.svg">icons/hamburger-menu.svg</file>
+        <file alias="ratio.svg">icons/yin-yang.svg</file>
+!       <file alias="transmission.png">icons/transmission.png</file>
+    </qresource>
+  </RCC>
+
 diff -cr old/qt/MainWindow.ui new/qt/MainWindow.ui
 *** old/qt/MainWindow.ui	2020-05-22 14:04:23.456805346 +0300
 --- new/qt/MainWindow.ui	2020-05-23 13:43:50.759382125 +0300
@@ -67,66 +119,57 @@ diff -cr old/qt/MainWindow.ui new/qt/MainWindow.ui
      <addaction name="action_Pause"/>
      <addaction name="action_Remove"/>
 --- 312,317 ----
-diff -cr old/qt/TorrentDelegate.cc new/qt/TorrentDelegate.cc
-*** old/qt/TorrentDelegate.cc	2020-05-22 14:04:23.458805360 +0300
---- new/qt/TorrentDelegate.cc	2020-05-23 13:49:58.847048084 +0300
+diff -cr a/qt/StyleHelper.cc b/qt/StyleHelper.cc
+*** a/qt/StyleHelper.cc	2023-02-22 22:12:15.000000000 +0300
+--- b/qt/StyleHelper.cc	2023-03-25 09:17:13.364164620 +0300
 ***************
-*** 15,20 ****
---- 15,21 ----
-  #include <QPixmap>
-  #include <QPixmapCache>
+*** 5,10 ****
+--- 5,11 ----
+  
+  #include <QPainter>
   #include <QStyleOptionProgressBar>
 + #include <QStyleFactory>
   
-  #include "Formatter.h"
-  #include "Torrent.h"
-***************
-*** 295,301 ****
+  #include "StyleHelper.h"
   
+***************
+*** 36,41 ****
+      style.drawControl(QStyle::CE_ProgressBar, &my_option, &painter);
+      painter.restore();
+  #else
+!     style.drawControl(QStyle::CE_ProgressBar, &option, &painter);
+  #endif
+  }
+--- 37,42 ----
+      style.drawControl(QStyle::CE_ProgressBar, &my_option, &painter);
+      painter.restore();
+  #else
+!     QStyleFactory::create(QString::fromLatin1 ("Fusion"))->drawControl(QStyle::CE_ProgressBar, &option, &painter);
+  #endif
+  }
+diff -cr a/qt/TorrentDelegate.cc b/qt/TorrentDelegate.cc
+*** a/qt/TorrentDelegate.cc	2023-02-22 22:12:15.000000000 +0300
+--- b/qt/TorrentDelegate.cc	2023-03-25 09:20:42.924169772 +0300
+***************
+*** 302,308 ****
       case TR_STATUS_DOWNLOAD:
       case TR_STATUS_SEED:
-!         str = shortTransferString(tor) + QLatin1String("    ") + tr("Ratio: %1").arg(Formatter::ratioToString(tor.ratio()));
+          str = shortTransferString(tor) + QStringLiteral("    ") +
+!             tr("Ratio: %1").arg(Formatter::get().ratioToString(tor.ratio()));
           break;
   
       default:
---- 295,301 ----
-  
+--- 302,308 ----
       case TR_STATUS_DOWNLOAD:
       case TR_STATUS_SEED:
-!         str = shortTransferString(tor) + QLatin1String("    ") + tr("%1").arg(Formatter::ratioToString(tor.ratio()));
+          str = shortTransferString(tor) + QStringLiteral("    ") +
+!             tr("%1").arg(Formatter::get().ratioToString(tor.ratio()));
           break;
   
       default:
-***************
-*** 603,609 ****
-      myProgressBarStyle->state = progressBarState;
-      setProgressBarPercentDone(option, tor);
-  
-!     style->drawControl(QStyle::CE_ProgressBar, myProgressBarStyle, painter);
-  
-      painter->restore();
-  }
---- 604,610 ----
-      myProgressBarStyle->state = progressBarState;
-      setProgressBarPercentDone(option, tor);
-  
-!     QStyleFactory::create(QString::fromLatin1 ("Fusion"))->drawControl (QStyle::CE_ProgressBar, myProgressBarStyle, painter);
-  
-      painter->restore();
-  }
-diff -cr old/qt/TorrentDelegateMin.cc new/qt/TorrentDelegateMin.cc
-*** old/qt/TorrentDelegateMin.cc	2020-05-22 14:04:23.458805360 +0300
---- new/qt/TorrentDelegateMin.cc	2020-05-23 13:52:05.541527662 +0300
-***************
-*** 18,23 ****
---- 18,24 ----
-  #include <QPixmap>
-  #include <QPixmapCache>
-  #include <QStyleOptionProgressBar>
-+ #include <QStyleFactory>
-  
-  #include <libtransmission/transmission.h>
-  #include <libtransmission/utils.h>
+diff -cr a/qt/TorrentDelegateMin.cc b/qt/TorrentDelegateMin.cc
+*** a/qt/TorrentDelegateMin.cc	2023-02-22 22:12:15.000000000 +0300
+--- b/qt/TorrentDelegateMin.cc	2023-03-25 09:22:02.987505067 +0300
 ***************
 *** 30,36 ****
   enum
@@ -136,7 +179,7 @@ diff -cr old/qt/TorrentDelegateMin.cc new/qt/TorrentDelegateMin.cc
       BAR_HEIGHT = 16,
       LINE_SPACING = 4
   };
---- 31,37 ----
+--- 30,36 ----
   enum
   {
       GUI_PAD = 6,
@@ -145,29 +188,12 @@ diff -cr old/qt/TorrentDelegateMin.cc new/qt/TorrentDelegateMin.cc
       LINE_SPACING = 4
   };
 ***************
-*** 101,107 ****
-      QFontMetrics const nameFM(nameFont);
-      QSize const nameSize(nameFM.size(0, myNameText));
+*** 111,117 ****
+      auto const name_fm = QFontMetrics(name_font);
+      auto const name_size = name_fm.size(0, name_text_);
   
--     statusFont.setPointSize(static_cast<int>(statusFont.pointSize() * 0.85));
-      QFontMetrics const statusFM(statusFont);
-      QSize const statusSize(statusFM.size(0, myStatusText));
+-     status_font.setPointSize(static_cast<int>(status_font.pointSize() * 0.85));
+      QFontMetrics const status_fm(status_font);
+      QSize const status_size(status_fm.size(0, status_text_));
   
---- 102,107 ----
-***************
-*** 276,282 ****
-      myProgressBarStyle->textVisible = true;
-      myProgressBarStyle->textAlignment = Qt::AlignCenter;
-      setProgressBarPercentDone(option, tor);
-!     style->drawControl(QStyle::CE_ProgressBar, myProgressBarStyle, painter);
-  
-      painter->restore();
-  }
---- 276,282 ----
-      myProgressBarStyle->textVisible = true;
-      myProgressBarStyle->textAlignment = Qt::AlignCenter;
-      setProgressBarPercentDone(option, tor);
-!     QStyleFactory::create(QString::fromLatin1 ("Fusion"))->drawControl (QStyle::CE_ProgressBar, myProgressBarStyle, painter);
-  
-      painter->restore();
-  }
+--- 111,116 ----

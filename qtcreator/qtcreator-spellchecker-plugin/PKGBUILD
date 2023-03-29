@@ -1,7 +1,7 @@
 pkgname=qtcreator-spellchecker-plugin
 pkgver=3.2.0
 _commit=10485a7
-pkgrel=1
+pkgrel=2
 pkgdesc="Spell Checker plugin for the Qt Creator IDE"
 groups=('qt' 'qt6')
 arch=('i686' 'x86_64')
@@ -18,6 +18,8 @@ build() {
 
     cd "${srcdir}/${pkgname}"
     git checkout ${_commit}
+    
+    patch -p1 -i $startdir/qtc10.patch
     
     cmake -B build -DCMAKE_INSTALL_PREFIX=/usr
     cmake --build build

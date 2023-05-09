@@ -57,22 +57,22 @@
 *** old/chrome/browser/ui/views/chrome_typography.cc	2019-02-07 01:06:38.000000000 +0300
 --- new/chrome/browser/ui/views/chrome_typography.cc	2019-02-09 13:55:13.339947057 +0300
 ***************
-*** 75,81 ****
-        const int omnibox_primary_delta =
-            GetFontSizeDeltaBoundedByAvailableHeight(
-                LocationBarView::GetAvailableTextHeight(),
-!               ui::TouchUiController::Get()->touch_ui() ? 15 : 14);
-        details.size_delta = omnibox_primary_delta;
-        if (context == CONTEXT_OMNIBOX_DEEMPHASIZED) {
-          --details.size_delta;
---- 75,81 ----
-        const int omnibox_primary_delta =
-            GetFontSizeDeltaBoundedByAvailableHeight(
-                LocationBarView::GetAvailableTextHeight(),
-!               ui::TouchUiController::Get()->touch_ui() ? 13 : 13);
-        details.size_delta = omnibox_primary_delta;
-        if (context == CONTEXT_OMNIBOX_DEEMPHASIZED) {
-          --details.size_delta;
+*** 80,86 ****
+        const bool use_gm3_text_style =
+            OmniboxFieldTrial::IsGM3TextStyleEnabled();
+  
+!       int desired_font_size = is_touch_ui ? 15 : 14;
+        if (use_gm3_text_style) {
+          desired_font_size = is_touch_ui
+                                  ? OmniboxFieldTrial::kFontSizeTouchUI.Get()
+--- 80,86 ----
+        const bool use_gm3_text_style =
+            OmniboxFieldTrial::IsGM3TextStyleEnabled();
+  
+!       int desired_font_size = is_touch_ui ? 13 : 13;
+        if (use_gm3_text_style) {
+          desired_font_size = is_touch_ui
+                                  ? OmniboxFieldTrial::kFontSizeTouchUI.Get()
 *** old/chrome/browser/ui/views/tabs/new_tab_button.cc	2019-02-07 01:06:38.000000000 +0300
 --- new/chrome/browser/ui/views/tabs/new_tab_button.cc	2019-02-10 12:05:03.598842169 +0300
 ***************

@@ -1,6 +1,6 @@
 pkgbase=perf
 pkgname=perf
-pkgver=6.1
+pkgver=6.3
 pkgrel=1
 pkgdesc='Linux kernel performance auditing tool'
 arch=(x86_64)

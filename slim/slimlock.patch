@@ -1,0 +1,65 @@
+*** a/slimlock.cpp	2022-10-17 09:06:22.283348063 +0300
+--- b/slimlock.cpp	2022-10-17 08:57:39.753376728 +0300
+***************
+*** 18,23 ****
+--- 18,24 ----
+  #include <X11/Xlib.h>
+  #include <X11/Xutil.h>
+  #include <X11/extensions/dpms.h>
++ #include <X11/XKBlib.h>
+  #include <security/pam_appl.h>
+  #include <pthread.h>
+  #include <err.h>
+***************
+*** 77,84 ****
+--- 78,88 ----
+  
+  int main(int argc, char **argv)
+  {
++     bool is_dpms = true;
+  	if((argc == 2) && !strcmp("-v", argv[1]))
+  		die ( APPNAME "-" VERSION ", © 2010-2012 Joel Burget\nUpdates © 2022-2023 Rob Pearce\n" );
++ 	else if((argc == 2) && !strcmp("-dpms", argv[1]))
++         is_dpms = false;
+  	else if(argc != 1)
+  		die ( "usage: " APPNAME " [-v]\n" );
+  
+***************
+*** 209,215 ****
+  	unsigned int cfg_dpms_standby, cfg_dpms_off;
+  	cfg_dpms_standby = Cfg::string2int(cfg->getOption("dpms_standby_timeout").c_str());
+  	cfg_dpms_off = Cfg::string2int(cfg->getOption("dpms_off_timeout").c_str());
+! 	using_dpms = DPMSCapable(Dpy) && (cfg_dpms_standby > 0);
+  	if (using_dpms) {
+  		DPMSGetTimeouts(Dpy, &dpms_standby, &dpms_suspend, &dpms_off);
+  
+--- 213,219 ----
+  	unsigned int cfg_dpms_standby, cfg_dpms_off;
+  	cfg_dpms_standby = Cfg::string2int(cfg->getOption("dpms_standby_timeout").c_str());
+  	cfg_dpms_off = Cfg::string2int(cfg->getOption("dpms_off_timeout").c_str());
+! 	using_dpms = is_dpms && DPMSCapable(Dpy) && (cfg_dpms_standby > 0);
+  	if (using_dpms) {
+  		DPMSGetTimeouts(Dpy, &dpms_standby, &dpms_suspend, &dpms_off);
+  
+***************
+*** 220,225 ****
+--- 224,230 ----
+  		if (!dpms_state)
+  			DPMSEnable(Dpy);
+  	}
++ 	XkbLockGroup(Dpy, XkbUseCoreKbd, 0);
+  
+  	// Get password timeout
+  	cfg_passwd_timeout = Cfg::string2int(cfg->getOption("wrong_passwd_timeout").c_str());
+***************
+*** 228,233 ****
+--- 233,241 ----
+  
+  	pthread_t raise_thread;
+  	pthread_create(&raise_thread, NULL, RaiseWindow, NULL);
++ 	
++ 	if (fork())
++        return 0;
+  
+  #if 0	// The DM code does this:
+  			/* Init Root */

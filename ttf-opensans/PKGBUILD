@@ -4,8 +4,8 @@
 # Contributor: Hexchain Tong <i@hexchain.org>
 
 pkgname=ttf-opensans
-pkgver=1.101
-pkgrel=3
+pkgver=3.001
+pkgrel=1
 pkgdesc='Sans-serif typeface commissioned by Google'
 arch=('any')
 url='https://fonts.google.com/specimen/Open+Sans'
@@ -14,6 +14,11 @@ license=('Apache')
 source=("https://github.com/googlefonts/opensans/archive/refs/heads/main.zip")
 
 sha256sums=('SKIP')
+
+pkgver() {
+  cd opensans-main/fonts/ttf
+  fc-query -f '%{fontversion}\n' OpenSans-Regular.ttf | perl -E 'printf "%.3f\n", <>/65536.0'
+}
 
 package() {
   cd opensans-main/fonts/ttf

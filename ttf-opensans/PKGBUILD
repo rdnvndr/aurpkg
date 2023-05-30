@@ -20,6 +20,8 @@ pkgver() {
   fc-query -f '%{fontversion}\n' OpenSans-Regular.ttf | perl -E 'printf "%.3f\n", <>/65536.0'
 }
 
+groups=('modified')
+
 package() {
   cd opensans-main/fonts/ttf
   install -dm 755 "${pkgdir}/usr/share/fonts/TTF"

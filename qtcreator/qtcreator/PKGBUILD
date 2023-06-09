@@ -29,8 +29,10 @@ source=("QTCREATORBUG-21681.patch"
         "navigationwidget.patch"
         "breakpoint.patch"
         "attach.patch"
-        "perf.patch")
+        "perf.patch"
+        "doxygen.patch")
 sha256sums=(SKIP
+            SKIP
             SKIP
             SKIP
             SKIP
@@ -49,6 +51,7 @@ prepare() {
   patch -d qt-creator -p1 < breakpoint.patch
   patch -d qt-creator -p1 < attach.patch  
   patch -d qt-creator -p1 < perf.patch  
+  patch -d qt-creator -p1 < doxygen.patch
 }
 
 build() {

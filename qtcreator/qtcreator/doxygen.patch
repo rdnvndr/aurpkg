@@ -1,0 +1,72 @@
+diff --git a/src/plugins/cppeditor/cppeditorwidget.cpp b/src/plugins/cppeditor/cppeditorwidget.cpp
+index 0430f210..e2c6ae94 100644
+--- a/src/plugins/cppeditor/cppeditorwidget.cpp
++++ b/src/plugins/cppeditor/cppeditorwidget.cpp
+@@ -362,6 +362,7 @@ static bool trySplitComment(TextEditor::TextEditorWidget *editorWidget,
+                     return true;
+                 }
+                 cursor.setPosition(pos);
++                return true;
+             }
+         }
+     } // right after first doxygen comment
+diff --git a/src/plugins/cppeditor/doxygengenerator.cpp b/src/plugins/cppeditor/doxygengenerator.cpp
+index 24cfba4a..7bccf4a2 100644
+--- a/src/plugins/cppeditor/doxygengenerator.cpp
++++ b/src/plugins/cppeditor/doxygengenerator.cpp
+@@ -143,18 +143,23 @@ QString DoxygenGenerator::generate(QTextCursor cursor, DeclarationAST *decl)
+     QString comment;
+     if (m_startComment)
+         writeStart(&comment);
+-    writeNewLine(&comment);
+-    writeContinuation(&comment);
++    
++    if (m_style != CppStyleA) {
++        writeNewLine(&comment);
++        writeContinuation(&comment);
++    }
+ 
+     if (decltr
+             && decltr->core_declarator
+             && decltr->core_declarator->asDeclaratorId()
+             && decltr->core_declarator->asDeclaratorId()->name) {
+         CoreDeclaratorAST *coreDecl = decltr->core_declarator;
+-        if (m_generateBrief)
++        if (m_generateBrief) {
+             writeBrief(&comment, m_printer.prettyName(coreDecl->asDeclaratorId()->name->name));
+-        else
++        } else {
++            comment.append(' ');
+             writeNewLine(&comment);
++        }
+ 
+         if (decltr->postfix_declarator_list
+                 && decltr->postfix_declarator_list->value
+@@ -218,7 +223,8 @@ QString DoxygenGenerator::generate(QTextCursor cursor, DeclarationAST *decl)
+         if (!briefWritten)
+             writeNewLine(&comment);
+     } else {
+-        writeNewLine(&comment);
++        if (m_style != CppStyleA)
++            writeNewLine(&comment);
+     }
+ 
+     writeEnd(&comment);
+@@ -235,7 +241,7 @@ QChar DoxygenGenerator::startMark() const
+ 
+ QChar DoxygenGenerator::styleMark() const
+ {
+-    if (m_style == QtStyle || m_style == CppStyleA || m_style == CppStyleB)
++    if (m_style == QtStyle || m_style == CppStyleB)
+         return QLatin1Char('\\');
+     return QLatin1Char('@');
+ }
+@@ -264,7 +270,7 @@ void DoxygenGenerator::writeStart(QString *comment) const
+ void DoxygenGenerator::writeEnd(QString *comment) const
+ {
+     if (m_style == CppStyleA)
+-        comment->append(QLatin1String("///"));
++        comment->chop(1);
+     else if (m_style == CppStyleB)
+         comment->append(QLatin1String("//!"));
+     else

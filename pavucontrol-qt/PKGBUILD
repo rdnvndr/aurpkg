@@ -9,14 +9,16 @@ arch=("x86_64")
 groups=("lxqt")
 url="https://github.com/lxqt/$pkgname"
 license=("GPL2")
-depends=("pulseaudio" "qt5-base")
+depends=("pulseaudio" "qt6-base")
 makedepends=("lxqt-build-tools")
 source=(
 	"https://github.com/lxqt/$pkgname/releases/download/$pkgver/$pkgname-$pkgver.tar.xz"
 	"https://github.com/lxqt/$pkgname/releases/download/$pkgver/$pkgname-$pkgver.tar.xz.asc"
 	"window.patch"
+	"qt6.patch"
 )
 sha256sums=('ac72c74ba35b2f7b023b6dcc5a50472bbe17584e1c858d139383d380d3d79d2a'
+            'SKIP'
             'SKIP'
             'SKIP')
 validpgpkeys=(
@@ -28,6 +30,7 @@ validpgpkeys=(
 prepare() {
   cd $srcdir
   patch -d $pkgname-$pkgver -p1 < window.patch
+  patch -d $pkgname-$pkgver -p1 < qt6.patch
 }
 
 

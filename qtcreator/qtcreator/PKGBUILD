@@ -1,6 +1,6 @@
 pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
-pkgver=10.0.2
+pkgver=11.0.0
 _clangver=15.0.7
 pkgrel=1
 pkgdesc='Lightweight, cross-platform integrated development environment'
@@ -30,8 +30,10 @@ source=("QTCREATORBUG-21681.patch"
         "breakpoint.patch"
         "attach.patch"
         "perf.patch"
-        "doxygen.patch")
+        "doxygen.patch"
+        "smallstring.patch")
 sha256sums=(SKIP
+            SKIP
             SKIP
             SKIP
             SKIP
@@ -43,7 +45,7 @@ groups=('modified')
 
 prepare() {
   cd $srcdir
-  git clone --branch 10.0 --depth 1 --recurse-submodules git@github.com:qt-creator/qt-creator.git
+  git clone --branch 11.0 --depth 1 --recurse-submodules git@github.com:qt-creator/qt-creator.git
   rm -r qt-creator/src/libs/qlitehtml/src/3rdparty
   patch -d qt-creator -p1 < QTCREATORBUG-21681.patch
   patch -d qt-creator -p1 < projectmodels.patch
@@ -52,6 +54,7 @@ prepare() {
   patch -d qt-creator -p1 < attach.patch  
   patch -d qt-creator -p1 < perf.patch  
   patch -d qt-creator -p1 < doxygen.patch
+  patch -d qt-creator -p1 < smallstring.patch
 }
 
 build() {

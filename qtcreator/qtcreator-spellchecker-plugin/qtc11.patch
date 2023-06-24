@@ -1,0 +1,144 @@
+diff --git a/src/Parsers/CppParser/cppdocumentparser.cpp b/src/Parsers/CppParser/cppdocumentparser.cpp
+index d88fa9ac..26382438 100644
+--- a/src/Parsers/CppParser/cppdocumentparser.cpp
++++ b/src/Parsers/CppParser/cppdocumentparser.cpp
+@@ -37,7 +37,7 @@
+ #include <cppeditor/cppmodelmanager.h>
+ #include <cppeditor/cpptoolsreuse.h>
+ #include <projectexplorer/project.h>
+-#include <projectexplorer/session.h>
++#include <projectexplorer/projectmanager.h>
+ #include <texteditor/syntaxhighlighter.h>
+ #include <texteditor/texteditor.h>
+ #include <utils/algorithm.h>
+diff --git a/src/Parsers/CppParser/cppparseroptionspage.cpp b/src/Parsers/CppParser/cppparseroptionspage.cpp
+index 0537df12..567a14da 100644
+--- a/src/Parsers/CppParser/cppparseroptionspage.cpp
++++ b/src/Parsers/CppParser/cppparseroptionspage.cpp
+@@ -1,4 +1,4 @@
+-/**************************************************************************
++﻿/**************************************************************************
+ **
+ ** Copyright (c) 2014 Carel Combrink
+ **
+@@ -25,13 +25,13 @@
+ using namespace SpellChecker::CppSpellChecker::Internal;
+ 
+ CppParserOptionsPage::CppParserOptionsPage( CppParserSettings* settings, QObject* parent )
+-  : Core::IOptionsPage( parent )
++  : Core::IOptionsPage()
+   , m_settings( settings )
+ {
+   setId( "SpellChecker::CppDocumentParserSettings" );
+-  setDisplayName( tr( "C++ Parser" ) );
++  setDisplayName( QObject::tr( "C++ Parser" ) );
+   setCategory( "SpellChecker" );
+-  setDisplayCategory( tr( "Spell Checker" ) );
++  setDisplayCategory( QObject::tr( "Spell Checker" ) );
+ }
+ // --------------------------------------------------
+ 
+diff --git a/src/Parsers/CppParser/cppparseroptionspage.h b/src/Parsers/CppParser/cppparseroptionspage.h
+index a1d13996..b54de8f7 100644
+--- a/src/Parsers/CppParser/cppparseroptionspage.h
++++ b/src/Parsers/CppParser/cppparseroptionspage.h
+@@ -1,4 +1,4 @@
+-/**************************************************************************
++﻿/**************************************************************************
+ **
+ ** Copyright (c) 2014 Carel Combrink
+ **
+@@ -34,7 +34,6 @@ class CppParserOptionsWidget;
+ class CppParserOptionsPage
+   : public Core::IOptionsPage
+ {
+-  Q_OBJECT
+ public:
+   CppParserOptionsPage( CppParserSettings* settings, QObject* parent = 0 );
+   virtual ~CppParserOptionsPage();
+@@ -44,9 +43,6 @@ public:
+   void apply();
+   void finish();
+ 
+-signals:
+-
+-public slots:
+ private:
+   CppParserSettings* const m_settings;
+   QPointer<CppParserOptionsWidget> m_widget;
+diff --git a/src/spellcheckercore.cpp b/src/spellcheckercore.cpp
+index 609fe233..2dc0f15d 100644
+--- a/src/spellcheckercore.cpp
++++ b/src/spellcheckercore.cpp
+@@ -31,7 +31,7 @@
+ 
+ #include <coreplugin/icore.h>
+ #include <projectexplorer/projectexplorer.h>
+-#include <projectexplorer/session.h>
++#include <projectexplorer/projectmanager.h>
+ 
+ #include <coreplugin/actionmanager/actioncontainer.h>
+ #include <coreplugin/actionmanager/actionmanager.h>
+@@ -128,7 +128,7 @@ SpellCheckerCore::SpellCheckerCore( QObject* parent )
+   connect( editorManager, &Core::EditorManager::editorOpened,         this, &SpellCheckerCore::editorOpened );
+   connect( editorManager, &Core::EditorManager::editorAboutToClose,   this, &SpellCheckerCore::editorAboutToClose );
+ 
+-  connect( ProjectExplorer::SessionManager::instance(),        &ProjectExplorer::SessionManager::startupProjectChanged,  this, &SpellCheckerCore::startupProjectChanged );
++  connect( ProjectExplorer::ProjectManager::instance(),        &ProjectExplorer::ProjectManager::startupProjectChanged,  this, &SpellCheckerCore::startupProjectChanged );
+   connect( ProjectExplorer::ProjectExplorerPlugin::instance(), &ProjectExplorer::ProjectExplorerPlugin::fileListChanged, this, &SpellCheckerCore::fileListChanged );
+ 
+   d->contextMenu = Core::ActionManager::createMenu( Constants::CONTEXT_MENU_ID );
+@@ -471,7 +471,7 @@ void SpellCheckerCore::aboutToQuit()
+ {
+   /* Disconnect from everything that can send signals to this object */
+   Core::EditorManager::instance()->disconnect( this );
+-  ProjectExplorer::SessionManager::instance()->disconnect( this );
++  ProjectExplorer::ProjectManager::instance()->disconnect( this );
+   ProjectExplorer::ProjectExplorerPlugin::instance()->disconnect( this );
+   d->shuttingDown   = true;
+   d->startupProject = nullptr;
+diff --git a/src/spellcheckercoreoptionspage.cpp b/src/spellcheckercoreoptionspage.cpp
+index 5b92ba70..92baa4b2 100644
+--- a/src/spellcheckercoreoptionspage.cpp
++++ b/src/spellcheckercoreoptionspage.cpp
+@@ -1,4 +1,4 @@
+-/**************************************************************************
++﻿/**************************************************************************
+ **
+ ** Copyright (c) 2014 Carel Combrink
+ **
+@@ -26,13 +26,13 @@
+ using namespace SpellChecker::Internal;
+ 
+ SpellCheckerCoreOptionsPage::SpellCheckerCoreOptionsPage( SpellCheckerCoreSettings* settings, QObject* parent )
+-  : Core::IOptionsPage( parent )
++  : Core::IOptionsPage()
+   , m_settings( settings )
+ {
+   setId( "SpellChecker::CoreSettings" );
+-  setDisplayName( tr( "SpellChecker" ) );
++  setDisplayName( QObject::tr( "SpellChecker" ) );
+   setCategory( "SpellChecker" );
+-  setDisplayCategory( tr( "Spell Checker" ) );
++  setDisplayCategory( QObject::tr( "Spell Checker" ) );
+   setCategoryIconPath( ":/spellcheckerplugin/images/optionspageicon_solid.png" );
+ }
+ // --------------------------------------------------
+diff --git a/src/spellcheckercoreoptionspage.h b/src/spellcheckercoreoptionspage.h
+index 160dbe17..754d93be 100644
+--- a/src/spellcheckercoreoptionspage.h
++++ b/src/spellcheckercoreoptionspage.h
+@@ -1,4 +1,4 @@
+-/**************************************************************************
++﻿/**************************************************************************
+ **
+ ** Copyright (c) 2014 Carel Combrink
+ **
+@@ -33,7 +33,6 @@ class SpellCheckerCoreOptionsWidget;
+ class SpellCheckerCoreOptionsPage
+   : public Core::IOptionsPage
+ {
+-  Q_OBJECT
+ public:
+   SpellCheckerCoreOptionsPage( SpellCheckerCoreSettings* settings, QObject* parent = 0 );
+   virtual ~SpellCheckerCoreOptionsPage();

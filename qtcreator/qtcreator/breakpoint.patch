@@ -123,8 +123,8 @@ diff -cr a/src/plugins/debugger/debuggerplugin.cpp b/src/plugins/debugger/debugg
 +         } else {
 +             //: Message tracepoint: %1 file, %2 line %3 function hit.
 +             message = tr("%1:%2 %3() hit").arg(location.fileName.fileName()).
-+                     arg(location.lineNumber).
-+                     arg(cppFunctionAt(location.fileName, location.lineNumber));
++                     arg(location.textPosition.line).
++                     arg(cppFunctionAt(location.fileName, location.textPosition.line));
 +         }
 +         QInputDialog dialog; // Create wide input dialog.
 +         dialog.setWindowFlags(dialog.windowFlags()

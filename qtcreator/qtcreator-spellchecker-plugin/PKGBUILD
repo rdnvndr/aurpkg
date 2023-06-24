@@ -9,14 +9,16 @@ url="https://github.com/CJCombrink/SpellChecker-Plugin"
 license=('GPL3')
 depends=('qtcreator' 'hunspell')
 makedepends=('git' 'qtcreator-devel')
-source=("$pkgname"::git+https://github.com/CJCombrink/SpellChecker-Plugin.git)
-sha256sums=('SKIP')
+source=("$pkgname"::git+https://github.com/CJCombrink/SpellChecker-Plugin.git
+        "qtc11.patch")
+sha256sums=('SKIP' 'SKIP')
 
 build() {
     mkdir -p "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/"
 
     cd "${srcdir}/${pkgname}"
     git checkout ${_commit}
+    patch -p1 < ../qtc11.patch
     
     cmake -B build -DCMAKE_INSTALL_PREFIX=/usr
     cmake --build build

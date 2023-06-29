@@ -1,26 +1,26 @@
 *** old/chrome/browser/ui/layout_constants.cc	2019-02-07 01:06:38.000000000 +0300
 --- new/chrome/browser/ui/layout_constants.cc	2019-02-11 00:59:36.133485914 +0300
 ***************
-*** 44,50 ****
+*** 34,40 ****
       case WEB_APP_PAGE_ACTION_ICON_SIZE:
         // We must limit the size of icons in the title bar to avoid vertically
         // stretching the container view.
 !       return 16;
       case LOCATION_BAR_BUBBLE_FONT_VERTICAL_PADDING:
         return 2;
-      case LOCATION_BAR_BUBBLE_CORNER_RADIUS:
---- 44,50 ----
+      case LOCATION_BAR_BUBBLE_ANCHOR_VERTICAL_INSET:
+--- 34,40 ----
       case WEB_APP_PAGE_ACTION_ICON_SIZE:
         // We must limit the size of icons in the title bar to avoid vertically
         // stretching the container view.
 !       return 0;
       case LOCATION_BAR_BUBBLE_FONT_VERTICAL_PADDING:
         return 2;
-      case LOCATION_BAR_BUBBLE_CORNER_RADIUS:
+      case LOCATION_BAR_BUBBLE_ANCHOR_VERTICAL_INSET:
 ***************
-*** 63,79 ****
-      case LOCATION_BAR_ICON_SIZE:
-        return touch_ui ? 20 : 16;
+*** 66,87 ****
+                   ? 20
+                   : GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
       case TAB_AFTER_TITLE_PADDING:
 !       return touch_ui ? 8 : 4;
       case TAB_ALERT_INDICATOR_CAPTURE_ICON_WIDTH:
@@ -28,6 +28,11 @@
       case TAB_ALERT_INDICATOR_ICON_WIDTH:
 !       return touch_ui ? 12 : 16;
       case TAB_HEIGHT:
+  #if BUILDFLAG(IS_CHROMEOS)
+        if (chromeos::features::IsJellyrollEnabled()) {
+          return 34 + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
+        }
+  #endif  // IS_CHROMEOS
 !       return (touch_ui ? 41 : 34) + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
       case TAB_PRE_TITLE_PADDING:
         return 8;
@@ -36,9 +41,9 @@
       case TABSTRIP_REGION_VIEW_CONTROL_PADDING:
         return 8;
       case TABSTRIP_TOOLBAR_OVERLAP:
---- 63,79 ----
-      case LOCATION_BAR_ICON_SIZE:
-        return touch_ui ? 20 : 16;
+--- 66,87 ----
+                   ? 20
+                   : GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
       case TAB_AFTER_TITLE_PADDING:
 !       return touch_ui ? 8 : 0;
       case TAB_ALERT_INDICATOR_CAPTURE_ICON_WIDTH:
@@ -46,6 +51,11 @@
       case TAB_ALERT_INDICATOR_ICON_WIDTH:
 !       return touch_ui ? 12 : 0;
       case TAB_HEIGHT:
+  #if BUILDFLAG(IS_CHROMEOS)
+        if (chromeos::features::IsJellyrollEnabled()) {
+          return 34 + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
+        }
+  #endif  // IS_CHROMEOS
 !       return (touch_ui ? 24 : 24) + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
       case TAB_PRE_TITLE_PADDING:
         return 8;

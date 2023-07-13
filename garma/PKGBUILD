@@ -1,0 +1,40 @@
+# Maintainer: Thomas Lübking <thomas.luebking at gmail>
+
+pkgname=qarma-git
+pkgrel=1
+pkgver=3004c986
+pkgdesc="A drop-in replacement clone for zenity, written in Qt5/6"
+arch=('i686' 'x86_64')
+url="https://github.com/luebking/qarma"
+license=('GPL')
+depends=('qt6-base')
+makedepends=('git' 'gcc')
+
+pkgver() {
+	cd $srcdir/qarma
+
+	#git describe --long | sed -E 's/^v//;s/([^-]*-g)/r\1/;s/-/./g;s/\.rc/rc/'
+	#echo $(echo ${_pkgver}. && git rev-parse --short HEAD) | sed -E 's/^v//;s/([^-]*-g)/r\1/;s/-/./g;s/\.rc/rc/;s/ //g'
+	git show -s --format=%h
+}
+
+prepare() {
+  cd $srcdir
+  git clone --depth 1 https://github.com/luebking/qarma.git
+}
+
+build()
+{
+    cd $srcdir/qarma
+    qmake6 qarma.pro
+    make
+}
+
+package()
+{
+    cd $srcdir/qarma
+    install -Dm755 qarma -t "$pkgdir/usr/bin"
+    ln -s /usr/bin/qarma "$pkgdir/usr/bin/qarma-askpass"
+}
+
+# vim:set ts=2 sw=2 et:

@@ -96,3 +96,22 @@
   	gtk_selection_data_set(selection_data, selection_data->target,
   			       8, (guchar *)uri_text, total);
 --- 136,141 ----
+*** old/src/thumb_standard.h   2005-01-06 04:08:55.000000000 +0300
+--- new/src/thumb_standard.h   2023-07-21 21:25:14.700015048 +0300
+***************
+*** 14,20 ****
+  #define THUMB_STANDARD_H
+  
+  
+! #define THUMB_FOLDER        ".thumbnails"
+  #define THUMB_FOLDER_NORMAL "normal"
+  #define THUMB_FOLDER_LARGE  "large"
+  #define THUMB_FOLDER_FAIL   "fail/gqview-1.0"
+--- 14,20 ----
+  #define THUMB_STANDARD_H
+  
+  
+! #define THUMB_FOLDER        ".config/gqview/thumb_folder"
+  #define THUMB_FOLDER_NORMAL "normal"
+  #define THUMB_FOLDER_LARGE  "large"
+  #define THUMB_FOLDER_FAIL   "fail/gqview-1.0"

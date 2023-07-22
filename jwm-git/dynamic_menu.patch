@@ -1,12 +1,13 @@
 diff --git a/src/root.c b/src/root.c
-index b381982e..5df85ac3 100644
+index b381982e..204c06c1 100644
 --- a/src/root.c
 +++ b/src/root.c
-@@ -192,6 +192,7 @@ char ShowRootMenu(int index, int x, int y, char keyboard)
-       Menu *menu = rootMenu[index];
+@@ -193,6 +193,7 @@ char ShowRootMenu(int index, int x, int y, char keyboard)
        menu = ParseDynamicMenu(menu->timeout_ms, menu->dynamic);
        if(menu) {
-+         menu->itemHeight = 14;
           InitializeMenu(menu);
++         menu->itemHeight = rootMenu[index]->itemHeight;
           ShowMenu(menu, RunRootCommand, x, y, keyboard);
           DestroyMenu(menu);
+          return 1;
+

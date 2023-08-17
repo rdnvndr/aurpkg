@@ -1,0 +1,128 @@
+*** old/chrome/browser/ui/layout_constants.cc	2019-02-07 01:06:38.000000000 +0300
+--- new/chrome/browser/ui/layout_constants.cc	2019-02-11 00:59:36.133485914 +0300
+***************
+*** 42,48 ****
+      case WEB_APP_PAGE_ACTION_ICON_SIZE:
+        // We must limit the size of icons in the title bar to avoid vertically
+        // stretching the container view.
+!       return 16;
+      case LOCATION_BAR_BUBBLE_FONT_VERTICAL_PADDING:
+        return 2;
+      case LOCATION_BAR_BUBBLE_ANCHOR_VERTICAL_INSET:
+--- 42,48 ----
+      case WEB_APP_PAGE_ACTION_ICON_SIZE:
+        // We must limit the size of icons in the title bar to avoid vertically
+        // stretching the container view.
+!       return 0;
+      case LOCATION_BAR_BUBBLE_FONT_VERTICAL_PADDING:
+        return 2;
+      case LOCATION_BAR_BUBBLE_ANCHOR_VERTICAL_INSET:
+***************
+*** 66,74 ****
+        if (base::FeatureList::IsEnabled(omnibox::kOmniboxSteadyStateHeight) ||
+            features::GetChromeRefresh2023Level() ==
+                features::ChromeRefresh2023Level::kLevel2) {
+!         return touch_ui ? 36 : 34;
+        } else {
+!         return touch_ui ? 36 : 28;
+        }
+      case LOCATION_BAR_ICON_SIZE:
+        return touch_ui ? 20 : 16;
+--- 66,74 ----
+        if (base::FeatureList::IsEnabled(omnibox::kOmniboxSteadyStateHeight) ||
+            features::GetChromeRefresh2023Level() ==
+                features::ChromeRefresh2023Level::kLevel2) {
+!         return touch_ui ? 24 : 24;
+        } else {
+!         return touch_ui ? 24 : 24;
+        }
+      case LOCATION_BAR_ICON_SIZE:
+        return touch_ui ? 20 : 16;
+***************
+*** 79,93 ****
+                   ? 20
+                   : GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
+      case TAB_AFTER_TITLE_PADDING:
+!       return touch_ui ? 8 : 4;
+      case TAB_ALERT_INDICATOR_CAPTURE_ICON_WIDTH:
+!       return 16;
+      case TAB_ALERT_INDICATOR_ICON_WIDTH:
+!       return touch_ui ? 12 : 16;
+      case TAB_CLOSE_BUTTON_SIZE:
+        return touch_ui ? 24 : 16;
+      case TAB_HEIGHT:
+!       return (touch_ui ? 41 : 34) + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
+      case TAB_SEPARATOR_HEIGHT:
+        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
+        // this constant.
+--- 79,93 ----
+                   ? 20
+                   : GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
+      case TAB_AFTER_TITLE_PADDING:
+!       return touch_ui ? 8 : 0;
+      case TAB_ALERT_INDICATOR_CAPTURE_ICON_WIDTH:
+!       return 0;
+      case TAB_ALERT_INDICATOR_ICON_WIDTH:
+!       return touch_ui ? 12 : 0;
+      case TAB_CLOSE_BUTTON_SIZE:
+        return touch_ui ? 24 : 16;
+      case TAB_HEIGHT:
+!       return (touch_ui ? 24 : 24) + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
+      case TAB_SEPARATOR_HEIGHT:
+        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
+        // this constant.
+***************
+*** 95,101 ****
+      case TAB_PRE_TITLE_PADDING:
+        return 8;
+      case TAB_STACK_DISTANCE:
+!       return touch_ui ? 4 : 6;
+      case TABSTRIP_REGION_VIEW_CONTROL_PADDING:
+        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
+        // this constant.
+--- 95,101 ----
+      case TAB_PRE_TITLE_PADDING:
+        return 8;
+      case TAB_STACK_DISTANCE:
+!       return touch_ui ? 4 : 0;
+      case TABSTRIP_REGION_VIEW_CONTROL_PADDING:
+        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
+        // this constant.
+*** old/chrome/browser/ui/views/chrome_typography.cc	2019-02-07 01:06:38.000000000 +0300
+--- new/chrome/browser/ui/views/chrome_typography.cc	2019-02-09 13:55:13.339947057 +0300
+***************
+*** 80,86 ****
+        const bool use_gm3_text_style =
+            OmniboxFieldTrial::IsGM3TextStyleEnabled();
+  
+!       int desired_font_size = is_touch_ui ? 15 : 14;
+        if (use_gm3_text_style) {
+          desired_font_size = is_touch_ui
+                                  ? OmniboxFieldTrial::kFontSizeTouchUI.Get()
+--- 80,86 ----
+        const bool use_gm3_text_style =
+            OmniboxFieldTrial::IsGM3TextStyleEnabled();
+  
+!       int desired_font_size = is_touch_ui ? 13 : 13;
+        if (use_gm3_text_style) {
+          desired_font_size = is_touch_ui
+                                  ? OmniboxFieldTrial::kFontSizeTouchUI.Get()
+*** old/chrome/browser/ui/views/tabs/new_tab_button.cc	2019-02-07 01:06:38.000000000 +0300
+--- new/chrome/browser/ui/views/tabs/new_tab_button.cc	2019-02-10 12:05:03.598842169 +0300
+***************
+*** 58,64 ****
+  }  // namespace
+  
+  // static
+! const gfx::Size NewTabButton::kButtonSize{28, 28};
+  
+  NewTabButton::NewTabButton(TabStrip* tab_strip, views::ButtonListener* listener)
+      : views::ImageButton(listener), tab_strip_(tab_strip) {
+--- 58,64 ----
+  }  // namespace
+  
+  // static
+! const gfx::Size NewTabButton::kButtonSize{18, 18};
+  
+  NewTabButton::NewTabButton(TabStrip* tab_strip, views::ButtonListener* listener)
+      : views::ImageButton(listener), tab_strip_(tab_strip) {

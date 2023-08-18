@@ -1,7 +1,7 @@
 *** old/chrome/browser/ui/layout_constants.cc	2019-02-07 01:06:38.000000000 +0300
 --- new/chrome/browser/ui/layout_constants.cc	2019-02-11 00:59:36.133485914 +0300
 ***************
-*** 34,40 ****
+*** 42,48 ****
       case WEB_APP_PAGE_ACTION_ICON_SIZE:
         // We must limit the size of icons in the title bar to avoid vertically
         // stretching the container view.
@@ -9,7 +9,7 @@
       case LOCATION_BAR_BUBBLE_FONT_VERTICAL_PADDING:
         return 2;
       case LOCATION_BAR_BUBBLE_ANCHOR_VERTICAL_INSET:
---- 34,40 ----
+--- 42,48 ----
       case WEB_APP_PAGE_ACTION_ICON_SIZE:
         // We must limit the size of icons in the title bar to avoid vertically
         // stretching the container view.
@@ -18,7 +18,28 @@
         return 2;
       case LOCATION_BAR_BUBBLE_ANCHOR_VERTICAL_INSET:
 ***************
-*** 66,87 ****
+*** 66,74 ****
+        if (base::FeatureList::IsEnabled(omnibox::kOmniboxSteadyStateHeight) ||
+            features::GetChromeRefresh2023Level() ==
+                features::ChromeRefresh2023Level::kLevel2) {
+!         return touch_ui ? 36 : 34;
+        } else {
+!         return touch_ui ? 36 : 28;
+        }
+      case LOCATION_BAR_ICON_SIZE:
+        return touch_ui ? 20 : 16;
+--- 66,74 ----
+        if (base::FeatureList::IsEnabled(omnibox::kOmniboxSteadyStateHeight) ||
+            features::GetChromeRefresh2023Level() ==
+                features::ChromeRefresh2023Level::kLevel2) {
+!         return touch_ui ? 24 : 24;
+        } else {
+!         return touch_ui ? 24 : 24;
+        }
+      case LOCATION_BAR_ICON_SIZE:
+        return touch_ui ? 20 : 16;
+***************
+*** 79,93 ****
                    ? 20
                    : GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
       case TAB_AFTER_TITLE_PADDING:
@@ -27,21 +48,14 @@
 !       return 16;
       case TAB_ALERT_INDICATOR_ICON_WIDTH:
 !       return touch_ui ? 12 : 16;
+      case TAB_CLOSE_BUTTON_SIZE:
+        return touch_ui ? 24 : 16;
       case TAB_HEIGHT:
-  #if BUILDFLAG(IS_CHROMEOS)
-        if (chromeos::features::IsJellyrollEnabled()) {
-          return 34 + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
-        }
-  #endif  // IS_CHROMEOS
 !       return (touch_ui ? 41 : 34) + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
-      case TAB_PRE_TITLE_PADDING:
-        return 8;
-      case TAB_STACK_DISTANCE:
-!       return touch_ui ? 4 : 6;
-      case TABSTRIP_REGION_VIEW_CONTROL_PADDING:
-        return 8;
-      case TABSTRIP_TOOLBAR_OVERLAP:
---- 66,87 ----
+      case TAB_SEPARATOR_HEIGHT:
+        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
+        // this constant.
+--- 79,93 ----
                    ? 20
                    : GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
       case TAB_AFTER_TITLE_PADDING:
@@ -50,20 +64,30 @@
 !       return 0;
       case TAB_ALERT_INDICATOR_ICON_WIDTH:
 !       return touch_ui ? 12 : 0;
+      case TAB_CLOSE_BUTTON_SIZE:
+        return touch_ui ? 24 : 16;
       case TAB_HEIGHT:
-  #if BUILDFLAG(IS_CHROMEOS)
-        if (chromeos::features::IsJellyrollEnabled()) {
-          return 34 + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
-        }
-  #endif  // IS_CHROMEOS
 !       return (touch_ui ? 24 : 24) + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
+      case TAB_SEPARATOR_HEIGHT:
+        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
+        // this constant.
+***************
+*** 95,101 ****
+      case TAB_PRE_TITLE_PADDING:
+        return 8;
+      case TAB_STACK_DISTANCE:
+!       return touch_ui ? 4 : 6;
+      case TABSTRIP_REGION_VIEW_CONTROL_PADDING:
+        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
+        // this constant.
+--- 95,101 ----
       case TAB_PRE_TITLE_PADDING:
         return 8;
       case TAB_STACK_DISTANCE:
 !       return touch_ui ? 4 : 0;
       case TABSTRIP_REGION_VIEW_CONTROL_PADDING:
-        return 8;
-      case TABSTRIP_TOOLBAR_OVERLAP:
+        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
+        // this constant.
 *** old/chrome/browser/ui/views/chrome_typography.cc	2019-02-07 01:06:38.000000000 +0300
 --- new/chrome/browser/ui/views/chrome_typography.cc	2019-02-09 13:55:13.339947057 +0300
 ***************

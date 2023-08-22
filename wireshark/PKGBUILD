@@ -15,7 +15,7 @@ arch=('x86_64')
 license=('GPL2')
 makedepends=('glibc' 'cmake' 'ninja' 'c-ares' 'libmaxminddb' 'qt6-tools' 'qt6-svg'
              'qt6-multimedia' 'krb5' 'libpcap' 'libssh' 'libxml2' 'libnghttp2'
-             'snappy' 'lz4' 'spandsp' 'gnutls' 'lua52' 'python' 'libcap' 'libnl'
+             'snappy' 'lz4' 'spandsp' 'gnutls' 'lua' 'python' 'libcap' 'libnl'
              'glib2' 'libgcrypt' 'sbc' 'bcg729' 'desktop-file-utils' 'libxslt'
              'hicolor-icon-theme' 'zstd' 'zlib' 'gcc-libs' 'brotli' 'asciidoctor'
              'doxygen' 'minizip' 'speexdsp' 'opus' 'flex')
@@ -46,7 +46,7 @@ build() {
 package_wireshark-cli() {
   pkgdesc+=' - CLI tools and data files'
   depends=('glibc' 'c-ares' 'libmaxminddb' 'krb5' 'libgcrypt' 'libcap' 'libpcap'
-           'gnutls' 'glib2' 'lua52' 'libssh' 'libxml2' 'libnghttp2' 'snappy'
+           'gnutls' 'glib2' 'lua' 'libssh' 'libxml2' 'libnghttp2' 'snappy'
            'lz4' 'spandsp' 'sbc' 'bcg729' 'zstd' 'zlib' 'brotli' 'speexdsp'
            'opus' libpcap.so libcap.so libbrotlidec.so libcares.so libkrb5.so
            libk5crypto.so)

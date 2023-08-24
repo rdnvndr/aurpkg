@@ -1,0 +1,27 @@
+# Maintainer: Marat Moustafine <moustafine-@t-tuta-d.t-io>
+
+pkgname=pvs-studio
+pkgver=7.26.73915.332
+pkgrel=1
+pkgdesc='Static code analyzer for C, C++ and C#'
+arch=('x86_64')
+url=http://www.$pkgname.com/en/$pkgname
+license=('unknown')
+optdepends=('how-to-use-pvs-studio-free: for adding special comments to a source code'
+            'bash-completion: for bash completion'
+            'strace: for analyzing via using strace logs')
+options=('!strip')
+install=$pkgname.install
+source=(http://cdn.$pkgname.com/$pkgname-$pkgver-${arch}.tgz)
+sha256sums=('SKIP')
+
+package() {
+  cd $srcdir/$pkgname-$pkgver-${arch}/bin
+  install -D -m 755 -t $pkgdir/usr/bin \
+    $pkgname \
+    $pkgname-analyzer \
+    plog-converter
+
+  cd $srcdir/$pkgname-$pkgver-${arch}/etc/bash_completion.d
+  install -D -m 644 -t $pkgdir/etc/bash_completion.d $pkgname.sh
+}

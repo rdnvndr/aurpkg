@@ -1,0 +1,25 @@
+# Maintainer: Marat Moustafine <moustafine-@t-tuta-d.t-io>
+
+pkgname=qtcreator-pvs-studio-plugin
+pkgver=7.26.73915.523
+_pvs=7.26.73915.332
+_qtc=11.0.x
+pkgrel=1
+pkgdesc='Static code analyzer for C, C++ and C#'
+arch=('x86_64')
+url=http://www.pvs-studio.com/en/pvs-studio
+license=('unknown')
+optdepends=('how-to-use-pvs-studio-free: for adding special comments to a source code'
+            'bash-completion: for bash completion'
+            'strace: for analyzing via using strace logs')
+depends=('qtcreator')
+options=('!strip')
+source=(http://cdn.pvs-studio.com/pvs-studio-${_pvs}-${arch}.tgz)
+sha256sums=('SKIP')
+
+package() {
+  cd $srcdir/pvs-studio-${_pvs}-${arch}/lib/pvs-studio/plugins
+  tar xvf libpvs-studio-qtcreator-${_qtc}-${pkgver}.linux.tar.gz
+  install -D -m 755 -t $pkgdir/usr/lib/qtcreator/plugins/ \
+    libpvs-studio-qtcreator-${_qtc}-${pkgver}.so
+}

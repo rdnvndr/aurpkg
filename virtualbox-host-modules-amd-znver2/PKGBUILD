@@ -24,7 +24,7 @@ package(){
   depends=('linux-amd-znver2')
 
   _kernver="$(</usr/lib/modules/*-AMD-znver2/extramodules/version)"
-  extramodules="$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")"
+  extramodules="$(readlink -f "/usr/lib/modules/${_kernver}/virtualbox")"
 
   install -Dt "$pkgdir/$extramodules" -m0644 \
     vboxhost/${pkgver}_OSE/${_kernver}/${CARCH}/module/*

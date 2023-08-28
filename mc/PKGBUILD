@@ -4,8 +4,8 @@
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 
 pkgname=mc
-pkgver=4.8.29
-pkgrel=2
+pkgver=4.8.30
+pkgrel=1
 pkgdesc='A file manager that emulates Norton Commander'
 arch=('x86_64')
 url='https://midnight-commander.org/'
@@ -20,6 +20,7 @@ depends=(
 )
 makedepends=(
   'aspell'
+  'git'
   'libxt'
   'libx11'
   'unzip'
@@ -37,7 +38,6 @@ optdepends=(
   'python: to access uc1541 or s3 storage'
   'python-boto: s3+ extfs'
   'python-pytz: s3+ extfs'
-  'samba: VFS support'
   'unace: uace extfs'
   'unarj: uarj extfs'
   'unrar: urar extfs'
@@ -54,35 +54,40 @@ backup=(
   'etc/mc/sfs.ini'
 )
 options=('!emptydirs')
+_commit='a18c8f28507cd14d7c344ab67a4f59b4e2827d4b'
 source=(
-  "http://ftp.midnight-commander.org/${pkgname}-${pkgver}.tar.xz"
+  "git+https://github.com/MidnightCommander/mc#commit=$_commit"
   'mc-python3.patch'
   'mc4817.patch'
 )
-sha512sums=('SKIP'
-            'SKIP'
-            SKIP)
-b2sums=('SKIP'
-        'SKIP'
-        SKIP)
+sha256sums=('SKIP'
+            '78df8592c86445fa6249433e8587889e3923c0bb8b604cae32d5e739d2cc025c'
+            'SKIP')
+
+pkgver() {
+  cd "$pkgname"
+
+  git describe --tags | sed 's/^v//'
+}
 
 prepare() {
-  cd "$pkgname-$pkgver"
+  cd "$pkgname"
 
   # port to Python 3
   # ref: https://github.com/MidnightCommander/mc/pull/149
   patch -p1 -i "$srcdir/mc-python3.patch"
   patch -p1 -i ../mc4817.patch || return 1
+
+  ./autogen.sh
 }
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$pkgname"
 
   ./configure \
     --prefix=/usr \
     --libexecdir=/usr/lib \
     --sysconfdir=/etc \
-    --enable-vfs-smb \
     --enable-aspell \
     --with-screen=slang \
     --with-x
@@ -91,7 +96,7 @@ build() {
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$pkgname"
 
   make DESTDIR="$pkgdir" install
 

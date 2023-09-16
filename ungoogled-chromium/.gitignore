@@ -3,3 +3,6 @@ ungoogled-chromium
 src
 pkg
 *.tar.*
+*.log
+nohup.out
+*.zip

@@ -18,7 +18,7 @@
         return 2;
       case LOCATION_BAR_BUBBLE_ANCHOR_VERTICAL_INSET:
 ***************
-*** 66,74 ****
+*** 68,76 ****
         if (base::FeatureList::IsEnabled(omnibox::kOmniboxSteadyStateHeight) ||
             features::GetChromeRefresh2023Level() ==
                 features::ChromeRefresh2023Level::kLevel2) {
@@ -28,7 +28,7 @@
         }
       case LOCATION_BAR_ICON_SIZE:
         return touch_ui ? 20 : 16;
---- 66,74 ----
+--- 68,76 ----
         if (base::FeatureList::IsEnabled(omnibox::kOmniboxSteadyStateHeight) ||
             features::GetChromeRefresh2023Level() ==
                 features::ChromeRefresh2023Level::kLevel2) {
@@ -39,7 +39,7 @@
       case LOCATION_BAR_ICON_SIZE:
         return touch_ui ? 20 : 16;
 ***************
-*** 79,93 ****
+*** 83,100 ****
                    ? 20
                    : GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
       case TAB_AFTER_TITLE_PADDING:
@@ -51,11 +51,14 @@
       case TAB_CLOSE_BUTTON_SIZE:
         return touch_ui ? 24 : 16;
       case TAB_HEIGHT:
+!       if (features::IsChromeRefresh2023()) {
+          return 34 + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
+        }
 !       return (touch_ui ? 41 : 34) + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
-      case TAB_SEPARATOR_HEIGHT:
-        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
-        // this constant.
---- 79,93 ----
+      case TAB_STRIP_HEIGHT:
+        return GetLayoutConstant(TAB_HEIGHT) +
+               GetLayoutConstant(TAB_STRIP_PADDING);
+--- 83,100 ----
                    ? 20
                    : GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
       case TAB_AFTER_TITLE_PADDING:
@@ -67,12 +70,15 @@
       case TAB_CLOSE_BUTTON_SIZE:
         return touch_ui ? 24 : 16;
       case TAB_HEIGHT:
+!       if (features::IsChromeRefresh2023() && false) {
+          return 34 + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
+        }
 !       return (touch_ui ? 24 : 24) + GetLayoutConstant(TABSTRIP_TOOLBAR_OVERLAP);
-      case TAB_SEPARATOR_HEIGHT:
-        // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
-        // this constant.
+      case TAB_STRIP_HEIGHT:
+        return GetLayoutConstant(TAB_HEIGHT) +
+               GetLayoutConstant(TAB_STRIP_PADDING);
 ***************
-*** 95,101 ****
+*** 107,113 ****
       case TAB_PRE_TITLE_PADDING:
         return 8;
       case TAB_STACK_DISTANCE:
@@ -80,7 +86,7 @@
       case TABSTRIP_REGION_VIEW_CONTROL_PADDING:
         // TODO (crbug.com/1451400): ChromeRefresh2023 needs different values for
         // this constant.
---- 95,101 ----
+--- 107,113 ----
       case TAB_PRE_TITLE_PADDING:
         return 8;
       case TAB_STACK_DISTANCE:

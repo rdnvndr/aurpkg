@@ -2,7 +2,7 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 
 pkgname=xterm
-pkgver=384
+pkgver=385
 pkgrel=1
 pkgdesc="X Terminal Emulator"
 arch=('x86_64')

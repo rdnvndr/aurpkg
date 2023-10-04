@@ -3,7 +3,7 @@ pkgname=(qtcreator qtcreator-devel)
 pkgver=11.0.3
 _clangver=16.0.6
 _commit=11.0
-pkgrel=4
+pkgrel=5
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -55,7 +55,6 @@ prepare() {
   patch -d qt-creator -p1 < attach.patch  
   patch -d qt-creator -p1 < perf.patch  
   patch -d qt-creator -p1 < doxygen.patch
-  patch -d qt-creator -p1 < smallstring.patch
 }
 
 build() {

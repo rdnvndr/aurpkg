@@ -31,10 +31,8 @@ source=("QTCREATORBUG-21681.patch"
         "breakpoint.patch"
         "attach.patch"
         "perf.patch"
-        "doxygen.patch"
-        "smallstring.patch")
+        "doxygen.patch")
 sha256sums=(SKIP
-            SKIP
             SKIP
             SKIP
             SKIP

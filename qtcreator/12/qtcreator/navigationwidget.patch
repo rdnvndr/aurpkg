@@ -1,0 +1,17 @@
+*** a/src/plugins/coreplugin/navigationwidget.cpp	2022-07-12 00:50:11.349932842 +0300
+--- b/src/plugins/coreplugin/navigationwidget.cpp	2022-07-12 00:48:31.006602497 +0300
+***************
+*** 232,243 ****
+      NavigationWidget *navigationWidget = NavigationWidget::instance(fallbackSide);
+      int preferredPosition = -1;
+  
+-     if (NavigationWidgetPrivate::s_activationsMap.contains(factoryId)) {
+-         const ActivationInfo info = NavigationWidgetPrivate::s_activationsMap.value(factoryId);
+-         navigationWidget = NavigationWidget::instance(info.side);
+-         preferredPosition = info.position;
+-     }
+- 
+      return navigationWidget->activateSubWidget(factoryId, preferredPosition);
+  }
+  
+--- 232,237 ----

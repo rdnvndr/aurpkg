@@ -3,7 +3,7 @@
 
 pkgname='virtualbox-host-modules-amd-znver2'
 pkgver=7.0.10
-pkgrel=6
+pkgrel=7
 pkgdesc='Virtualbox host kernel modules for Arch Kernel'
 arch=('x86_64')
 url='https://virtualbox.org/'

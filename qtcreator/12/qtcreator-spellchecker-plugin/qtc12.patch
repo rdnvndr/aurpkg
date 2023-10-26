@@ -446,7 +446,17 @@ diff --git a/src/outputpane.cpp b/src/outputpane.cpp
 index 17c8e6fe..dca469bb 100644
 --- a/src/outputpane.cpp
 +++ b/src/outputpane.cpp
-@@ -262,13 +262,13 @@ void OutputPane::loadColumnSizes()
+@@ -66,7 +66,8 @@ OutputPane::OutputPane( SpellingMistakesModel* model, QObject* parent )
+   , d( new OutputPanePrivate() )
+ {
+   Q_ASSERT( model != nullptr );
+-  d->model = model;
++  d->model = model;
++  setDisplayName(displayName());
+ 
+   /* Create the tree view for the model */
+   d->treeView = new QTreeView();
+@@ -262,13 +263,13 @@ void OutputPane::loadColumnSizes()
    int colLine    = 40;
    int colColumn  = 40;
  
@@ -467,7 +477,7 @@ index 17c8e6fe..dca469bb 100644
    settings->endGroup(); /* CORE_SETTINGS_OP_GROUP */
    settings->endGroup(); /* CORE_SETTINGS_GROUP */
  
-@@ -282,13 +282,13 @@ void OutputPane::loadColumnSizes()
+@@ -282,13 +283,13 @@ void OutputPane::loadColumnSizes()
  void OutputPane::saveColumnSizes()
  {
    /* Save the table sizes to the settings file. */

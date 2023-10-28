@@ -2,22 +2,34 @@ diff -cr a/src/plugins/projectexplorer/projectmodels.cpp b/src/plugins/projectex
 *** a/src/plugins/projectexplorer/projectmodels.cpp	2021-09-30 05:33:49.000000000 +0300
 --- b/src/plugins/projectexplorer/projectmodels.cpp	2021-11-07 15:40:11.945407765 +0300
 ***************
-*** 480,486 ****
+*** 480,493 ****
           if (m_filterDisabledFiles && !node->isEnabled())
               continue;
           if (FolderNode *subFolderNode = node->asFolderNode()) {
 !             bool isHidden = m_filterProjects && !subFolderNode->showInSimpleTree();
               if (m_hideSourceGroups) {
                   if (subFolderNode->isVirtualFolderType()) {
-                      auto vnode = static_cast<VirtualFolderNode *>(subFolderNode);
---- 480,486 ----
+-                     auto vnode = static_cast<VirtualFolderNode *>(subFolderNode);
+-                     if (vnode->isSourcesOrHeaders()) {
+                          isHidden = true;
+                          hasHiddenSourcesOrHeaders = true;
+-                     }
+                  }
+              }
+              if (!isHidden && Utils::insert(*seen, subFolderNode)) {
+--- 480,491 ----
           if (m_filterDisabledFiles && !node->isEnabled())
               continue;
           if (FolderNode *subFolderNode = node->asFolderNode()) {
-!             bool isHidden = m_filterProjects && (!subFolderNode->showInSimpleTree() || subFolderNode->displayName() == "..");
+!             bool isHidden = m_filterProjects && (!subFolderNode->showInSimpleTree() || 
+!                 subFolderNode->displayName() == "..");
               if (m_hideSourceGroups) {
                   if (subFolderNode->isVirtualFolderType()) {
-                      auto vnode = static_cast<VirtualFolderNode *>(subFolderNode);
+                          isHidden = true;
+                          hasHiddenSourcesOrHeaders = true;
+                  }
+              }
+              if (!isHidden && Utils::insert(*seen, subFolderNode)) {
 ***************
 *** 499,505 ****
                   addFolderNode(parent, subFolderNode, seen);

@@ -56,9 +56,9 @@ build() {
     --with-gssapi
     --with-libxml
     --with-openssl
-    --with-perl
+    --without-perl
     --with-python
-    --with-tcl
+    --without-tcl
     --with-pam
     --with-system-tzdata=/usr/share/zoneinfo
     --with-uuid=e2fs

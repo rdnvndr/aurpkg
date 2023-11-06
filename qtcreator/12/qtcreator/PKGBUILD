@@ -44,7 +44,7 @@ groups=('modified')
 
 prepare() {
   cd $srcdir
-  git clone --branch ${_commit} --depth 1 --recurse-submodules git@github.com:qt-creator/qt-creator.git
+  git clone --branch ${_commit} --depth 1 --shallow-submodules --recurse-submodules git@github.com:qt-creator/qt-creator.git
   rm -r qt-creator/src/libs/qlitehtml/src/3rdparty
   patch -d qt-creator -p1 < QTCREATORBUG-21681.patch
   patch -d qt-creator -p1 < projectmodels.patch

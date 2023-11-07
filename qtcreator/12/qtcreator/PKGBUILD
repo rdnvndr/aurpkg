@@ -10,7 +10,7 @@ url='https://www.qt.io'
 license=("Apache-2.0")
 depends=(qt6-tools qt6-svg qt6-quick3d qt6-webengine qt6-serialport qt6-shadertools qt6-5compat
          clang=$_clangver clazy yaml-cpp litehtml) # syntax-highlighting
-makedepends=(cmake llvm python)
+makedepends=(cmake llvm python clang)
 options=(docs)
 optdepends=('qt6-doc: integrated Qt documentation'
             'qt6-examples: welcome page examples'
@@ -56,6 +56,11 @@ prepare() {
 }
 
 build() {
+  # Clang
+  export CC=/usr/bin/clang
+  export CXX=/usr/bin/clang++
+  export CXXFLAGS="$CXXFLAGS -fPIC -Qunused-arguments"
+  
   cmake -B build -S qt-creator \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBEXECDIR=lib \

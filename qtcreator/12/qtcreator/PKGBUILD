@@ -59,7 +59,11 @@ build() {
   # Clang
   export CC=/usr/bin/clang
   export CXX=/usr/bin/clang++
-  export CXXFLAGS="$CXXFLAGS -fPIC -Qunused-arguments"
+  export CXXFLAGS="-march=znver2 -mtune=generic -O2 -pipe -fno-plt -fexceptions \
+                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
+                   -fstack-clash-protection -fcf-protection -Wp,-D_GLIBCXX_ASSERTIONS \
+                   -fPIC -Qunused-arguments -flto=thin"
+
   
   cmake -B build -S qt-creator \
     -DCMAKE_INSTALL_PREFIX=/usr \

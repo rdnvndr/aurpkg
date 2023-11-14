@@ -57,14 +57,14 @@ prepare() {
 
 build() {
   # Clang
-  export CC=/usr/bin/clang
-  export CXX=/usr/bin/clang++
-  export CXXFLAGS="-march=znver2 -mtune=znver2 -O2 -pipe -fno-plt -fexceptions \
-                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
-                   -fPIC -Qunused-arguments -flto=thin"
-  export CFLAGS="-march=znver2 -mtune=znver2 -O2 -pipe -fno-plt -fexceptions \
-                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
-                   -fPIC -Qunused-arguments -flto=thin"
+#  export CC=/usr/bin/clang
+#  export CXX=/usr/bin/clang++
+#  export CXXFLAGS="-march=znver2 -mtune=znver2 -O2 -pipe -fno-plt -fexceptions \
+#                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
+#                   -fPIC -Qunused-arguments -flto=thin"
+#  export CFLAGS="-march=znver2 -mtune=znver2 -O2 -pipe -fno-plt -fexceptions \
+#                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
+#                   -fPIC -Qunused-arguments -flto=thin"
 
   
   cmake -B build -S qt-creator \

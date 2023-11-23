@@ -1,16 +1,16 @@
 pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
-pkgver=11.0.3
+pkgver=12.0.0
 _clangver=16.0.6
-_commit=11.0
-pkgrel=6
+_commit=12.0
+pkgrel=1
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
 license=("Apache-2.0")
 depends=(qt6-tools qt6-svg qt6-quick3d qt6-webengine qt6-serialport qt6-shadertools qt6-5compat
          clang=$_clangver clazy yaml-cpp litehtml) # syntax-highlighting
-makedepends=(cmake llvm python)
+makedepends=(cmake llvm python clang)
 options=(docs)
 optdepends=('qt6-doc: integrated Qt documentation'
             'qt6-examples: welcome page examples'
@@ -44,7 +44,7 @@ groups=('modified')
 
 prepare() {
   cd $srcdir
-  git clone --branch ${_commit} --depth 1 --recurse-submodules git@github.com:qt-creator/qt-creator.git
+  git clone --branch ${_commit} --depth 1 --shallow-submodules --recurse-submodules git@github.com:qt-creator/qt-creator.git
   rm -r qt-creator/src/libs/qlitehtml/src/3rdparty
   patch -d qt-creator -p1 < QTCREATORBUG-21681.patch
   patch -d qt-creator -p1 < projectmodels.patch
@@ -56,6 +56,17 @@ prepare() {
 }
 
 build() {
+  # Clang
+#  export CC=/usr/bin/clang
+#  export CXX=/usr/bin/clang++
+#  export CXXFLAGS="-march=znver2 -mtune=znver2 -O2 -pipe -fno-plt -fexceptions \
+#                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
+#                   -fPIC -Qunused-arguments -flto=thin"
+#  export CFLAGS="-march=znver2 -mtune=znver2 -O2 -pipe -fno-plt -fexceptions \
+#                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
+#                   -fPIC -Qunused-arguments -flto=thin"
+
+  
   cmake -B build -S qt-creator \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBEXECDIR=lib \

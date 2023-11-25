@@ -3,7 +3,7 @@
 
 pkgbase=postgresql-11
 pkgname=('postgresql-libs-11' 'postgresql-docs-11' 'postgresql-11')
-pkgver=11.20
+pkgver=11.22
 _majorver=${pkgver%.*}
 pkgrel=1
 pkgdesc='Sophisticated object-relational DBMS'
@@ -54,7 +54,7 @@ build() {
     --datadir=/usr/share/postgresql
     --sysconfdir=/etc
     --with-gssapi
-    --with-libxml
+    --without-libxml
     --with-openssl
     --without-perl
     --with-python

@@ -3,7 +3,7 @@
 
 pkgname=strawberry
 pkgver=1.0.21
-pkgrel=1
+pkgrel=2
 pkgdesc='A music player aimed at audio enthusiasts and music collectors'
 arch=(x86_64)
 url='https://www.strawbs.org/'
@@ -28,7 +28,7 @@ build() {
   cmake -B build -S $pkgname-$pkgver \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DUSE_SYSTEM_TAGLIB=ON \
-    -DENABLE_AUDIOCD=ON \
+    -DENABLE_AUDIOCD=OFF \
     -DENABLE_GIO=OFF \
     -DENABLE_IMOBILEDEVICE=OFF \
     -DENABLE_LIBGPOD=OFF \
@@ -40,7 +40,9 @@ build() {
     -DENABLE_VLC=OFF \
     -DENABLE_SUBSONIC=OFF \
     -DENABLE_TIDAL=OFF \
+    -DENABLE_QOBUZ=OFF \
     -DENABLE_XINE=OFF \
+    -DENABLE_UDISKS2=OFF \
     -DBUILD_WITH_QT6=ON
   cmake --build build
 }

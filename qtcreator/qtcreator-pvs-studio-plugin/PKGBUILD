@@ -1,10 +1,10 @@
 # Maintainer: Marat Moustafine <moustafine-@t-tuta-d.t-io>
 
 pkgname=qtcreator-pvs-studio-plugin
-pkgver=7.27.75620.597
-_pvs=7.27.75620.346
-_qtc=11.0.x
-pkgrel=2
+pkgver=7.28.77071.662
+_pvs=7.28.77080.365
+_qtc=12.0.x
+pkgrel=1
 pkgdesc='Static code analyzer for C, C++ and C#'
 arch=('x86_64')
 url=http://www.pvs-studio.com/en/pvs-studio
@@ -14,7 +14,7 @@ optdepends=('how-to-use-pvs-studio-free: for adding special comments to a source
             'strace: for analyzing via using strace logs')
 depends=('qtcreator')
 options=('!strip')
-source=(http://cdn.pvs-studio.com/pvs-studio-${_pvs}-${arch}.tgz)
+source=(https://cdn.pvs-studio.com/pvs-studio-${_pvs}-${arch}.tgz)
 sha256sums=('SKIP')
 
 package() {

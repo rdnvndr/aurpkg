@@ -31,8 +31,10 @@ source=("QTCREATORBUG-21681.patch"
         "breakpoint.patch"
         "attach.patch"
         "perf.patch"
-        "doxygen.patch")
+        "doxygen.patch"
+        "pythonproject.patch")
 sha256sums=(SKIP
+            SKIP
             SKIP
             SKIP
             SKIP
@@ -53,6 +55,7 @@ prepare() {
   patch -d qt-creator -p1 < attach.patch  
   patch -d qt-creator -p1 < perf.patch  
   patch -d qt-creator -p1 < doxygen.patch
+  patch -d qt-creator -p1 < pythonproject.patch
 }
 
 build() {

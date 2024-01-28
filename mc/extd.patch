@@ -1,0 +1,80 @@
+diff -cr old/misc/ext.d/doc.sh.in new/misc/ext.d/doc.sh.in
+*** old/misc/ext.d/doc.sh.in	2024-01-28 16:56:25.000000000 +0300
+--- new/misc/ext.d/doc.sh.in	2024-01-28 17:01:28.596348870 +0300
+***************
+*** 210,216 ****
+      do_view_action "${filetype}"
+      ;;
+  open)
+!     ("${MC_XDG_OPEN}" "${MC_EXT_FILENAME}" >/dev/null 2>&1) || \
+          do_open_action "${filetype}"
+      ;;
+  *)
+--- 210,216 ----
+      do_view_action "${filetype}"
+      ;;
+  open)
+!     (nohup "${MC_XDG_OPEN}" "${MC_EXT_FILENAME}" >/dev/null 2>&1 &) || \
+          do_open_action "${filetype}"
+      ;;
+  *)
+diff -cr old/misc/ext.d/image.sh new/misc/ext.d/image.sh
+*** old/misc/ext.d/image.sh	2024-01-28 16:56:25.000000000 +0300
+--- new/misc/ext.d/image.sh	2024-01-28 17:02:53.043019760 +0300
+***************
+*** 59,65 ****
+      do_view_action "${filetype}"
+      ;;
+  open)
+!     ("${MC_XDG_OPEN}" "${MC_EXT_FILENAME}" >/dev/null 2>&1) || \
+          do_open_action "${filetype}"
+      ;;
+  *)
+--- 59,65 ----
+      do_view_action "${filetype}"
+      ;;
+  open)
+!     (nohup "${MC_XDG_OPEN}" "${MC_EXT_FILENAME}" >/dev/null 2>&1 &) || \
+          do_open_action "${filetype}"
+      ;;
+  *)
+diff -cr old/misc/ext.d/video.sh new/misc/ext.d/video.sh
+*** old/misc/ext.d/video.sh	2024-01-28 16:56:25.000000000 +0300
+--- new/misc/ext.d/video.sh	2024-01-28 17:07:17.703032976 +0300
+***************
+*** 53,59 ****
+      do_view_action "${filetype}"
+      ;;
+  open)
+!     ("${MC_XDG_OPEN}" "${MC_EXT_FILENAME}" >/dev/null 2>&1) || \
+          do_open_action "${filetype}"
+      ;;
+  *)
+--- 53,59 ----
+      do_view_action "${filetype}"
+      ;;
+  open)
+!     (nohup "${MC_XDG_OPEN}" "${MC_EXT_FILENAME}" >/dev/null 2>&1 &) || \
+          do_open_action "${filetype}"
+      ;;
+  *)
+diff -cr old/misc/ext.d/web.sh.in new/misc/ext.d/web.sh.in
+*** old/misc/ext.d/web.sh.in	2024-01-28 16:56:25.000000000 +0300
+--- new/misc/ext.d/web.sh.in	2024-01-28 17:07:38.446367352 +0300
+***************
+*** 47,53 ****
+      do_view_action "${filetype}"
+      ;;
+  open)
+!     ("${MC_XDG_OPEN}" "${MC_EXT_FILENAME}" >/dev/null 2>&1) || \
+          do_open_action "${filetype}"
+      ;;
+  *)
+--- 47,53 ----
+      do_view_action "${filetype}"
+      ;;
+  open)
+!     (nohup "${MC_XDG_OPEN}" "${MC_EXT_FILENAME}" >/dev/null 2>&1 &) || \
+          do_open_action "${filetype}"
+      ;;
+  *)

@@ -3,7 +3,7 @@ pkgname=(qtcreator qtcreator-devel)
 pkgver=12.0.2
 _clangver=16.0.6
 _commit=12.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -32,8 +32,10 @@ source=("QTCREATORBUG-21681.patch"
         "attach.patch"
         "perf.patch"
         "doxygen.patch"
-        "pythonproject.patch")
+        "pythonproject.patch"
+        "appoutputpane.patch")
 sha256sums=(SKIP
+            SKIP
             SKIP
             SKIP
             SKIP
@@ -56,6 +58,7 @@ prepare() {
   patch -d qt-creator -p1 < perf.patch  
   patch -d qt-creator -p1 < doxygen.patch
   patch -d qt-creator -p1 < pythonproject.patch
+  patch -d qt-creator -p1 < appoutputpane.patch
 }
 
 build() {

@@ -1,0 +1,35 @@
+pkgname=openvpn-dco
+pkgver=0.2.20231117
+pkgrel=1
+pkgdesc='Optional Data Channel Offload kernel module for OpenVPN 2.5'
+arch=('any')
+url='https://github.com/OpenVPN/ovpn-dco'
+license=('GPL2')
+depends=('dkms')
+conflicts=('ovpn-dco' 'ovpn-dco-git' 'ovpn-dco-dkms-git')
+makedepends=('linux-amd-znver2-headers' "openvpn-dco-dkms=$pkgver")
+
+build() {
+  _kernver="$(/usr/bin/uname -r)"
+
+  fakeroot dkms build --dkmstree "$srcdir" -m ovpn-dco/${pkgver} -k ${_kernver}
+}
+
+
+package() {
+	cd "${srcdir}"
+  depends=('linux-amd-znver2')
+
+  _kernver="$(/usr/bin/uname -r)"
+  extramodules="$(readlink -f "/usr/lib/modules/${_kernver}/ovpn-dco")"
+
+  install -Dt "$pkgdir/$extramodules" -m0644 \
+    ovpn-dco/${pkgver}/${_kernver}/${CARCH}/module/*
+
+  # compress each module individually
+  find "$pkgdir" -name '*.ko' -exec xz -T1 {} +
+  
+  # systemd module loading
+  echo ovpn-dco-v2 |
+    install -D -m0644 /dev/stdin "$pkgdir/usr/lib/modules-load.d/$pkgname.conf"
+}

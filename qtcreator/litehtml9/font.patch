@@ -1,0 +1,19 @@
+*** a/src/css_properties.cpp	2024-01-31 03:48:44.000000000 +0300
+--- b/src/css_properties.cpp	2024-03-22 20:11:04.036876220 +0300
+***************
+*** 347,353 ****
+  	m_text_decoration	=               el->get_string_property(_text_decoration_,	true, "none",										offset(m_text_decoration));
+  
+  	m_font = doc->get_font(
+! 		m_font_family.c_str(), 
+  		font_size, 
+  		index_value(m_font_weight, font_weight_strings).c_str(), 
+  		index_value(m_font_style, font_style_strings).c_str(),
+--- 347,353 ----
+  	m_text_decoration	=               el->get_string_property(_text_decoration_,	true, "none",										offset(m_text_decoration));
+  
+  	m_font = doc->get_font(
+! 		"Carlito", 
+  		font_size, 
+  		index_value(m_font_weight, font_weight_strings).c_str(), 
+  		index_value(m_font_style, font_style_strings).c_str(),

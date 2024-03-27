@@ -49,15 +49,15 @@ groups=('modified')
 prepare() {
   cd $srcdir
 
-  git clone --branch ${_commit} --depth 1 --shallow-submodules git@github.com:qt-creator/qt-creator.git
-  cd qt-creator
-  git submodule update --init src/libs/3rdparty/googletest
-  git submodule update --init src/shared/qbs
-  git submodule update --init src/tools/perfparser
-  cd ..
+#  git clone --branch ${_commit} --depth 1 --shallow-submodules git@github.com:qt-creator/qt-creator.git
+#  cd qt-creator
+#  git submodule update --init src/libs/3rdparty/googletest
+#  git submodule update --init src/shared/qbs
+#  git submodule update --init src/tools/perfparser
+#  cd ..
 
-  # git clone --branch ${_commit} --depth 1 --shallow-submodules --recurse-submodules git@github.com:qt-creator/qt-creator.git
-  # rm -r qt-creator/src/libs/qlitehtml/src/3rdparty
+  git clone --branch ${_commit} --depth 1 --shallow-submodules --recurse-submodules git@github.com:qt-creator/qt-creator.git
+  rm -r qt-creator/src/libs/qlitehtml/src/3rdparty
 
   patch -d qt-creator -p1 < projectmodels.patch
   patch -d qt-creator -p1 < navigationwidget.patch

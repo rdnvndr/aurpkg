@@ -5,7 +5,7 @@
 
 pkgname=mc
 pkgver=4.8.31
-pkgrel=1
+pkgrel=3
 pkgdesc='A file manager that emulates Norton Commander'
 arch=('x86_64')
 url='https://midnight-commander.org/'
@@ -57,30 +57,18 @@ backup=(
   'etc/mc/sfs.ini'
 )
 options=('!emptydirs')
-_commit='953c10134767853a39e95caf9b04c7431f65d0e5'
 source=(
-  "git+https://github.com/MidnightCommander/mc#commit=$_commit"
-  'mc-python3.patch'
+  "git+https://github.com/MidnightCommander/mc#tag=$pkgver"
   'mc4817.patch'
   'extd.patch'
 )
-sha256sums=('SKIP'
-            '78df8592c86445fa6249433e8587889e3923c0bb8b604cae32d5e739d2cc025c'
+sha256sums=('70a9fa0da9da13b82e6a612f132626bba4d685078a74884d8d0f2b6abdf317e1'
             'SKIP'
             'SKIP')
-
-pkgver() {
-  cd "$pkgname"
-
-  git describe --tags | sed 's/^v//'
-}
 
 prepare() {
   cd "$pkgname"
 
-  # port to Python 3
-  # ref: https://github.com/MidnightCommander/mc/pull/149
-#  patch -p1 -i "$srcdir/mc-python3.patch"
   patch -p1 -i ../mc4817.patch || return 1
   patch -p1 -i ../extd.patch || return 1
 

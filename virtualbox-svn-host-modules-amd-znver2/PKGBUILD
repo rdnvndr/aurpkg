@@ -1,23 +1,23 @@
 # Maintainer: Sébastien Luttringer
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
-pkgname='virtualbox-host-modules-amd-znver2'
-pkgver=7.0.14
-pkgrel=12
+pkgname='virtualbox-svn-host-modules-amd-znver2'
+pkgver=104157
+pkgrel=1
 pkgdesc='Virtualbox host kernel modules for Arch Kernel'
 arch=('x86_64')
 url='https://virtualbox.org/'
 license=('GPL')
-makedepends=('linux-amd-znver2-headers' "virtualbox-host-dkms=$pkgver")
+makedepends=('linux-amd-znver2-headers' "virtualbox-host-dkms-svn=$pkgver")
 replaces=('virtualbox-modules' 'virtualbox-host-modules')
 conflicts=('virtualbox-modules' 'virtualbox-host-modules')
-provides=('VIRTUALBOX-HOST-MODULES')
+provides=('VIRTUALBOX-HOST-MODULES-SVN')
 
 build() {
   _kernver="$(/usr/bin/uname -r)"
 #  _kernver="$(</usr/lib/modules/*-AMD-znver2/extramodules/version)"
 
-  fakeroot dkms build --dkmstree "$srcdir" -m vboxhost/${pkgver}_OSE -k ${_kernver}
+  fakeroot dkms build --dkmstree "$srcdir" -m vboxhost/svn_OSE -k ${_kernver}
 }
 
 package(){
@@ -28,7 +28,7 @@ package(){
   extramodules="$(readlink -f "/usr/lib/modules/${_kernver}/virtualbox")"
 
   install -Dt "$pkgdir/$extramodules" -m0644 \
-    vboxhost/${pkgver}_OSE/${_kernver}/${CARCH}/module/*
+    vboxhost/svn_OSE/${_kernver}/${CARCH}/module/*
 
   # compress each module individually
   find "$pkgdir" -name '*.ko' -exec xz -T1 {} +

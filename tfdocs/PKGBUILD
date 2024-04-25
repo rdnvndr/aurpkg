@@ -1,0 +1,6 @@
+pkgname=tfdocs
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="tfdocs"
+arch=(x86_64)
+depends=('qt5-base' 'qt5-svg' 'zeromq')

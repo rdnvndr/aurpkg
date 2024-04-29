@@ -1,20 +1,19 @@
-diff -cr a/src/html_tag.cpp b/src/html_tag.cpp
-*** a/src/html_tag.cpp	2022-04-05 23:49:06.000000000 +0300
---- b/src/html_tag.cpp	2022-12-30 21:10:32.454237383 +0300
+*** a/src/css_properties.cpp	2024-01-31 03:48:44.000000000 +0300
+--- b/src/css_properties.cpp	2024-03-22 20:11:04.036876220 +0300
 ***************
-*** 2011,2017 ****
-  	const tchar_t* style		= get_style_property(_t("font-style"),		true,	_t("normal"));
-  	const tchar_t* decoration	= get_style_property(_t("text-decoration"),	true,	_t("none"));
+*** 347,353 ****
+  	m_text_decoration	=               el->get_string_property(_text_decoration_,	true, "none",										offset(m_text_decoration));
   
-! 	m_font = get_document()->get_font(name, m_font_size, weight, style, decoration, &m_font_metrics);
-  }
+  	m_font = doc->get_font(
+! 		m_font_family.c_str(), 
+  		font_size, 
+  		index_value(m_font_weight, font_weight_strings).c_str(), 
+  		index_value(m_font_style, font_style_strings).c_str(),
+--- 347,353 ----
+  	m_text_decoration	=               el->get_string_property(_text_decoration_,	true, "none",										offset(m_text_decoration));
   
-  bool litehtml::html_tag::is_break() const
---- 2011,2017 ----
-  	const tchar_t* style		= get_style_property(_t("font-style"),		true,	_t("normal"));
-  	const tchar_t* decoration	= get_style_property(_t("text-decoration"),	true,	_t("none"));
-  
-! 	m_font = get_document()->get_font(_t("Carlito"), m_font_size, weight, style, decoration, &m_font_metrics);
-  }
-  
-  bool litehtml::html_tag::is_break() const
+  	m_font = doc->get_font(
+! 		"Carlito", 
+  		font_size, 
+  		index_value(m_font_weight, font_weight_strings).c_str(), 
+  		index_value(m_font_style, font_style_strings).c_str(),

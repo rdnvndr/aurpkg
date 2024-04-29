@@ -1,9 +1,9 @@
 # Maintainer: Marat Moustafine <moustafine-@t-tuta-d.t-io>
 
 pkgname=qtcreator-pvs-studio-plugin
-pkgver=7.28.77071.662
-_pvs=7.28.77080.365
-_qtc=12.0.x
+pkgver=7.30.80678.851
+_pvs=7.30.80678.389
+_qtc=13.0.x
 pkgrel=1
 pkgdesc='Static code analyzer for C, C++ and C#'
 arch=('x86_64')

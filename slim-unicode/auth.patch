@@ -1,0 +1,38 @@
+*** a/switchuser.cpp	2013-10-02 02:38:05.000000000 +0400
+--- b/switchuser.cpp	2024-04-30 00:06:23.650436213 +0300
+***************
+*** 52,58 ****
+  
+  void SwitchUser::SetClientAuth(const char* mcookie) {
+  	string home = string(Pw->pw_dir);
+! 	string authfile = home + "/.Xauthority";
+  	remove(authfile.c_str());
+  	Util::add_mcookie(mcookie, ":0", cfg->getOption("xauth_path"),
+  	  authfile);
+--- 52,58 ----
+  
+  void SwitchUser::SetClientAuth(const char* mcookie) {
+  	string home = string(Pw->pw_dir);
+! 	string authfile = home + "/.config/X11/Xauthority";
+  	remove(authfile.c_str());
+  	Util::add_mcookie(mcookie, ":0", cfg->getOption("xauth_path"),
+  	  authfile);
+*** a/app.cpp	2013-10-02 02:38:05.000000000 +0400
+--- b/app.cpp	2024-04-30 00:09:19.680445045 +0300
+***************
+*** 546,552 ****
+  	maildir.append("/");
+  	maildir.append(pw->pw_name);
+  	string xauthority = pw->pw_dir;
+! 	xauthority.append("/.Xauthority");
+  
+  #ifdef USE_PAM
+  	/* Setup the PAM environment */
+--- 546,552 ----
+  	maildir.append("/");
+  	maildir.append(pw->pw_name);
+  	string xauthority = pw->pw_dir;
+! 	xauthority.append("/.config/X11/Xauthority");
+  
+  #ifdef USE_PAM
+  	/* Setup the PAM environment */

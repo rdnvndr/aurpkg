@@ -3,7 +3,7 @@ pkgname=(qtcreator qtcreator-devel)
 pkgver=13.0.0
 _clangver=17.0.6
 _commit=13.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -33,8 +33,10 @@ source=("fancymainwindow.patch"
         "perf.patch"
         "doxygen.patch"
         "pythonproject.patch"
-        "appstackedpane.patch")
+        "appstackedpane.patch"
+        "pylsp.patch")
 sha256sums=(SKIP
+            SKIP
             SKIP
             SKIP
             SKIP
@@ -68,6 +70,7 @@ prepare() {
   patch -d qt-creator -p1 < pythonproject.patch
   patch -d qt-creator -p1 < appstackedpane.patch
   patch -d qt-creator -p1 < fancymainwindow.patch
+  patch -d qt-creator -p1 < pylsp.patch
 }
 
 build() {

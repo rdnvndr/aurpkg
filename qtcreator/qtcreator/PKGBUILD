@@ -34,8 +34,10 @@ source=("fancymainwindow.patch"
         "doxygen.patch"
         "pythonproject.patch"
         "appstackedpane.patch"
-        "pylsp.patch")
+        "pylsp.patch"
+        "pyindent.patch")
 sha256sums=(SKIP
+            SKIP
             SKIP
             SKIP
             SKIP
@@ -71,6 +73,7 @@ prepare() {
   patch -d qt-creator -p1 < appstackedpane.patch
   patch -d qt-creator -p1 < fancymainwindow.patch
   patch -d qt-creator -p1 < pylsp.patch
+  patch -d qt-creator -p1 < pyindent.patch
 }
 
 build() {

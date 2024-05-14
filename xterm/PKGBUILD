@@ -2,8 +2,8 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 
 pkgname=xterm
-pkgver=390
-pkgrel=2
+pkgver=391
+pkgrel=1
 pkgdesc="X Terminal Emulator"
 arch=('x86_64')
 url="https://invisible-island.net/xterm/"

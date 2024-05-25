@@ -1,6 +1,6 @@
 pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
-pkgver=13.0.2
+pkgver=13.0.3
 _clangver=17.0.6
 _commit=13.0
 pkgrel=1

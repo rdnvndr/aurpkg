@@ -35,8 +35,8 @@ fi
 ###################################################################################
 
 pkgbase=linux-amd-znver2
-pkgver=6.9.0
-_pkgver=6.9
+pkgver=6.9.2
+_pkgver=6.9.2
 pkgrel=1
 major=6.9
 commit=1e29f0ecf2221b2fbf580752f42ab5040d88b5e0
@@ -340,12 +340,12 @@ _package-headers(){
   ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
 }
 
-sha256sums=('24fa01fb989c7a3e28453f117799168713766e119c5381dac30115f18f268149'
+sha256sums=('SKIP'
             'SKIP'
             'e3ff7450ac5ce41729febf471cba26446f88c3e711808cb01a012ed4d9f8d345'
             '29c297704b3e6a8b865457061dd829e449e4c7a5fda29b74352738643ef649cc'
             '87470fae9a8a0080c2cb3d38be224b3ccbcb2004316207e0d148ff8a62764a9e'
-            '1e36095b05ee849ad05e3696f3e16cc15e0467b7065ec8fe4624bffa3afaf6b5'
+            'SKIP'
             'f4e7fcd011f2691840d2c8c2361dca850a78ea33cc5c24d2e27c3e0294fd1dc5')
 
 pkgname=($pkgbase $pkgbase-headers)

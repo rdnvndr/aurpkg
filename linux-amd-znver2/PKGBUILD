@@ -35,8 +35,8 @@ fi
 ###################################################################################
 
 pkgbase=linux-amd-znver2
-pkgver=6.9.4
-_pkgver=6.9.4
+pkgver=6.9.6
+_pkgver=6.9.6
 pkgrel=1
 major=6.9
 commit=1e29f0ecf2221b2fbf580752f42ab5040d88b5e0

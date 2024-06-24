@@ -6,7 +6,7 @@ diff -cr jwm-933/src/dock.c jwm-roand/src/dock.c
      memset(&event, 0, sizeof(event));
      for(np = dock->nodes; np; np = np->next) {
   
-!       JXMoveResizeWindow(display, np->window, x, y, itemSize, itemSize);
+!       JXMoveResizeWindow(display, np->window, x + xoffset, y + yoffset, itemSize, itemSize);
   
         /* Reparent if this window likes to go other places. */
         if(np->needs_reparent) {

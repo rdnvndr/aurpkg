@@ -53,17 +53,17 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
 !                   if(charging == 'D') {
 !                       hours = remainingCapacity/presentRate;
 !                       minute = ((float)(remainingCapacity)/(float)(presentRate)-hours)*60;
-!                       asprintf(&out, "\nРазрядка, %d%%, %.2d:%.2d",perc, hours, minute);
+!                       asprintf((char**)&out, "\nРазрядка, %d%%, %.2d:%.2d",perc, hours, minute);
 !                   } else {
 !                       hours = (float)(lastFullCapacity-remainingCapacity)/(float)presentRate;
 !                       minute = ((float)(lastFullCapacity-remainingCapacity)/(float)(presentRate)-(float)hours)*60;
-!                       asprintf(&out, "\nЗарядка, %d%%, %.2d:%.2d", perc, hours, minute);
+!                       asprintf((char**)&out, "\nЗарядка, %d%%, %.2d:%.2d", perc, hours, minute);
 !                   }
 !               } else {
 !                  if(charging =='D')
-!                     asprintf(&out, "\nРазрядка, %d%%, none", perc);
+!                     asprintf((char**)&out, "\nРазрядка, %d%%, none", perc);
 !                  else
-!                     asprintf(&out, "\nЗарядка, %d%%, none", perc);
+!                     asprintf((char**)&out, "\nЗарядка, %d%%, none", perc);
 !               }
 !               ShowPopup(x, y, strcat(longTime,out), POPUP_CLOCK);
 !               free(out);
@@ -122,7 +122,7 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
 +    }
 + 
 +    int perc = (lastFullCapacity != 0) ? ((float)remainingCapacity/(float)lastFullCapacity*100) : 0;
-+    asprintf(&timeString, " %d%% %s", perc, GetTimeString(clk->format, clk->zone));
++    asprintf((char**)&timeString, " %d%% %s", perc, GetTimeString(clk->format, clk->zone));
 + 
      /* Determine if the clock is the right size. */
      width = GetStringWidth(FONT_CLOCK, timeString);

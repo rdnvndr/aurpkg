@@ -6,7 +6,7 @@
 pkgbase=transmission
 pkgname=(transmission-qt libtransmission)
 pkgver=4.0.6
-pkgrel=1
+pkgrel=2
 arch=(x86_64)
 url="http://www.transmissionbt.com/"
 license=(GPL)
@@ -21,23 +21,26 @@ makedepends=(
 	libnatpmp
 	miniupnpc
 	ninja
+	npm
 	qt6-base
 	qt6-svg
 	qt6-tools
 	systemd
 )
 source=(https://github.com/transmission/transmission/releases/download/$pkgver/transmission-$pkgver.tar.xz
+        febfe49c.patch
         transmission-cli.sysusers
         transmission-cli.tmpfiles)
 sha256sums=('SKIP'
+            '1e5917c79a0c17595f18b544c5c1ab101ecbef5b2ffb0ca42a0a3b221a85e044'
             '641310fb0590d40e00bea1b5b9c843953ab78edf019109f276be9c6a7bdaf5b2'
             '1266032bb07e47d6bcdc7dabd74df2557cc466c33bf983a5881316a4cc098451')
 
 prepare() {
   cd $pkgbase-$pkgver
-  
   cp $startdir/transmission.png qt/icons/
   sed -i '/^Icon=/ s/$/-qt/' qt/transmission-qt.desktop
+  patch -p1 -i ../febfe49c.patch # Fix build with miniupnpc 2.2.8
   patch -p1 -i $startdir/progressbar.patch    || return 1
 }
 

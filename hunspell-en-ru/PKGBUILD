@@ -1,0 +1,31 @@
+# Maintainer: Alexander Epaneshnikov <alex19ep@archlinux.org>
+# Contributor: Dmytro Meleshko <dmytro.meleshko@gmail.com>
+
+pkgname=hunspell-en-ru
+pkgver=0.1
+pkgrel=1
+pkgdesc="Russian dictionary for Hunspell"
+arch=('any')
+license=('custom')
+optdepends=('hunspell: the spell checking libraries and apps')
+conflicts=('hunspell-ru')
+provides=('hunspell-dictionary')
+source=("ru_RU.dic"
+        "ru_RU.aff")
+sha512sums=('SKIP'
+            'SKIP')
+
+package() {
+	install -vdm755 "${pkgdir}/usr/share/hunspell"
+	for dict in aff dic; do
+		install -vDm644 "ru_RU.${dict}" "${pkgdir}/usr/share/hunspell/ru_RU.${dict}"
+	done
+
+	# the symlinks
+	install -dm755 "$pkgdir"/usr/share/myspell/dicts
+	pushd "$pkgdir"/usr/share/myspell/dicts
+	for file in "$pkgdir"/usr/share/hunspell/*; do
+		ln -sv /usr/share/hunspell/$(basename $file) .
+	done
+	popd
+}

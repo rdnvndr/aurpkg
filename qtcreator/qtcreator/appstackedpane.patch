@@ -1,5 +1,5 @@
 diff --git a/src/plugins/projectexplorer/appoutputpane.cpp b/src/plugins/projectexplorer/appoutputpane.cpp
-index 9bea0e0d..27fd43c3 100644
+index 29c84aec..c8b4394a 100644
 --- a/src/plugins/projectexplorer/appoutputpane.cpp
 +++ b/src/plugins/projectexplorer/appoutputpane.cpp
 @@ -40,6 +40,8 @@
@@ -149,16 +149,16 @@ index 9bea0e0d..27fd43c3 100644
  }
  
  void AppOutputPane::clearContents()
-@@ -413,7 +367,7 @@ void AppOutputPane::createNewOutputWindow(RunControl *rc)
+@@ -418,7 +372,7 @@ void AppOutputPane::createNewOutputWindow(RunControl *rc)
          // Update the title.
          const int tabIndex = m_tabWidget->indexOf(tab->window);
          QTC_ASSERT(tabIndex != -1, return);
 -        m_tabWidget->setTabText(tabIndex, rc->displayName());
 +        m_tabComboBox->setItemText(tabIndex, rc->displayName());
+         updateOutputFileName(tabIndex, rc);
  
          tab->window->scrollToBottom();
-         qCDebug(appOutputLog) << "AppOutputPane::createNewOutputWindow: Reusing tab"
-@@ -453,7 +407,12 @@ void AppOutputPane::createNewOutputWindow(RunControl *rc)
+@@ -459,7 +413,12 @@ void AppOutputPane::createNewOutputWindow(RunControl *rc)
              ow, updateBehaviorSettings);
  
      m_runControlTabs.push_back(RunControlTab(rc, ow));
@@ -168,11 +168,11 @@ index 9bea0e0d..27fd43c3 100644
 +    } else {
 +        m_tabComboBox->setItemText(0, rc->displayName());
 +    }
-+    m_tabWidget->addWidget(ow);
++    m_tabWidget->addWidget(ow);    
+     updateOutputFileName(m_tabWidget->count() - 1, rc);
      qCDebug(appOutputLog) << "AppOutputPane::createNewOutputWindow: Adding tab for" << rc;
      updateCloseActions();
-     setFilteringEnabled(m_tabWidget->count() > 0);
-@@ -635,7 +594,13 @@ void AppOutputPane::closeTab(int tabIndex, CloseTabMode closeTabMode)
+@@ -642,7 +601,13 @@ void AppOutputPane::closeTab(int tabIndex, CloseTabMode closeTabMode)
              return;
      }
  
@@ -187,7 +187,7 @@ index 9bea0e0d..27fd43c3 100644
      delete window;
  
      Utils::erase(m_runControlTabs, [runControl](const RunControlTab &t) {
-@@ -735,26 +700,6 @@ void AppOutputPane::tabChanged(int i)
+@@ -742,26 +707,6 @@ void AppOutputPane::tabChanged(int i)
      }
  }
  

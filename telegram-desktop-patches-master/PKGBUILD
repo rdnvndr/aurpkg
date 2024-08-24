@@ -1,6 +1,6 @@
 # https://gitlab.archlinux.org/archlinux/packaging/packages/telegram-desktop/-/blob/main/PKGBUILD
 pkgname=telegram-desktop-patched
-pkgver=5.3.2
+pkgver=5.4.1
 pkgrel=1
 pkgdesc='Official Telegram Desktop client'
 arch=('x86_64')

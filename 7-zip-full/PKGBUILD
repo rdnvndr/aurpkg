@@ -1,6 +1,6 @@
 _name=7-zip
 pkgname=${_name}-full
-pkgver=24.06
+pkgver=24.08
 pkgrel=1
 pkgdesc='File archiver with a high compression ratio (full package to replace p7zip)'
 url='https://7-zip.org/'
@@ -8,6 +8,8 @@ license=('LGPL-2.1-or-later' 'BSD-3-Clause' 'LicenseRef-UnRAR')
 arch=('x86_64' 'i686' 'aarch64' 'armv7h')
 provides=("${_name}" 'p7zip' '7z.so')
 conflicts=('p7zip')
+
+depends=('glibc')
 makedepends=('uasm')
 
 _repo='7zip'
@@ -17,15 +19,19 @@ _manarc="7z${pkgver//./}-linux-x64.tar.xz"
 
 source=(
     "${_url}/archive/${pkgver}/${_snapshot}.tar.gz"
+    "${_url}/releases/download/${pkgver}/${_manarc}" # to get the manual
     '01-make.patch'
     '02-lib-load-path.patch'
 )
 
 sha256sums=(
-    '0e0d3e2b1baaba81d8b6f5d26e55152fdea4a2453d79ef2d96f3a31405f0ad46'
-    'f54dfe73ad045f200d5512dfd4387ef626068662a5af6e17d81052996544af54'
+    'a37ab4537d8d2f63b5d6e6aa7300dd9fa728823fa90a7e99bc063c31d6f5dac5'
+    '9b3a2edf0644a2b00b0a39ab6843f426128e4a6f6f98c40f8c02a668e5b5b59b'
+    'fc5f46ddb1834c8e518b58c0fe69837b73f2529e3754461541d106f8436bfa67'
     '338b732445d3cfa416e40384bd9f0596506aa4b464b3f86aa971af4cfa6084c7'
 )
+
+noextract=("${_manarc}")
 
 prepare() {
     for p in *.patch; do
@@ -41,13 +47,24 @@ _make() {
 }
 
 _build() {
-    local -A platforms=(['x86_64']='x64' ['i686']='x86' ['aarch64']='arm64' ['armv7h']='arm')
-
     set -a
-    PLATFORM="${platforms["${CARCH}"]}"
-    [ "${CARCH}" = 'x86_64' ] && IS_X64=1
-    [ "${CARCH}" = 'i686' ] && IS_X86=1
-    [ "${CARCH}" = 'aarch64' ] && IS_ARM64=1
+    case "${CARCH}" in
+        'x86_64')
+            PLATFORM='x64'
+            IS_X64=1
+            ;;
+        'i686')
+            PLATFORM='x86'
+            IS_X86=1
+            ;;
+        'aarch64')
+            PLATFORM='arm64'
+            IS_ARM64=1
+            ;;
+        'armv7h')
+            PLATFORM='arm'
+            ;;
+    esac
     USE_ASM=1
     CFLAGS_WARN='-Wno-error'
     CFLAGS_USER="${CFLAGS}"
@@ -80,4 +97,5 @@ package() {
     install -Dm644 -t "${doc}" \
         'DOC/'{'7zC.txt','7zFormat.txt','lzma.txt','Methods.txt','readme.txt','src-history.txt'}
 
+    bsdtar -C "${doc}" -xf "${srcdir}/${_manarc}" 'MANUAL'
 }

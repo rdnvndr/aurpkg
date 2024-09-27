@@ -9,7 +9,7 @@ shopt -s extglob
 
 pkgbase=python
 pkgname=(python)
-pkgver=3.12.4
+pkgver=3.12.6
 pkgrel=1
 _pybasever=${pkgver%.*}
 pkgdesc="The Python programming language"

@@ -1,8 +1,8 @@
-diff -cr jwm-1632/src/border.c jwm-roand/src/border.c
-*** jwm-1632/src/border.c	2012-01-27 01:04:17.000000000 +0000
---- jwm-roand/src/border.c	2012-03-03 11:39:35.270290418 +0000
+diff -cr old/src/border.c new/src/border.c
+*** old/src/border.c	2024-10-09 23:22:26.036674030 +0300
+--- new/src/border.c	2024-10-09 23:29:12.676680367 +0300
 ***************
-*** 485,491 ****
+*** 488,494 ****
               titley += south - 1;
            }
            RenderString(canvas, FONT_BORDER, borderTextColor,
@@ -10,7 +10,7 @@ diff -cr jwm-1632/src/border.c jwm-roand/src/border.c
            Release(titleBuffer);
         }
   
---- 485,491 ----
+--- 488,494 ----
               titley += south - 1;
            }
            RenderString(canvas, FONT_BORDER, borderTextColor,
@@ -19,27 +19,23 @@ diff -cr jwm-1632/src/border.c jwm-roand/src/border.c
         }
   
 ***************
-*** 1126,1136 ****
-                      Pixmap canvas, GC gc, long fg)
-  {
+*** 1168,1176 ****
   #ifdef USE_ICONS
-!    const int iconSize = GetBorderIconSize();
+     const char hasIcon = np->icon ? 1 : 0;
      const int titleHeight = GetTitleHeight();
-     IconNode *icon = np->icon ? np->icon : buttonIcons[BI_MENU];
-     PutIcon(icon, canvas, fg,
-!            x + (titleHeight - iconSize) / 2,
-             y + (titleHeight - iconSize) / 2,
-             iconSize, iconSize);
-  #endif
---- 1126,1136 ----
-                      Pixmap canvas, GC gc, long fg)
-  {
+!    const int iconSize = hasIcon ? GetBorderIconSize() : Max((int)titleHeight - 2, 0);
+!    const int iconXOffset = (titleHeight - iconSize) / 2;
+!    const int iconYOffset = hasIcon ? iconXOffset : iconXOffset + 1;
+     IconNode *icon;
+     if(hasIcon) {
+        icon = np->icon;
+--- 1168,1176 ----
   #ifdef USE_ICONS
-!    const int iconSize = GetBorderIconSize() + 2;
+     const char hasIcon = np->icon ? 1 : 0;
      const int titleHeight = GetTitleHeight();
-     IconNode *icon = np->icon ? np->icon : buttonIcons[BI_MENU];
-     PutIcon(icon, canvas, fg,
-!            x + (titleHeight - iconSize - 2) / 2 - 1,
-             y + (titleHeight - iconSize) / 2,
-             iconSize, iconSize);
-  #endif
+!    const int iconSize = hasIcon ? GetBorderIconSize() + 2 : Max((int)titleHeight - 2, 0);
+!    const int iconXOffset = (titleHeight - iconSize - 2) / 2 ;
+!    const int iconYOffset = hasIcon ? (titleHeight - iconSize) / 2 : iconXOffset + 1;
+     IconNode *icon;
+     if(hasIcon) {
+        icon = np->icon;

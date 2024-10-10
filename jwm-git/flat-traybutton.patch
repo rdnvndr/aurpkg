@@ -88,10 +88,32 @@ diff -cr jwm-1271/src/traybutton.c jwm-roand/src/traybutton.c
   struct IconNode;
  
 diff --git a/src/button.c b/src/button.c
-index df86cf8d..9f0756c1 100644
+index e79b3fb4..3ba82c8a 100644
 --- a/src/button.c
 +++ b/src/button.c
-@@ -135,7 +135,7 @@ static void GetTextSpaceRemaining(ButtonNode *bp, int *width, int *height, int *
+@@ -62,8 +62,8 @@ static void GetButtonColors(ButtonNode *bp, ColorType *fg, long *bg1, long *bg2,
+       *fg = COLOR_TASKLIST_FG;
+       *bg1 = colors[COLOR_TASKLIST_BG1];
+       *bg2 = colors[COLOR_TASKLIST_BG2];
+-      *up = colors[COLOR_TASKLIST_UP];
+-      *down = colors[COLOR_TASKLIST_DOWN];
++      *up = colors[COLOR_TASKLIST_ACTIVE_UP];
++      *down = colors[COLOR_TASKLIST_ACTIVE_DOWN];
+       *decorations = settings.taskListDecorations;
+       *gd = gradients[COLOR_TASKLIST_BG1];
+       break;
+@@ -80,8 +80,8 @@ static void GetButtonColors(ButtonNode *bp, ColorType *fg, long *bg1, long *bg2,
+       *fg = COLOR_TASKLIST_MINIMIZED_FG;
+       *bg1 = colors[COLOR_TASKLIST_MINIMIZED_BG1];
+       *bg2 = colors[COLOR_TASKLIST_MINIMIZED_BG2];
+-      *down = colors[COLOR_TASKLIST_MINIMIZED_UP];
+-      *up = colors[COLOR_TASKLIST_MINIMIZED_DOWN];
++      *up = colors[COLOR_TASKLIST_ACTIVE_UP];
++      *down = colors[COLOR_TASKLIST_ACTIVE_DOWN];
+       *decorations = settings.taskListDecorations;
+       *gd = gradients[COLOR_TASKLIST_MINIMIZED_BG1];
+       break;
+@@ -152,7 +152,7 @@ static void GetTextSpaceRemaining(ButtonNode *bp, int *width, int *height, int *
     if(bp->labelPos < LABEL_POSITION_TOP) {
        if(*width > *height || !bp->icon) {
           const int borderWidth = BUTTON_BORDER * (bp->icon ? 3 : 2);
@@ -100,4 +122,3 @@ index df86cf8d..9f0756c1 100644
        }
     } else {
        *textHeight = Min(*textHeight, *height - *iconHeight - BUTTON_BORDER * 3);
-       

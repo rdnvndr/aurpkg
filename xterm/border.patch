@@ -1,25 +1,24 @@
-diff -cr a/charproc.c b/charproc.c
-*** a/charproc.c	2023-01-09 03:26:45.000000000 +0300
---- b/charproc.c	2023-01-16 14:44:51.240122789 +0300
+*** a/charproc.c	2024-10-25 19:56:13.476686294 +0300
+--- b/charproc.c	2024-10-25 19:56:30.783353828 +0300
 ***************
-*** 6018,6024 ****
-  	    stat = REQ_RESIZE((Widget) xw,
-  			      ((Dimension) FontWidth(screen)
-  			       * (tt_width)
-! 			       + 2 * screen->border
-  			       + screen->fullVwin.sb_info.width),
-  			      ((Dimension) FontHeight(screen)
-  			       * (tt_length)
---- 6018,6024 ----
-  	    stat = REQ_RESIZE((Widget) xw,
-  			      ((Dimension) FontWidth(screen)
-  			       * (tt_width)
-! 			       + 4 * screen->border
-  			       + screen->fullVwin.sb_info.width),
-  			      ((Dimension) FontHeight(screen)
-  			       * (tt_length)
+*** 9436,9442 ****
+  	    if (rows < 0)
+  		value = (unsigned long) MaxRows(screen);
+  	    value *= (unsigned long) FontHeight(screen);
+! 	    value += (unsigned long) (2 * screen->border);
+  	    if (!okDimension(value, askedHeight))
+  		goto give_up;
+  	}
+--- 9436,9442 ----
+  	    if (rows < 0)
+  		value = (unsigned long) MaxRows(screen);
+  	    value *= (unsigned long) FontHeight(screen);
+! 	    value += (unsigned long) (4 * screen->border);
+  	    if (!okDimension(value, askedHeight))
+  		goto give_up;
+  	}
 ***************
-*** 8950,8956 ****
+*** 9445,9451 ****
   	    if (cols < 0)
   		value = (unsigned long) MaxCols(screen);
   	    value *= (unsigned long) FontWidth(screen);
@@ -27,7 +26,7 @@ diff -cr a/charproc.c b/charproc.c
   				      + ScrollbarWidth(screen));
   	    if (!okDimension(value, askedWidth))
   		goto give_up;
---- 8950,8956 ----
+--- 9445,9451 ----
   	    if (cols < 0)
   		value = (unsigned long) MaxCols(screen);
   	    value *= (unsigned long) FontWidth(screen);
@@ -35,6 +34,7 @@ diff -cr a/charproc.c b/charproc.c
   				      + ScrollbarWidth(screen));
   	    if (!okDimension(value, askedWidth))
   		goto give_up;
+
 diff -cr a/fontutils.c b/fontutils.c
 *** a/fontutils.c	2023-01-09 02:42:23.000000000 +0300
 --- b/fontutils.c	2023-01-16 14:40:01.418379837 +0300

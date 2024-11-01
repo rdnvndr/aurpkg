@@ -1,0 +1,14 @@
+diff --git a/src/plugins/python/pythonlanguageclient.cpp b/src/plugins/python/pythonlanguageclient.cpp
+index 3c05b8f8..c092860f 100644
+--- a/src/plugins/python/pythonlanguageclient.cpp
++++ b/src/plugins/python/pythonlanguageclient.cpp
+@@ -89,6 +89,9 @@ static PythonLanguageServerState checkPythonLanguageServer(const FilePath &pytho
+     using namespace std::chrono_literals;
+     pythonProcess.runBlocking(2s);
+     bool pipAvailable = pythonProcess.allOutput().startsWith("pip ");
++    
++    if (FilePath("/usr/bin/pylsp").withExecutableSuffix().exists())
++        return {PythonLanguageServerState::Installed, lspPath};
+ 
+     if (lspPath.pathAppended("bin").pathAppended("pylsp").withExecutableSuffix().exists()) {
+         if (pipAvailable) {

@@ -1,0 +1,42 @@
+diff --git a/SpellChecker.json.in b/SpellChecker.json.in
+index c71badad..b4b5a68c 100644
+--- a/SpellChecker.json.in
++++ b/SpellChecker.json.in
+@@ -1,7 +1,9 @@
+ {
++    "Id" : "spellchecker",
+     "Name" : "SpellChecker",
+     "Version" : "3.7.0",
+     "CompatVersion" : "3.7.0",
++    "VendorId" : "carel_combrink",
+     "Vendor" : "Carel Combrink",
+     "Copyright" : "(C) 2015 - 2024 Carel Combrink",
+     "License" : [ "GNU Lesser General Public License Usage",
+diff --git a/src/spellcheckercore.cpp b/src/spellcheckercore.cpp
+index c5d026b6..85d648f3 100644
+--- a/src/spellcheckercore.cpp
++++ b/src/spellcheckercore.cpp
+@@ -818,7 +818,8 @@ void SpellCheckerCore::updateContextMenu()
+     QVector<const char*> holderActionIds { Constants::ACTION_HOLDER1_ID, Constants::ACTION_HOLDER2_ID, Constants::ACTION_HOLDER3_ID, Constants::ACTION_HOLDER4_ID, Constants::ACTION_HOLDER5_ID };
+     /* Iterate the commands and */
+     for( int count = 0; count < holderActionIds.size(); ++count ) {
+-      Core::Command* cmd = Core::ActionManager::command( holderActionIds[count] );
++      auto id = QString::fromLatin1(holderActionIds[count], strlen(holderActionIds[count]));
++      Core::Command* cmd = Core::ActionManager::command( Utils::Id::fromString(id ));
+       d->contextMenuHolderCommands.push_back( cmd );
+     }
+   }
+diff --git a/src/spellcheckerplugin.cpp b/src/spellcheckerplugin.cpp
+index 58a7d81f..9f1396ee 100644
+--- a/src/spellcheckerplugin.cpp
++++ b/src/spellcheckerplugin.cpp
+@@ -166,7 +166,8 @@ bool SpellCheckerPlugin::initialize( const QStringList& arguments, QString* erro
+   QVector<const char*> holderActionIds { Constants::ACTION_HOLDER1_ID, Constants::ACTION_HOLDER2_ID, Constants::ACTION_HOLDER3_ID, Constants::ACTION_HOLDER4_ID, Constants::ACTION_HOLDER5_ID };
+   for( int count = 0; count < holderActionIds.size(); ++count ) {
+     QAction* actionHolder    = new QAction( QStringLiteral( "" ), this );
+-    Core::Command* cmdHolder = Core::ActionManager::registerAction( actionHolder, holderActionIds[count], textContext );
++    auto id = QString::fromLatin1(holderActionIds[count], strlen(holderActionIds[count]));
++    Core::Command* cmdHolder = Core::ActionManager::registerAction( actionHolder, Utils::Id::fromString(id), textContext );
+     contextMenu->addAction( cmdHolder );
+   }
+   /* Set the right click context menu only enabled if the word under the cursor is a spelling

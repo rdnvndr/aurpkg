@@ -1,0 +1,34 @@
+pkgname=qtcreator-spellchecker-plugin
+pkgver=3.7.0
+_commit=v3.7.0
+pkgrel=2
+pkgdesc="Spell Checker plugin for the Qt Creator IDE"
+groups=('qt' 'qt6')
+arch=('i686' 'x86_64')
+url="https://github.com/CJCombrink/SpellChecker-Plugin"
+license=('GPL3')
+depends=('qtcreator' 'hunspell')
+makedepends=('git' 'qtcreator-devel')
+source=("$pkgname"::git+https://github.com/CJCombrink/SpellChecker-Plugin.git
+        "qtc15.patch")
+sha256sums=('SKIP' 'SKIP')
+
+prepare() {
+    mkdir -p "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/"
+
+    cd "${srcdir}/${pkgname}"
+    git checkout ${_commit}
+    
+    patch -p1 < ../qtc15.patch
+}
+
+build() {
+    cd "${srcdir}/${pkgname}"
+    cmake -B build -DCMAKE_INSTALL_PREFIX=/usr
+    cmake --build build
+}
+
+package() {
+    cd "${srcdir}/${pkgname}"
+    DESTDIR="$pkgdir" cmake --install build
+}

@@ -1,7 +1,7 @@
 # Maintainer: Marat Moustafine <moustafine-@t-tuta-d.t-io>
 
 pkgname=pvs-studio
-pkgver=7.30.80678.389
+pkgver=7.33.85330.89
 pkgrel=1
 pkgdesc='Static code analyzer for C, C++ and C#'
 arch=('x86_64')

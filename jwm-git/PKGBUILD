@@ -1,5 +1,5 @@
 pkgname=jwm-git
-pkgver=56cebf9
+pkgver=3e4518e
 pkgrel=1
 pkgdesc="A lightweight window manager for the X11 Window System"
 arch=('i686' 'x86_64')

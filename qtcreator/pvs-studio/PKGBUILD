@@ -6,7 +6,8 @@ pkgrel=1
 pkgdesc='Static code analyzer for C, C++ and C#'
 arch=('x86_64')
 url=http://www.$pkgname.com/en/$pkgname
-license=('unknown')
+license=('strace')
+depends=('qtcreator')
 optdepends=('how-to-use-pvs-studio-free: for adding special comments to a source code'
             'bash-completion: for bash completion'
             'strace: for analyzing via using strace logs')

@@ -2,30 +2,30 @@
 # Contributor: Fabio 'Lolix' Loli <lolix@disroot.org> -> https://github.com/FabioLolix
 
 pkgname=strawberry
-pkgver=1.1.3
-pkgrel=1
+pkgver=1.2.0
+pkgrel=3
 pkgdesc='A music player aimed at audio enthusiasts and music collectors'
 arch=(x86_64)
 url='https://www.strawbs.org/'
 license=(GPL3)
-depends=(qt6-base protobuf gst-plugins-base gst-plugins-good libcdio libmtp fftw)
+depends=(qt6-base protobuf gst-plugins-base gst-plugins-good libcdio libebur128 libmtp fftw
+         kdsingleapplication)
 makedepends=(cmake boost qt6-tools)
 optdepends=('gst-libav: additional codecs'
             'gst-plugins-bad: additional codecs'
             'gst-plugins-ugly: additional codecs')
-source=(https://github.com/strawberrymusicplayer/strawberry/releases/download/$pkgver/$pkgname-$pkgver.tar.xz)
+source=(git+https://github.com/strawberrymusicplayer/strawberry#tag=$pkgver)
 sha256sums=('SKIP')
 
 groups=('modified')
 
 prepare() {
-  cd $pkgname-$pkgver
-#  patch -p1 < $startdir/36eb1312.patch 
+  cd $pkgname
   patch -p1 < $startdir/cle.patch
 }
 
 build() {
-  cmake -B build -S $pkgname-$pkgver \
+  cmake -B build -S $pkgname \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DUSE_SYSTEM_TAGLIB=ON \
     -DENABLE_AUDIOCD=OFF \

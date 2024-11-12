@@ -1,7 +1,7 @@
 # https://gitlab.archlinux.org/archlinux/packaging/packages/telegram-desktop/-/blob/main/PKGBUILD
 pkgname=telegram-desktop-patched
-pkgver=5.6.3
-pkgrel=1
+pkgver=5.7.2
+pkgrel=3
 pkgdesc='Official Telegram Desktop client'
 arch=('x86_64')
 url="https://desktop.telegram.org/"
@@ -20,14 +20,17 @@ source=("https://github.com/telegramdesktop/tdesktop/releases/download/v${pkgver
         "0001-Disable-sponsored-messages.patch"
         "0002-Disable-saving-restrictions.patch"
         "0003-Disable-invite-peeking-restrictions.patch"
-        "0004-Disable-accounts-limit.patch")
+        "0004-Disable-accounts-limit.patch"
+        $pkgname-28611.patch::https://patch-diff.githubusercontent.com/raw/telegramdesktop/tdesktop/pull/28611.patch)
 sha512sums=('SKIP'
+    "SKIP"
     "SKIP"
     "SKIP"
     "SKIP"
     "SKIP")
 
 prepare() {
+    patch -Np1 -d tdesktop-$pkgver-full -i "$srcdir"/$pkgname-28611.patch
     cd tdesktop-$pkgver-full
     patch --forward --strip=1 -i "${srcdir}/0001-Disable-sponsored-messages.patch"
     patch --forward --strip=1 -i "${srcdir}/0002-Disable-saving-restrictions.patch"

@@ -3,7 +3,7 @@
 pkgname=pgadmin4-py
 _pkgname=${pkgname%[0-9]*}
 __pkgname=${pkgname%-*}
-pkgver=8.9
+pkgver=8.10
 pkgrel=1
 pkgdesc='Most popular and feature rich Open Source administration and development platform for PostgreSQL'
 url='https://www.pgadmin.org/'
@@ -24,9 +24,11 @@ package() {
         install -o postgres -g postgres -dvm 755 "$pkgdir/var/lib/postgres/"
     fi
     cd $pkgdir/home/pgadmin/
-    python3 -m venv $__pkgname 
+    #sed -i '/darwin/ s/\([[:digit:]]\);.*/\1/' "pgadmin4-8.12/pgadmin4-8.12.dist-info/METADATA"
+    #sed -i '/psycopg\[binary\]==3.1.19/d' "pgadmin4-8.12/pgadmin4-8.12.dist-info/METADATA"
+    python3 -m venv $__pkgname
     source $__pkgname/bin/activate
-    pip install $__pkgname
+    pip install $__pkgname==$pkgver
 
     # Script de ejecución pgadmin4.
     install -Dvm755 <(cat <<'EOF'

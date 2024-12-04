@@ -1,7 +1,7 @@
 pkgname=qt5-rtp-platformtheme
 _pkgname=qt-rtp-platformtheme
-pkgver=0.3.1
-pkgrel=3
+pkgver=0.3.2
+pkgrel=1
 pkgdesc="A theme engine for Qt5"
 arch=(x86_64)
 url="https://github.com/rdnvndr/$pkgname"

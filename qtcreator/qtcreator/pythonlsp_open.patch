@@ -1,0 +1,28 @@
+diff --git a/src/plugins/python/pythoneditor.cpp b/src/plugins/python/pythoneditor.cpp
+index 5854b92d..acaf4132 100644
+--- a/src/plugins/python/pythoneditor.cpp
++++ b/src/plugins/python/pythoneditor.cpp
+@@ -297,8 +297,7 @@ PythonDocument::PythonDocument()
+ 
+ void PythonDocument::updateCurrentPython()
+ {
+-    if (Core::DocumentModel::entryForDocument(this))
+-        updatePython(detectPython(filePath()));
++    updatePython(detectPython(filePath()));
+ }
+ 
+ void PythonDocument::updatePython(const FilePath &python)
+diff --git a/src/plugins/python/pythonlanguageclient.cpp b/src/plugins/python/pythonlanguageclient.cpp
+index bbfb5c75..199702a8 100644
+--- a/src/plugins/python/pythonlanguageclient.cpp
++++ b/src/plugins/python/pythonlanguageclient.cpp
+@@ -334,8 +337,7 @@ void PyLSConfigureAssistant::installPythonLanguageServer(const FilePath &python,
+ void PyLSConfigureAssistant::openDocument(const FilePath &python, TextEditor::TextDocument *document)
+ {
+     resetEditorInfoBar(document);
+-    if (!PythonSettings::pylsEnabled() || !python.exists()
+-        || !Core::DocumentModel::entryForDocument(document)) {
++    if (!PythonSettings::pylsEnabled() || !python.exists()) {
+         return;
+     }
+ 

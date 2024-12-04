@@ -1,8 +1,8 @@
 diff --git a/src/plugins/projectexplorer/appoutputpane.cpp b/src/plugins/projectexplorer/appoutputpane.cpp
-index 29c84aec..c8b4394a 100644
+index 22e76bd2..ab2b89c6 100644
 --- a/src/plugins/projectexplorer/appoutputpane.cpp
 +++ b/src/plugins/projectexplorer/appoutputpane.cpp
-@@ -40,6 +40,8 @@
+@@ -43,6 +43,8 @@
  #include <QSpinBox>
  #include <QTabBar>
  #include <QTabWidget>
@@ -11,21 +11,17 @@ index 29c84aec..c8b4394a 100644
  #include <QTimer>
  #include <QToolButton>
  #include <QVBoxLayout>
-@@ -74,59 +76,6 @@ static QString msgAttachDebuggerTooltip(const QString &handleDescription = QStri
+@@ -78,48 +80,6 @@ static QString msgAttachDebuggerTooltip(const QString &handleDescription = QStri
             Tr::tr("Attach debugger to %1").arg(handleDescription);
  }
  
 -class TabWidget : public QTabWidget
 -{
--    Q_OBJECT
 -public:
 -    TabWidget(QWidget *parent = nullptr);
--signals:
--    void contextMenuRequested(const QPoint &pos, int index);
--protected:
--    bool eventFilter(QObject *object, QEvent *event) override;
+-
 -private:
--    void slotContextMenuRequested(const QPoint &pos);
+-    bool eventFilter(QObject *object, QEvent *event) override;
 -    int m_tabIndexForMiddleClick = -1;
 -};
 -
@@ -34,8 +30,6 @@ index 29c84aec..c8b4394a 100644
 -{
 -    tabBar()->installEventFilter(this);
 -    setContextMenuPolicy(Qt::CustomContextMenu);
--    connect(this, &QWidget::customContextMenuRequested,
--            this, &TabWidget::slotContextMenuRequested);
 -}
 -
 -bool TabWidget::eventFilter(QObject *object, QEvent *event)
@@ -63,15 +57,10 @@ index 29c84aec..c8b4394a 100644
 -    return QTabWidget::eventFilter(object, event);
 -}
 -
--void TabWidget::slotContextMenuRequested(const QPoint &pos)
--{
--    emit contextMenuRequested(pos, tabBar()->tabAt(pos));
--}
--
  AppOutputPane::RunControlTab::RunControlTab(RunControl *runControl, Core::OutputWindow *w) :
      runControl(runControl), window(w)
  {
-@@ -137,16 +86,15 @@ AppOutputPane::RunControlTab::RunControlTab(RunControl *runControl, Core::Output
+@@ -130,16 +90,15 @@ AppOutputPane::RunControlTab::RunControlTab(RunControl *runControl, Core::Output
  }
  
  AppOutputPane::AppOutputPane() :
@@ -91,7 +80,7 @@ index 29c84aec..c8b4394a 100644
      m_handler(new ShowOutputTaskHandler(this,
          Tr::tr("Show &App Output"),
          Tr::tr("Show the output that generated this issue in Application Output."),
-@@ -203,18 +151,26 @@ AppOutputPane::AppOutputPane() :
+@@ -196,18 +155,22 @@ AppOutputPane::AppOutputPane() :
      formatterWidgetsLayout->setContentsMargins(QMargins());
      m_formatterWidget->setLayout(formatterWidgetsLayout);
  
@@ -102,7 +91,12 @@ index 29c84aec..c8b4394a 100644
 +    connect(m_closeCurrentTabButton, &QToolButton::clicked, this, [this] {
 +        closeTab(m_tabWidget->currentIndex());
 +    });
-+    
+ 
+-    m_tabWidget->setDocumentMode(true);
+-    m_tabWidget->setTabsClosable(true);
+-    m_tabWidget->setMovable(true);
+-    connect(m_tabWidget, &QTabWidget::tabCloseRequested,
+-            this, [this](int index) { closeTab(index); });
 +    m_tabComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 +    m_tabComboBox->addItem(Tr::tr("<no configuration>"));
 +    connect(m_tabComboBox, &QComboBox::activated,
@@ -110,24 +104,15 @@ index 29c84aec..c8b4394a 100644
 +    connect(m_tabWidget, &QStackedWidget::currentChanged,
 +            m_tabComboBox, &QComboBox::setCurrentIndex);
  
--    m_tabWidget->setDocumentMode(true);
--    m_tabWidget->setTabsClosable(true);
--    m_tabWidget->setMovable(true);
--    connect(m_tabWidget, &QTabWidget::tabCloseRequested,
--            this, [this](int index) { closeTab(index); });
-+    // Spacer (?)
- 
 -    connect(m_tabWidget, &QTabWidget::currentChanged,
 +    connect(m_tabWidget, &QStackedWidget::currentChanged,
              this, &AppOutputPane::tabChanged);
--    connect(m_tabWidget, &TabWidget::contextMenuRequested,
+-    connect(m_tabWidget, &QWidget::customContextMenuRequested,
 -            this, &AppOutputPane::contextMenuRequested);
-+//    connect(m_tabWidget, &TabWidget::contextMenuRequested,
-+//            this, &AppOutputPane::contextMenuRequested);
  
      connect(SessionManager::instance(), &SessionManager::aboutToUnloadSession,
              this, &AppOutputPane::aboutToUnloadSession);
-@@ -281,9 +237,7 @@ const AppOutputPane::RunControlTab *AppOutputPane::tabFor(const QWidget *outputW
+@@ -276,9 +239,7 @@ const AppOutputPane::RunControlTab *AppOutputPane::tabFor(const QWidget *outputW
  void AppOutputPane::updateCloseActions()
  {
      const int tabCount = m_tabWidget->count();
@@ -138,7 +123,7 @@ index 29c84aec..c8b4394a 100644
  }
  
  bool AppOutputPane::aboutToClose() const
-@@ -305,8 +259,8 @@ QWidget *AppOutputPane::outputWidget(QWidget *)
+@@ -300,8 +261,8 @@ QWidget *AppOutputPane::outputWidget(QWidget *)
  
  QList<QWidget *> AppOutputPane::toolBarWidgets() const
  {
@@ -149,7 +134,7 @@ index 29c84aec..c8b4394a 100644
  }
  
  void AppOutputPane::clearContents()
-@@ -418,7 +372,7 @@ void AppOutputPane::createNewOutputWindow(RunControl *rc)
+@@ -414,7 +375,7 @@ void AppOutputPane::createNewOutputWindow(RunControl *rc)
          // Update the title.
          const int tabIndex = m_tabWidget->indexOf(tab->window);
          QTC_ASSERT(tabIndex != -1, return);
@@ -158,7 +143,7 @@ index 29c84aec..c8b4394a 100644
          updateOutputFileName(tabIndex, rc);
  
          tab->window->scrollToBottom();
-@@ -459,7 +413,12 @@ void AppOutputPane::createNewOutputWindow(RunControl *rc)
+@@ -456,7 +417,12 @@ void AppOutputPane::createNewOutputWindow(RunControl *rc)
              ow, updateBehaviorSettings);
  
      m_runControlTabs.push_back(RunControlTab(rc, ow));
@@ -172,7 +157,7 @@ index 29c84aec..c8b4394a 100644
      updateOutputFileName(m_tabWidget->count() - 1, rc);
      qCDebug(appOutputLog) << "AppOutputPane::createNewOutputWindow: Adding tab for" << rc;
      updateCloseActions();
-@@ -642,7 +601,13 @@ void AppOutputPane::closeTab(int tabIndex, CloseTabMode closeTabMode)
+@@ -669,7 +635,13 @@ void AppOutputPane::closeTab(int tabIndex, CloseTabMode closeTabMode)
              return;
      }
  
@@ -187,12 +172,13 @@ index 29c84aec..c8b4394a 100644
      delete window;
  
      Utils::erase(m_runControlTabs, [runControl](const RunControlTab &t) {
-@@ -742,26 +707,6 @@ void AppOutputPane::tabChanged(int i)
+@@ -770,27 +742,6 @@ void AppOutputPane::tabChanged(int i)
      }
  }
  
--void AppOutputPane::contextMenuRequested(const QPoint &pos, int index)
+-void AppOutputPane::contextMenuRequested(const QPoint &pos)
 -{
+-    const int index = m_tabWidget->tabBar()->tabAt(pos);
 -    const QList<QAction *> actions = {m_closeCurrentTabAction, m_closeAllTabsAction, m_closeOtherTabsAction};
 -    QAction *action = QMenu::exec(actions, m_tabWidget->mapToGlobal(pos), nullptr, m_tabWidget);
 -    if (action == m_closeAllTabsAction) {
@@ -215,10 +201,10 @@ index 29c84aec..c8b4394a 100644
  {
      const RunControlTab * const tab = tabFor(runControl);
 diff --git a/src/plugins/projectexplorer/appoutputpane.h b/src/plugins/projectexplorer/appoutputpane.h
-index f7cbb653..e52b08d1 100644
+index 0b83ac29..123e901a 100644
 --- a/src/plugins/projectexplorer/appoutputpane.h
 +++ b/src/plugins/projectexplorer/appoutputpane.h
-@@ -17,6 +17,8 @@ QT_BEGIN_NAMESPACE
+@@ -16,6 +16,8 @@ QT_BEGIN_NAMESPACE
  class QToolButton;
  class QAction;
  class QPoint;
@@ -227,22 +213,21 @@ index f7cbb653..e52b08d1 100644
  QT_END_NAMESPACE
  
  namespace Core { class OutputWindow; }
-@@ -29,7 +31,6 @@ class Project;
+@@ -27,7 +29,6 @@ class RunControl;
  namespace Internal {
  
  class ShowOutputTaskHandler;
 -class TabWidget;
  
- class AppOutputPane : public Core::IOutputPane
- {
-@@ -119,18 +120,17 @@ private:
+ enum class AppOutputPaneMode { FlashOnOutput, PopupOnOutput, PopupOnFirstOutput };
+ 
+@@ -136,17 +137,16 @@ private:
      void loadSettings();
      void storeSettings() const;
  
 -    TabWidget *m_tabWidget;
 +    QStackedWidget *m_tabWidget;
      QVector<RunControlTab> m_runControlTabs;
-     int m_runControlCount = 0;
      QAction *m_stopAction;
 -    QAction *m_closeCurrentTabAction;
 -    QAction *m_closeAllTabsAction;

@@ -9,7 +9,7 @@ arch=('x86_64')
 url='https://github.com/rui314/mold'
 license=('MIT')
 # xxhash is bundled
-depends=('glibc' 'gcc-libs' 'mimalloc' 'zlib' 'tbb' 'zstd')
+depends=('glibc' 'gcc-libs' 'zlib' 'tbb' 'zstd')
 makedepends=('git' 'python' 'cmake' 'mold')
 checkdepends=('clang' 'libdwarf')
 source=("$pkgname::git+$url.git#tag=v$pkgver")
@@ -36,8 +36,8 @@ build() {
   -D CMAKE_BUILD_TYPE='None' \
   -D CMAKE_INSTALL_PREFIX='/usr' \
   -D CMAKE_INSTALL_LIBEXECDIR='lib' \
-  -D MOLD_USE_SYSTEM_MIMALLOC=OFF \
   -D MOLD_USE_SYSTEM_TBB=ON \
+  -D MOLD_USE_MIMALLOC=ON \
   -D MOLD_LTO=ON \
   -D MOLD_USE_MOLD=ON
 

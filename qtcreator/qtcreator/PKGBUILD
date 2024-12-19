@@ -90,10 +90,10 @@ build() {
   export CXX=/usr/bin/clang++
   export CXXFLAGS="-march=native -O3 -pipe -fno-plt -fexceptions \
                    -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
-                   -fPIC -Qunused-arguments -flto=thin"
+                   -fPIC -Qunused-arguments -flto=thin -fomit-frame-pointer"
   export CFLAGS="-march=native -O3 -pipe -fno-plt -fexceptions \
                    -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
-                   -fPIC -Qunused-arguments -flto=thin"
+                   -fPIC -Qunused-arguments -flto=thin -fomit-frame-pointer"
   export AR=/usr/bin/llvm-ar
   export NM=/usr/bin/llvm-nm
   export RANLIB=/usr/bin/llvm-ranlib

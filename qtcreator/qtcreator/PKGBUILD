@@ -2,7 +2,7 @@ pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
 pkgver=15.0.1
 _commit=15.0
-pkgrel=7
+pkgrel=9
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -10,7 +10,7 @@ license=("Apache-2.0")
 depends=(qt6-tools qt6-svg qt6-quick3d qt6-webengine qt6-serialport qt6-shadertools qt6-5compat
          clang clazy yaml-cpp litehtml) # syntax-highlighting
 makedepends=(cmake llvm python clang)
-options=(docs !lto)
+options=(docs)
 optdepends=('qt6-doc: integrated Qt documentation'
             'qt6-examples: welcome page examples'
             'qt6-translations: for other languages'
@@ -85,19 +85,6 @@ prepare() {
 }
 
 build() {
-  # Clang
-  export CC=/usr/bin/clang
-  export CXX=/usr/bin/clang++
-  export CXXFLAGS="-march=native -O3 -pipe -fno-plt -fexceptions \
-                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
-                   -fPIC -Qunused-arguments -flto=thin -fomit-frame-pointer"
-  export CFLAGS="-march=native -O3 -pipe -fno-plt -fexceptions \
-                   -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
-                   -fPIC -Qunused-arguments -flto=thin -fomit-frame-pointer"
-  export AR=/usr/bin/llvm-ar
-  export NM=/usr/bin/llvm-nm
-  export RANLIB=/usr/bin/llvm-ranlib
-    
   cmake -B build -S qt-creator \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBEXECDIR=lib \

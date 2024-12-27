@@ -2,7 +2,7 @@ pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
 pkgver=15.0.1
 _commit=15.0
-pkgrel=9
+pkgrel=10
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -81,7 +81,7 @@ prepare() {
 #  patch -d qt-creator -p1 < pyindent.patch
   patch -d qt-creator -p1 < multitextcursor.patch
   patch -d qt-creator -p1 < pythonlsp_open.patch
-  patch -d qt-creator -p1 < clangtool.patch
+#  patch -d qt-creator -p1 < clangtool.patch
 }
 
 build() {

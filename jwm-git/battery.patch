@@ -122,7 +122,7 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
 +    }
 + 
 +    int perc = (lastFullCapacity != 0) ? ((float)remainingCapacity/(float)lastFullCapacity*100) : 0;
-+    asprintf((char**)&timeString, " %d%% %s", perc, GetTimeString(clk->format, clk->zone));
++    asprintf((char**)&timeString, " %d%% %s", perc, GetTimeString(clk->format, clk->zone));
 + 
      /* Determine if the clock is the right size. */
      width = GetStringWidth(FONT_CLOCK, timeString);

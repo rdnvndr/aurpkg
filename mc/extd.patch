@@ -58,11 +58,11 @@ diff -cr old/misc/ext.d/video.sh new/misc/ext.d/video.sh
           do_open_action "${filetype}"
       ;;
   *)
-diff -cr old/misc/ext.d/web.sh.in new/misc/ext.d/web.sh.in
-*** old/misc/ext.d/web.sh.in	2024-01-28 16:56:25.000000000 +0300
---- new/misc/ext.d/web.sh.in	2024-01-28 17:07:38.446367352 +0300
+diff -cr old/misc/ext.d/web.sh new/misc/ext.d/web.sh
+*** old/misc/ext.d/web.sh	2024-01-28 16:56:25.000000000 +0300
+--- new/misc/ext.d/web.sh	2024-01-28 17:07:38.446367352 +0300
 ***************
-*** 47,53 ****
+*** 52,58 ****
       do_view_action "${filetype}"
       ;;
   open)
@@ -70,7 +70,7 @@ diff -cr old/misc/ext.d/web.sh.in new/misc/ext.d/web.sh.in
           do_open_action "${filetype}"
       ;;
   *)
---- 47,53 ----
+--- 52,58 ----
       do_view_action "${filetype}"
       ;;
   open)

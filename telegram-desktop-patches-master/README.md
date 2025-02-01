@@ -4,13 +4,15 @@ Patches disabling some anti-features of [Telegram Desktop](https://desktop.teleg
 
 ## Installation
 
+Building requires ⪝48 GB of RAM. Use zram, if you are lacking.
+
 ### Arch Linux
 
 ```sh
 makepkg -si
 ```
 
-Or if you want to regenerate PKGBUILD for current patches in the directory:
+Or if you want to regenerate `PKGBUILD` for current patches in the directory (don't use spaces in patch filenames):
 
 ``` sh
 make
@@ -18,9 +20,18 @@ make
 
 You may also install a prebuilt package published in releases.
 
+### Nix
+
+May be unmaintained.
+
+- [Overrides](https://github.com/Layerex/telegram-desktop-patches/issues/4#issue-2124576494)
+- [Flake](https://github.com/shwewo/telegram-desktop-patched)
+
+**TODO:** generate overrides and flake automatically.
+
 ### Other systems
 
-Download source code of Telegram Desktop and run commands from prepare(), build() and package() in PKGBUILD manually.
+Download source code of Telegram Desktop and run commands from `prepare()`, `build()` and `package()` in `PKGBUILD` manually.
 
 ## Patches
 
@@ -36,9 +47,19 @@ Disables restrictions for viewing and exporting private chats and channels you d
 
 ### 0004-Disable-accounts-limit.patch
 
+### 0005-Option-to-disable-stories.patch
+
+Toggle is in experimental settings.
+
 ## Contributing
 
 Feel free to contibute patches and means of packaging and installation.
+
+## Updating
+
+If you want to update `PKGBUILD`, make changes in `PKGBUILD.m4` instead and generate `PKGBUILD` with `make`.
+
+See `PKGBUILD.m4` for update instructions.
 
 ## See also
 

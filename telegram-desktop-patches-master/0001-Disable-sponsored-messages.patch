@@ -1,16 +1,25 @@
-*** a/Telegram/SourceFiles/data/components/sponsored_messages.cpp	2024-11-05 11:45:43.000000000 +0300
---- b/Telegram/SourceFiles/data/components/sponsored_messages.cpp	2024-11-12 15:36:57.080621183 +0300
-***************
-*** 195,205 ****
-  }
-  
-  bool SponsoredMessages::canHaveFor(not_null<History*> history) const {
-- 	if (history->peer->isChannel()) {
-- 		return true;
-- 	} else if (const auto user = history->peer->asUser()) {
-- 		return user->isBot();
-- 	}
-  	return false;
-  }
-  
---- 195,200 ----
+diff --git a/Telegram/SourceFiles/data/components/sponsored_messages.cpp b/Telegram/SourceFiles/data/components/sponsored_messages.cpp
+index 5ae9d8b..73f4244 100644
+--- a/Telegram/SourceFiles/data/components/sponsored_messages.cpp
++++ b/Telegram/SourceFiles/data/components/sponsored_messages.cpp
+@@ -210,20 +210,10 @@ void SponsoredMessages::inject(
+ }
+ 
+ bool SponsoredMessages::canHaveFor(not_null<History*> history) const {
+-	if (history->peer->isChannel()) {
+-		return true;
+-	} else if (const auto user = history->peer->asUser()) {
+-		return user->isBot();
+-	}
+ 	return false;
+ }
+ 
+ bool SponsoredMessages::isTopBarFor(not_null<History*> history) const {
+-	if (peerIsUser(history->peer->id)) {
+-		if (const auto user = history->peer->asUser()) {
+-			return user->isBot();
+-		}
+-	}
+ 	return false;
+ }
+ 

@@ -1,8 +1,8 @@
 diff --git a/Telegram/SourceFiles/data/data_story.cpp b/Telegram/SourceFiles/data/data_story.cpp
-index d5faa43..c6b26dc 100644
+index 9adcad0..9750d5a 100644
 --- a/Telegram/SourceFiles/data/data_story.cpp
 +++ b/Telegram/SourceFiles/data/data_story.cpp
-@@ -318,12 +318,11 @@ bool Story::edited() const {
+@@ -390,12 +390,11 @@ bool Story::out() const {
  }
  
  bool Story::canDownloadIfPremium() const {
@@ -18,10 +18,10 @@ index d5faa43..c6b26dc 100644
  
  bool Story::canShare() const {
 diff --git a/Telegram/SourceFiles/history/history_inner_widget.cpp b/Telegram/SourceFiles/history/history_inner_widget.cpp
-index 2f1dabe..bd6d25f 100644
+index dcc9d77..0260ebb 100644
 --- a/Telegram/SourceFiles/history/history_inner_widget.cpp
 +++ b/Telegram/SourceFiles/history/history_inner_widget.cpp
-@@ -649,14 +649,7 @@ void HistoryInner::setupSharingDisallowed() {
+@@ -652,14 +652,7 @@ void HistoryInner::setupSwipeReply() {
  }
  
  bool HistoryInner::hasSelectRestriction() const {
@@ -37,7 +37,7 @@ index 2f1dabe..bd6d25f 100644
  }
  
  void HistoryInner::messagesReceived(
-@@ -2665,12 +2658,12 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
+@@ -2988,12 +2981,12 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
  }
  
  bool HistoryInner::hasCopyRestriction(HistoryItem *item) const {
@@ -50,13 +50,13 @@ index 2f1dabe..bd6d25f 100644
 -	return hasCopyRestriction(item) || item->forbidsSaving();
 +	return false;
  }
- 
+
  bool HistoryInner::showCopyRestriction(HistoryItem *item) {
 diff --git a/Telegram/SourceFiles/history/history_item.cpp b/Telegram/SourceFiles/history/history_item.cpp
-index d9c30601..5fcd7d02 100644
+index ec57dee..4f586fc 100644
 --- a/Telegram/SourceFiles/history/history_item.cpp
 +++ b/Telegram/SourceFiles/history/history_item.cpp
-@@ -2243,11 +2243,6 @@ bool HistoryItem::forbidsForward() const {
+@@ -2268,11 +2268,6 @@ bool HistoryItem::forbidsForward() const {
  }
  
  bool HistoryItem::forbidsSaving() const {
@@ -69,10 +69,10 @@ index d9c30601..5fcd7d02 100644
  }
  
 diff --git a/Telegram/SourceFiles/history/view/history_view_list_widget.cpp b/Telegram/SourceFiles/history/view/history_view_list_widget.cpp
-index 3de0cb2..0359ab3 100644
+index 2e2c087..223607c 100644
 --- a/Telegram/SourceFiles/history/view/history_view_list_widget.cpp
 +++ b/Telegram/SourceFiles/history/view/history_view_list_widget.cpp
-@@ -1420,13 +1420,11 @@ bool ListWidget::isEmpty() const {
+@@ -1545,13 +1545,11 @@ bool ListWidget::isEmpty() const {
  }
  
  bool ListWidget::hasCopyRestriction(HistoryItem *item) const {
@@ -88,9 +88,9 @@ index 3de0cb2..0359ab3 100644
  }
  
  bool ListWidget::showCopyRestriction(HistoryItem *item) {
-@@ -1452,21 +1450,6 @@ bool ListWidget::showCopyMediaRestriction(not_null<HistoryItem*> item) {
+@@ -1577,21 +1575,6 @@ bool ListWidget::showCopyMediaRestriction(not_null<HistoryItem*> item) {
  }
- 
+
  bool ListWidget::hasCopyRestrictionForSelected() const {
 -	if (hasCopyRestriction()) {
 -		return true;
@@ -109,8 +109,8 @@ index 3de0cb2..0359ab3 100644
 -	}
  	return false;
  }
- 
-@@ -1485,8 +1468,7 @@ bool ListWidget::showCopyRestrictionForSelected() {
+
+@@ -1610,8 +1593,7 @@ bool ListWidget::showCopyRestrictionForSelected() {
  }
  
  bool ListWidget::hasSelectRestriction() const {
@@ -119,12 +119,12 @@ index 3de0cb2..0359ab3 100644
 +	return false;
  }
  
- auto ListWidget::findViewForPinnedTracking(int top) const
+ Element *ListWidget::lookupItemByY(int y) const {
 diff --git a/Telegram/SourceFiles/history/view/history_view_top_bar_widget.cpp b/Telegram/SourceFiles/history/view/history_view_top_bar_widget.cpp
-index fa0d6ed..a569215 100644
+index 3912e53..7af4419 100644
 --- a/Telegram/SourceFiles/history/view/history_view_top_bar_widget.cpp
 +++ b/Telegram/SourceFiles/history/view/history_view_top_bar_widget.cpp
-@@ -1153,15 +1153,14 @@ void TopBarWidget::updateMembersShowArea() {
+@@ -1228,15 +1228,14 @@ void TopBarWidget::updateMembersShowArea() {
  }
  
  bool TopBarWidget::showSelectedState() const {
@@ -143,10 +143,10 @@ index fa0d6ed..a569215 100644
  		&& _canDelete == canDelete
  		&& _canForward == canForward
 diff --git a/Telegram/SourceFiles/info/media/info_media_provider.cpp b/Telegram/SourceFiles/info/media/info_media_provider.cpp
-index 3e75975..ee23733 100644
+index 2fc6973..2e830b7 100644
 --- a/Telegram/SourceFiles/info/media/info_media_provider.cpp
 +++ b/Telegram/SourceFiles/info/media/info_media_provider.cpp
-@@ -87,14 +87,7 @@ Type Provider::type() {
+@@ -88,14 +88,7 @@ Type Provider::type() {
  }
  
  bool Provider::hasSelectRestriction() {
@@ -163,10 +163,10 @@ index 3e75975..ee23733 100644
  
  rpl::producer<bool> Provider::hasSelectRestrictionChanges() {
 diff --git a/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp b/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
-index 0a58cdb..626773f 100644
+index 9362819..4b3944f 100644
 --- a/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
 +++ b/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
-@@ -1031,13 +1031,7 @@ QSize OverlayWidget::flipSizeByRotation(QSize size) const {
+@@ -1083,13 +1083,7 @@ QSize OverlayWidget::flipSizeByRotation(QSize size) const {
  }
  
  bool OverlayWidget::hasCopyMediaRestriction(bool skipPremiumCheck) const {
@@ -179,5 +179,5 @@ index 0a58cdb..626773f 100644
 -		|| (_message && _message->forbidsSaving());
 +	return false;
  }
- 
+
  bool OverlayWidget::showCopyMediaRestriction(bool skipPRemiumCheck) {

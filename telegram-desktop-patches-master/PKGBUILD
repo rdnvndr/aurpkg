@@ -16,7 +16,7 @@ prepare() {
 # To bump Telegram version, selectively paste upstream PKGBUILD below, retaining PATCH_FILENAMES and PATCH_HASHES
 # https://gitlab.archlinux.org/archlinux/packaging/packages/telegram-desktop/-/blob/main/PKGBUILD
 # Make sure you are modifying PKGBUILD.m4, not PKGBUILD, or your changes will be overwritten by make
-pkgver=5.10.7
+pkgver=5.11.1
 arch=('x86_64')
 license=('GPL3')
 depends=('hunspell' 'ffmpeg' 'hicolor-icon-theme' 'lz4' 'minizip' 'openal'

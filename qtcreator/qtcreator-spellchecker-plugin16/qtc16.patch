@@ -1,0 +1,27 @@
+diff --git a/src/Parsers/CppParser/cppparseroptionspage.cpp b/src/Parsers/CppParser/cppparseroptionspage.cpp
+index 2a236372..086aa876 100644
+--- a/src/Parsers/CppParser/cppparseroptionspage.cpp
++++ b/src/Parsers/CppParser/cppparseroptionspage.cpp
+@@ -31,7 +31,7 @@ CppParserOptionsPage::CppParserOptionsPage( CppParserSettings* settings )
+   setId( "SpellChecker::CppDocumentParserSettings" );
+   setDisplayName( CppParserOptionsWidget::tr( "C++ Parser" ) );
+   setCategory( "SpellChecker" );
+-  setDisplayCategory( CppParserOptionsWidget::tr( "Spell Checker" ) );
++  registerCategory("SpellChecker::CppDocumentParserSettings",  CppParserOptionsWidget::tr( "Spell Checker" ), "");
+ }
+ // --------------------------------------------------
+ 
+diff --git a/src/spellcheckercoreoptionswidget.cpp b/src/spellcheckercoreoptionswidget.cpp
+index 601b3dc8..c67a0277 100644
+--- a/src/spellcheckercoreoptionswidget.cpp
++++ b/src/spellcheckercoreoptionswidget.cpp
+@@ -269,8 +269,7 @@ SpellChecker::Internal::SpellCheckerCoreOptionsPage::SpellCheckerCoreOptionsPage
+   setId( "SpellChecker::CoreSettings" );
+   setDisplayName( SpellCheckerCoreOptionsWidget::tr( "SpellChecker" ) );
+   setCategory( "SpellChecker" );
+-  setDisplayCategory( SpellCheckerCoreOptionsWidget::tr( "Spell Checker" ) );
+-  setCategoryIconPath( ":/spellcheckerplugin/images/optionspageicon_solid.png" );
++  registerCategory("SpellChecker::CoreSettings", SpellCheckerCoreOptionsWidget::tr( "Spell Checker" ), ":/spellcheckerplugin/images/optionspageicon_solid.png");
+   setWidgetCreator([settings, onApply] { return new SpellCheckerCoreOptionsWidget(settings, onApply); });
+ }
+ // --------------------------------------------------

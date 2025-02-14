@@ -2,7 +2,7 @@
 # Contributor: Fabio 'Lolix' Loli <lolix@disroot.org> -> https://github.com/FabioLolix
 
 pkgname=strawberry
-pkgver=1.2.6
+pkgver=1.2.7
 pkgrel=1
 pkgdesc='A music player aimed at audio enthusiasts and music collectors'
 arch=(x86_64)
@@ -46,6 +46,8 @@ build() {
     -DENABLE_GPOD=OFF \
     -DENABLE_XINE=OFF \
     -DENABLE_UDISKS2=OFF \
+    -DENABLE_SPOTIFY=OFF \
+    -DENABLE_GIO_UNIX=OFF \
     -DBUILD_WITH_QT6=ON
   cmake --build build
 }

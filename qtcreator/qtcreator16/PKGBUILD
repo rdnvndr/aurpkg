@@ -80,7 +80,7 @@ prepare() {
   patch -d qt-creator -p1 < pylsp.patch
 #  patch -d qt-creator -p1 < pyindent.patch
   patch -d qt-creator -p1 < multitextcursor.patch
-  patch -d qt-creator -p1 < pythonlsp_open.patch
+#  patch -d qt-creator -p1 < pythonlsp_open.patch
 #  patch -d qt-creator -p1 < clangtool.patch
 }
 

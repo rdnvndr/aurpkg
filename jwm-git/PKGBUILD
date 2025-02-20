@@ -48,6 +48,7 @@ build() {
   cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
   ./autogen.sh
   ./configure --prefix=/usr --sysconfdir=/etc --disable-fribidi --enable-cairo  --disable-rsvg --disable-jpeg  
+  gettextize -f
   make
 }
 

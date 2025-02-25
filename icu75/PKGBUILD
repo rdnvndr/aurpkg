@@ -10,7 +10,7 @@ url="https://icu.unicode.org"
 license=('LicenseRef-Unicode-3.0'
          'BSD-2-Clause'
          'BSD-3-Clause')
-depends=('gcc-libs' 'glibc' 'sh')
+depends=('gcc-libs' 'glibc' 'sh' 'ungoogled-chromium-xdg')
 makedepends=('python')
 provides=(libicu{data,i18n,io,test,tu,uc}.so)
 source=(https://github.com/unicode-org/icu/releases/download/release-${pkgver//./-}/icu4c-${pkgver//./_}-src.tgz{,.asc}
@@ -64,7 +64,10 @@ check() {
 package() {
   cd icu/source
   make DESTDIR="${pkgdir}" install
-
-  # Install license
-  install -Dm644 "${srcdir}"/LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+  rm -rf "${pkgdir}/usr/bin"
+  rm -rf "${pkgdir}/usr/include"
+  rm -rf "${pkgdir}/usr/share"
+  rm -rf "${pkgdir}/usr/lib/icu"
+  rm -rf "${pkgdir}/usr/lib/pkgconfig"
+  rm -rf "${pkgdir}"/usr/lib/*.so
 }

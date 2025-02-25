@@ -78,8 +78,8 @@ prepare() {
   patch -d qt-creator -p1 < appstackedpane.patch
   patch -d qt-creator -p1 < fancymainwindow.patch
   patch -d qt-creator -p1 < pylsp.patch
-#  patch -d qt-creator -p1 < pyindent.patch
-  patch -d qt-creator -p1 < multitextcursor.patch
+  patch -d qt-creator -p1 < pyindent.patch        # Fix rename symbol under cursor
+  patch -d qt-creator -p1 < multitextcursor.patch # Fix delete and move cursor to left
 #  patch -d qt-creator -p1 < pythonlsp_open.patch
 #  patch -d qt-creator -p1 < clangtool.patch
 }

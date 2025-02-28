@@ -3,7 +3,7 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-server-bug865-issue1578
-pkgver=21.1.15
+pkgver=21.1.16
 pkgrel=1
 arch=('x86_64')
 license=('LicenseRef-Adobe-Display-PostScript'

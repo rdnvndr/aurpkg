@@ -1,8 +1,8 @@
 pkgbase=qtcreator
 pkgname=(qtcreator qtcreator-devel)
-pkgver=15.0.1
-_commit=15.0
-pkgrel=19
+pkgver=16.0.0
+_commit=16.0
+pkgrel=3
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -78,9 +78,9 @@ prepare() {
   patch -d qt-creator -p1 < appstackedpane.patch
   patch -d qt-creator -p1 < fancymainwindow.patch
   patch -d qt-creator -p1 < pylsp.patch
-#  patch -d qt-creator -p1 < pyindent.patch
-  patch -d qt-creator -p1 < multitextcursor.patch
-  patch -d qt-creator -p1 < pythonlsp_open.patch
+  patch -d qt-creator -p1 < pyindent.patch        # Fix rename symbol under cursor
+  patch -d qt-creator -p1 < multitextcursor.patch # Fix delete and move cursor to left
+#  patch -d qt-creator -p1 < pythonlsp_open.patch
 #  patch -d qt-creator -p1 < clangtool.patch
 }
 

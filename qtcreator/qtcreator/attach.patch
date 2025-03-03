@@ -1,8 +1,8 @@
 diff --git a/src/plugins/projectexplorer/projectexplorer.cpp b/src/plugins/projectexplorer/projectexplorer.cpp
-index cf82aa6e..9fa6050b 100644
+index d67c6362..10a1ac57 100644
 --- a/src/plugins/projectexplorer/projectexplorer.cpp
 +++ b/src/plugins/projectexplorer/projectexplorer.cpp
-@@ -119,6 +119,7 @@
+@@ -122,6 +122,7 @@
  
  #include <extensionsystem/pluginmanager.h>
  #include <extensionsystem/pluginspec.h>
@@ -10,20 +10,20 @@ index cf82aa6e..9fa6050b 100644
  
  #include <texteditor/findinfiles.h>
  #include <texteditor/tabsettings.h>
-@@ -2970,6 +2971,16 @@ void ProjectExplorerPlugin::runProject(Project *pro, Id mode, const bool forceSk
+@@ -3012,6 +3013,16 @@ static bool hasDeploySettings(Project *pro)
+ 
+ void ProjectExplorerPlugin::runProject(Project *pro, Id mode, const bool forceSkipDeploy)
  {
-     if (!pro)
-         return;
-+        
 +    for (auto *rc : ProjectExplorerPlugin::instance()->allRunControls()) {
-+        if (rc->isRunning() && rc->project() == pro && 
++        if (rc->isRunning() && rc->project() == pro &&
 +            mode == ProjectExplorer::Constants::DEBUG_RUN_MODE) {
 +            ExtensionSystem::Invoker<void>(
-+                ExtensionSystem::PluginManager::getObjectByName("DebuggerPlugin"), 
++                ExtensionSystem::PluginManager::getObjectByName("DebuggerPlugin"),
 +                "attachExternalApplication", rc);
 +            return;
 +        }
 +    }
- 
-     if (Target *target = pro->activeTarget())
-         if (RunConfiguration *rc = target->activeRunConfiguration())
++
+     if (RunConfiguration *rc = activeRunConfig(pro))
+         runRunConfiguration(rc, mode, forceSkipDeploy);
+ }

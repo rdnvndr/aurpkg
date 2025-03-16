@@ -3,7 +3,7 @@ pkgdesc='Telegram Desktop client with some anti-features (sponsored messages, sa
 url="https://github.com/Layerex/telegram-desktop-patches"
 conflicts=("telegram-desktop")
 provides=("telegram-desktop")
-pkgrel=2
+pkgrel=1
 
 prepare() {
     cd tdesktop-$pkgver-full
@@ -16,7 +16,7 @@ prepare() {
 # To bump Telegram version, selectively paste upstream PKGBUILD below, retaining PATCH_FILENAMES and PATCH_HASHES
 # https://gitlab.archlinux.org/archlinux/packaging/packages/telegram-desktop/-/blob/main/PKGBUILD
 # Make sure you are modifying PKGBUILD.m4, not PKGBUILD, or your changes will be overwritten by make
-pkgver=5.11.1
+pkgver=5.12.2
 arch=('x86_64')
 license=('GPL3')
 depends=('hunspell' 'ffmpeg' 'hicolor-icon-theme' 'lz4' 'minizip' 'openal'

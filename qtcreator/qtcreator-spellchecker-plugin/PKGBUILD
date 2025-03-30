@@ -1,14 +1,14 @@
 pkgname=qtcreator-spellchecker-plugin
-pkgver=3.8.0
-_commit=main
-pkgrel=3
+pkgver=3.9.0
+_commit=v3.9.0
+pkgrel=1
 pkgdesc="Spell Checker plugin for the Qt Creator IDE"
 groups=('qt' 'qt6')
 arch=('i686' 'x86_64')
 url="https://github.com/CJCombrink/SpellChecker-Plugin"
 license=('GPL3')
 depends=('qtcreator' 'hunspell')
-makedepends=('git' 'qtcreator-devel')
+makedepends=('git' 'qtcreator-devel-patches')
 source=("$pkgname"::git+https://github.com/CJCombrink/SpellChecker-Plugin.git)
 sha256sums=('SKIP')
 
@@ -16,7 +16,6 @@ prepare() {
     mkdir -p "${srcdir}/${pkgname}/build/lib/qtcreator/plugins/"
 
     cd "${srcdir}/${pkgname}"
-#    patch  -p1 < ../../qtc16.patch
     git checkout ${_commit}
 }
 

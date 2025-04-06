@@ -1,7 +1,0 @@
-*~
-p7zip_*.tar.bz2
-*.pkg.tar.*
-pkg
-src
-testfiles/
-oemcp-*.patch

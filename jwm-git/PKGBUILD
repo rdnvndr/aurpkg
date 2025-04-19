@@ -44,11 +44,12 @@ build() {
   patch -p1 -i $startdir/nomaxborder.patch                         || return 1
   patch -p1 -i $startdir/dynamic_menu.patch                        || return 1
   patch -p1 -i $startdir/gnu_source.patch                          || return 1
+  patch -p1 -i $startdir/drag.patch                                || return 1
   
   cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
   ./autogen.sh
-  ./configure --prefix=/usr --sysconfdir=/etc --disable-fribidi --enable-cairo  --disable-rsvg --disable-jpeg  
   gettextize -f
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-xbm --disable-xinerama --disable-rsvg --disable-jpeg
   make
 }
 

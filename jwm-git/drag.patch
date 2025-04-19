@@ -1,0 +1,34 @@
+diff --git a/src/event.c b/src/event.c
+index c9d5f0c4..6e04ddf3 100644
+--- a/src/event.c
++++ b/src/event.c
+@@ -426,7 +426,8 @@ void HandleButtonEvent(const XButtonEvent *event)
+       const unsigned int mask = event->state & ~lockMask;
+       np = FindClientByWindow(event->window);
+       if(np) {
+-         const char move_resize = (np->state.status & STAT_DRAG)
++         const char move_resize = (np->state.status & STAT_DRAG 
++               && mask == 0)
+             || ((mask == settings.moveMask)
+                && !(np->state.status & STAT_NODRAG));
+          switch(event->button) {
+@@ -443,16 +444,10 @@ void HandleButtonEvent(const XButtonEvent *event)
+             }
+             break;
+          case Button3:
+-            if(move_resize) {
+-               GetBorderSize(&np->state, &north, &south, &east, &west);
+-               ResizeClient(np, MC_BORDER | MC_BORDER_E | MC_BORDER_S,
+-                            event->x + west, event->y + north);
+-            } else {
+-               FocusClient(np);
+-               if(settings.focusModel == FOCUS_SLOPPY
+-                  || settings.focusModel == FOCUS_CLICK) {
++            FocusClient(np);
++            if(settings.focusModel == FOCUS_SLOPPY
++              || settings.focusModel == FOCUS_CLICK) {
+                   RaiseClient(np);
+-               }
+             }
+             break;
+          default:

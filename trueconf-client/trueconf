@@ -1,0 +1,36 @@
+#!/bin/bash
+
+. "/etc/os-release"
+
+CLIENT_PATH="/opt/trueconf/client"
+
+if [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+  export DESKTOP_SESSION="kde"
+  export QT_QPA_PLATFORMTHEME=gtk3
+fi
+
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+  export QT_QPA_PLATFORM="xcb"
+fi
+
+if [[ "$ID" == "astra" ]] && [[ "$VERSION_ID" == "1.8_x86-64" ]]; then
+  export QT_CLIENT_USE_Q_FILE_DIALOG="1"
+fi
+
+if [[ "$ID" == "centos" ]] && [[ "$VERSION_ID" == "9" ]]; then
+  export QT_CLIENT_USE_Q_FILE_DIALOG="1"
+fi
+
+# For debugging when runnning a QT application
+#export QT_DEBUG_PLUGINS=1
+
+export QSG_RENDER_LOOP="basic"
+export LD_LIBRARY_PATH=$CLIENT_PATH/lib:$CLIENT_PATH/qt5/lib:"$LD_LIBRARY_PATH"
+#export QT_PLUGIN_PATH='/opt/trueconf/client/plugins'
+export QTWEBENGINE_DISABLE_SANDBOX=1
+export QT_QPA_PLATFORMTHEME=''
+export QT_SUPPORT_GL_CHILD_WIDGETS=1
+
+
+export LIBVA_DRIVER_NAME="iHD"
+$CLIENT_PATH/TrueConf  "$@"

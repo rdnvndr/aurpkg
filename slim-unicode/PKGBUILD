@@ -83,12 +83,14 @@ prepare() {
 build() {
   cd $_pkgname-$pkgver
 
+  CXXFLAGS+=' -Wno-reserved-user-defined-literal'
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SKIP_RPATH=ON \
     -DUSE_PAM=yes \
-    -DUSE_CONSOLEKIT=no
+    -DUSE_CONSOLEKIT=no \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
   make
 }
 

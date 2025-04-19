@@ -71,60 +71,144 @@ diff -cr jwm-2.1.0/src/clock.c jwm-roand/src/clock.c
      }
   
 ***************
-*** 258,266 ****
-     int rwidth;
+*** 251,302 ****
+  void DrawClock(ClockType *clk, const TimeType *now)
+  {
+  
+!    TrayComponentType *cp = clk->cp;
+     const char *timeString;
+!    char *tmpTimeString;
+!    char *token;
+!    int tokenWidth;
+!    int maxTokenWidth;
+!    int tmpWidth;
+!    int linesCount;
+!    int sheight;
+!    int yoffset;
   
      /* Only draw if the time changed. */
 !    if(now->seconds == clk->lastTime.seconds) {
         return;
      }
+! 
+!    /* Determine if the clock is the right size. */
+!    timeString = GetTimeString(clk->format, clk->zone);
+!    tmpTimeString = CopyString(timeString);
+!    token = strtok(tmpTimeString, "\n");
+! 
+!    linesCount = 0;
+!    tmpWidth = 0;
+!    maxTokenWidth = 0;
+!    while(token) {
+!       linesCount++;
+!       tmpWidth = GetStringWidth(FONT_CLOCK, token);
+!       if (tmpWidth > maxTokenWidth)
+!          maxTokenWidth = tmpWidth;
+! 
+!       token = strtok(NULL, "\n");
+!    }
+! 
+!    /**< Resize clock if width of time/date string bigger than component width */
+!    if (maxTokenWidth > cp->width) {
+!       clk->cp->requestedWidth = maxTokenWidth + CLOCK_BORDER_SIZE * 2;
+!       ResizeTray(clk->cp->tray);
+!    }
+! 
+!    sheight = GetStringHeight(FONT_CLOCK);
+!    yoffset = (cp->height - sheight) / 2;
+!    if (linesCount > 1) {
+!       yoffset = (cp->height - sheight * linesCount) / 2;
+!    }
   
      /* Clear the area. */
-     cp = clk->cp;
---- 308,317 ----
-     int rwidth;
+     if(colors[COLOR_CLOCK_BG1] == colors[COLOR_CLOCK_BG2]) {
+        JXSetForeground(display, rootGC, colors[COLOR_CLOCK_BG1]);
+        JXFillRectangle(display, cp->pixmap, rootGC, 0, 0,
+--- 302,320 ----
+  void DrawClock(ClockType *clk, const TimeType *now)
+  {
+  
+!    TrayComponentType *cp;
+     const char *timeString;
+!    int width;
+!    int rwidth;
   
      /* Only draw if the time changed. */
 !    if((int)(now->seconds/60) == (int)(clk->lastTime.seconds/60)) {
         return;
      }
-+    clk->lastTime.seconds = now->seconds;
+!    clk->lastTime.seconds = now->seconds;
   
      /* Clear the area. */
-     cp = clk->cp;
++    cp = clk->cp;
+     if(colors[COLOR_CLOCK_BG1] == colors[COLOR_CLOCK_BG2]) {
+        JXSetForeground(display, rootGC, colors[COLOR_CLOCK_BG1]);
+        JXFillRectangle(display, cp->pixmap, rootGC, 0, 0,
 ***************
-*** 274,281 ****
-                               0, 0, cp->width, cp->height);
+*** 307,328 ****
+                     0, 0, cp->width, cp->height, gradients[COLOR_CLOCK_BG1]);
      }
   
-     /* Determine if the clock is the right size. */
--    timeString = GetTimeString(clk->format, clk->zone);
-     width = GetStringWidth(FONT_CLOCK, timeString);
-     rwidth = width + 4;
-     if(rwidth == clk->cp->requestedWidth || clk->userWidth) {
---- 325,349 ----
-                               0, 0, cp->width, cp->height);
+!     /* Draw the clock. */
+!    Release(tmpTimeString);
+!    tmpTimeString = CopyString(timeString);
+!    token = strtok(tmpTimeString, "\n");
+! 
+!    int i = 1;
+!    while(token) {
+!       tokenWidth = GetStringWidth(FONT_CLOCK, token);
+        RenderString(cp->pixmap, FONT_CLOCK, COLOR_CLOCK_FG,
+!                   (cp->width - tokenWidth) / 2, yoffset - 1,
+!                   cp->width, token);
+  
+-       yoffset += sheight * i;
+-       token = strtok(NULL, "\n");
      }
   
-+    FILE *fp1;
-+    FILE *fp2;
-+    int remainingCapacity = 0;
-+    int lastFullCapacity = 0;
-+    fp1 = fopen("/sys/class/power_supply/BAT0/energy_now", "r");
-+    if(fp1 != NULL) {
-+       fscanf(fp1, "%d", &remainingCapacity);
-+       fclose(fp1);
-+    }
-+    fp2 = fopen("/sys/class/power_supply/BAT0/energy_full", "r");
-+    if(fp2 != NULL) {
-+       fscanf(fp2, "%d", &lastFullCapacity);
-+       fclose(fp2);
-+    }
-+ 
-+    int perc = (lastFullCapacity != 0) ? ((float)remainingCapacity/(float)lastFullCapacity*100) : 0;
-+    asprintf((char**)&timeString, " %d%% %s", perc, GetTimeString(clk->format, clk->zone));
-+ 
-     /* Determine if the clock is the right size. */
-     width = GetStringWidth(FONT_CLOCK, timeString);
-     rwidth = width + 4;
-     if(rwidth == clk->cp->requestedWidth || clk->userWidth) {
+-    UpdateSpecificTray(clk->cp->tray, clk->cp);
+-    Release(tmpTimeString);
+  }
+--- 325,367 ----
+                     0, 0, cp->width, cp->height, gradients[COLOR_CLOCK_BG1]);
+     }
+  
+!    FILE *fp1;
+!    FILE *fp2;
+!    int remainingCapacity = 0;
+!    int lastFullCapacity = 0;
+!    fp1 = fopen("/sys/class/power_supply/BAT0/energy_now", "r");
+!    if(fp1 != NULL) {
+!       fscanf(fp1, "%d", &remainingCapacity);
+!       fclose(fp1);
+!    }
+!    fp2 = fopen("/sys/class/power_supply/BAT0/energy_full", "r");
+!    if(fp2 != NULL) {
+!       fscanf(fp2, "%d", &lastFullCapacity);
+!       fclose(fp2);
+!    }
+! 
+!    int perc = (lastFullCapacity != 0) ? ((float)remainingCapacity/(float)lastFullCapacity*100) : 0;
+!    asprintf((char**)&timeString, " %d%% %s", perc, GetTimeString(clk->format, clk->zone));
+! 
+!    /* Determine if the clock is the right size. */
+!    width = GetStringWidth(FONT_CLOCK, timeString);
+!    rwidth = width + 4;
+!    if(rwidth == clk->cp->requestedWidth || clk->userWidth) {
+! 
+!       /* Draw the clock. */
+        RenderString(cp->pixmap, FONT_CLOCK, COLOR_CLOCK_FG,
+!                    (cp->width - width) / 2,
+!                    (cp->height - GetStringHeight(FONT_CLOCK)) / 2,
+!                    cp->width, timeString);
+! 
+!       UpdateSpecificTray(clk->cp->tray, clk->cp);
+! 
+!    } else {
+! 
+!       /* Wrong size. Resize. */
+!       clk->cp->requestedWidth = rwidth;
+!       ResizeTray(clk->cp->tray);
+  
+     }
+  
+  }

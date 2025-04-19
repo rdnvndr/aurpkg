@@ -2,13 +2,31 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 
 pkgname=xterm
-pkgver=397
-pkgrel=4
+pkgver=398
+pkgrel=1
 pkgdesc="X Terminal Emulator"
 arch=('x86_64')
 url="https://invisible-island.net/xterm/"
 license=('custom')
-depends=('libxaw' 'ncurses' 'luit' 'xbitmaps' 'libxkbfile')
+depends=(
+  'fontconfig'
+  'freetype2'
+  'glibc'
+  'libice'
+  'libutempter'
+  'libx11'
+  'libxaw'
+  'libxext'
+  'libxft'
+  'libxkbfile'
+  'libxmu'
+  'libxpm'
+  'libxt'
+  'luit'
+  'ncurses'
+  'xbitmaps'
+)
+
 source=(https://invisible-mirror.net/archives/${pkgname}/${pkgname}-${pkgver}.tgz{,.asc}
         border.patch)
 sha256sums=('SKIP'
@@ -47,6 +65,7 @@ build() {
       --enable-block-select \
       --with-tty-group=tty \
       --with-utempter
+  sed -i '/^LIBS\s*=/ s/$/ -lfreetype/' Makefile
   make
 }
 

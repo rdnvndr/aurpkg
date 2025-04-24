@@ -1,59 +1,29 @@
 diff --git a/src/filemanager/panel.c b/src/filemanager/panel.c
-index ec1dbc3d..a422c622 100644
+index f9ca01f4..bdccb87a 100644
 --- a/src/filemanager/panel.c
 +++ b/src/filemanager/panel.c
-@@ -80,6 +80,50 @@
+@@ -80,6 +80,11 @@
  
  #include "panel.h"
  
-+#ifdef HAVE_SLANG
-+#	define MCLIB_V_RTEE_CHAR SLSMG_RTEE_CHAR
-+#	define MCLIB_V_LTEE_CHAR SLSMG_LTEE_CHAR
-+#	define MCLIB_V_UTEE_CHAR SLSMG_UTEE_CHAR
-+#	define MCLIB_V_DTEE_CHAR SLSMG_DTEE_CHAR
-+#else
-+#	define MCLIB_V_RTEE_CHAR ACS_RTEE
-+#	define MCLIB_V_LTEE_CHAR ACS_LTEE
-+#	define MCLIB_V_UTEE_CHAR ACS_TTEE
-+#	define MCLIB_V_DTEE_CHAR ACS_BTEE
-+#endif
-+
-+#ifdef UTF8
-+#include <wchar.h>
-+#include <wctype.h>
-+
-+#define mc_wchar_t wchar_t
-+#define mc_wint_t wint_t
-+
-+#else
-+
-+#define mc_wchar_t unsigned char
-+#define mc_wint_t int
-+
-+#endif
-+
-+void mclib_v_draw_object(int _y, int _x, mc_wchar_t _ch){
-+ #ifdef HAVE_SLANG
-+ #ifdef UTF8 
-+     SLsmg_draw_object (_y, _x, (SLwchar_Type) _ch);
-+ #else 
-+     SLsmg_draw_object (_y, _x, (unsigned char) _ch); 
-+ #endif 
-+ #else
-+     /*
-+     FIXME: needed to test with --with-screen=ncurses
-+     */
-+      attron(A_ALTCHARSET);
-+      mvaddch(_y, _x, (const chtype) _ch); 
-+      attroff(A_ALTCHARSET);
-+ #endif
++void mclib_v_draw_object(int _y, int _x, char* _ch){
++    tty_gotoyx (_y, _x);
++    tty_print_string (_ch);
 +}
-+
 +
  /*** global variables ****************************************************************************/
  
  /* The hook list for the select file function */
-@@ -484,6 +528,142 @@ add_permission_string (const char *dest, int width, file_entry_t * fe, file_attr
+@@ -366,6 +371,8 @@ static panel_field_t panel_fields[] = {
+ };
+ /* *INDENT-ON* */
+ 
++static char *panel_dtopmiddle_char = NULL;
++static char *panel_bottommiddle_char = NULL;
+ static char *panel_sort_up_char = NULL;
+ static char *panel_sort_down_char = NULL;
+ 
+@@ -486,6 +493,142 @@ add_permission_string (const char *dest, int width, file_entry_t *fe, file_attr_
      }
  }
  
@@ -67,14 +37,14 @@ index ec1dbc3d..a422c622 100644
 +	//tty_setcolor (COLOR_NORMAL);
 +
 +    if (panel->list_format==list_full) {
-+	mclib_v_draw_object (origny, orignx+panel->widget.rect.cols-22, MCLIB_V_UTEE_CHAR);
-+	mclib_v_draw_object (origny, orignx+panel->widget.rect.cols-14, MCLIB_V_UTEE_CHAR);
++	mclib_v_draw_object (origny, orignx+panel->widget.rect.cols-22, panel_dtopmiddle_char);
++	mclib_v_draw_object (origny, orignx+panel->widget.rect.cols-14, panel_dtopmiddle_char);
 +    }
 +
 +    if (panel->list_format==list_brief) {
 +       int brief_cols = panel->brief_cols;
 +       for (int i=1;i<brief_cols;i++) 
-+          mclib_v_draw_object (origny, orignx+((int)((panel->widget.rect.cols-2)/brief_cols))*i, MCLIB_V_UTEE_CHAR);
++          mclib_v_draw_object (origny, orignx+((int)((panel->widget.rect.cols-2)/brief_cols))*i, panel_dtopmiddle_char);
 +    }
 +
 +    if (panel->list_format==list_user) {
@@ -104,17 +74,17 @@ index ec1dbc3d..a422c622 100644
 +		length += len;
 +
 +	    } else {
-+		mclib_v_draw_object (origny, orignx+length, MCLIB_V_UTEE_CHAR);
++		mclib_v_draw_object (origny, orignx+length, panel_dtopmiddle_char);
 +
 +		//if (panel->split){
-+		//    mclib_v_draw_object (origny, orignx+length+panel->widget.cols/2-1, MCLIB_V_UTEE_CHAR);
++		//    mclib_v_draw_object (origny, orignx+length+panel->widget.cols/2-1, panel_dtopmiddle_char);
 +		//}
 +		length++;
 +	    }
 +	
 +	}
 +	//if (panel->split){
-+	//    mclib_v_draw_object (origny, orignx+panel->widget.cols/2-1, MCLIB_V_UTEE_CHAR);
++	//    mclib_v_draw_object (origny, orignx+panel->widget.cols/2-1, panel_dtopmiddle_char);
 +	//}
 +    }
 +
@@ -137,15 +107,15 @@ index ec1dbc3d..a422c622 100644
 +    
 +    if (panel->list_format==list_full)
 +    {
-+       mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+panel->widget.rect.cols-22, MCLIB_V_DTEE_CHAR);
-+       mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+panel->widget.rect.cols-14, MCLIB_V_DTEE_CHAR);
++       mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+panel->widget.rect.cols-22, panel_bottommiddle_char);
++       mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+panel->widget.rect.cols-14, panel_bottommiddle_char);
 +    }
 +    
 +    if (panel->list_format==list_brief)
 +    {
 +       int brief_cols = panel->brief_cols;
 +       for (int i=1;i<brief_cols;i++) 
-+          mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+((int)((panel->widget.rect.cols-2)/brief_cols))*i, MCLIB_V_DTEE_CHAR);
++          mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+((int)((panel->widget.rect.cols-2)/brief_cols))*i, panel_bottommiddle_char);
 +    }
 +    
 +    
@@ -177,16 +147,16 @@ index ec1dbc3d..a422c622 100644
 + 	        length += len;
 + 		
 + 	    } else {
-+ 		mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+length, MCLIB_V_DTEE_CHAR);
++ 		mclib_v_draw_object (origny+panel->widget.rect.lines-pos_mini_info, orignx+length, panel_bottommiddle_char);
 + 		
 + 		
 + 		//if (panel->split){
-+ 		//    mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+length+panel->widget.cols/2-1, MCLIB_V_DTEE_CHAR);
++ 		//    mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+length+panel->widget.cols/2-1, panel_bottommiddle_char);
 + 		//}
 + 		length++;
 + 	    }
 + 	    //if (panel->split){
-+ 		//mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+panel->widget.cols/2-1, MCLIB_V_DTEE_CHAR);
++ 		//mclib_v_draw_object (origny+panel->widget.lines-pos_mini_info, orignx+panel->widget.cols/2-1, panel_bottommiddle_char);
 + 	    //}
 + 	}
 + 
@@ -196,7 +166,7 @@ index ec1dbc3d..a422c622 100644
  /* --------------------------------------------------------------------------------------------- */
  /** String representations of various file attributes name */
  
-@@ -1179,6 +1359,7 @@ mini_info_separator (const WPanel * panel)
+@@ -1184,6 +1327,7 @@ mini_info_separator (const WPanel *panel)
          tty_draw_hline (w->rect.y + y, w->rect.x + 1, ACS_HLINE, w->rect.cols - 2);
          /* Status displays total marked size.
           * Centered in panel, full format. */
@@ -204,7 +174,7 @@ index ec1dbc3d..a422c622 100644
          display_total_marked_size (panel, y, -1, FALSE);
      }
  }
-@@ -1330,18 +1511,17 @@ show_dir (const WPanel * panel)
+@@ -1335,18 +1479,17 @@ show_dir (const WPanel *panel)
      }
  
      widget_gotoyx (w, 0, 1);
@@ -228,7 +198,7 @@ index ec1dbc3d..a422c622 100644
  
      if (panel->is_panelized)
          tty_printf (" %s ", _("Panelize"));
-@@ -1394,6 +1574,7 @@ show_dir (const WPanel * panel)
+@@ -1399,6 +1542,7 @@ show_dir (const WPanel *panel)
      }
  
      show_free_space (panel);
@@ -236,7 +206,7 @@ index ec1dbc3d..a422c622 100644
  
      if (panel->active)
          tty_set_normal_attrs ();
-@@ -1582,7 +1763,7 @@ panel_paint_sort_info (const WPanel * panel)
+@@ -1583,7 +1727,7 @@ panel_paint_sort_info (const WPanel *panel)
              panel->sort_info.reverse ? panel_sort_up_char : panel_sort_down_char;
          char *str;
  
@@ -245,7 +215,7 @@ index ec1dbc3d..a422c622 100644
          widget_gotoyx (panel, 1, 1);
          tty_print_string (str);
          g_free (str);
-@@ -4014,16 +4195,16 @@ panel_mouse_callback (Widget * w, mouse_msg_t msg, mouse_event_t * event)
+@@ -4085,16 +4229,16 @@ panel_mouse_callback (Widget *w, mouse_msg_t msg, mouse_event_t *event)
          if (event->y == 0)
          {
              /* top frame */
@@ -265,7 +235,7 @@ index ec1dbc3d..a422c622 100644
                  /* "." button show/hide hidden files */
                  send_message (filemanager, NULL, MSG_ACTION, CK_ShowHidden, NULL);
              else
-@@ -4036,7 +4217,7 @@ panel_mouse_callback (Widget * w, mouse_msg_t msg, mouse_event_t * event)
+@@ -4107,7 +4251,7 @@ panel_mouse_callback (Widget *w, mouse_msg_t msg, mouse_event_t *event)
              break;
          }
  
@@ -274,7 +244,7 @@ index ec1dbc3d..a422c622 100644
          {
              /* sort on clicked column */
              mouse_sort_col (panel, event->x + 1);
-@@ -4045,6 +4226,28 @@ panel_mouse_callback (Widget * w, mouse_msg_t msg, mouse_event_t * event)
+@@ -4116,6 +4260,28 @@ panel_mouse_callback (Widget *w, mouse_msg_t msg, mouse_event_t *event)
  
          if (!is_active)
              (void) change_panel ();
@@ -303,3 +273,21 @@ index ec1dbc3d..a422c622 100644
          MC_FALLTHROUGH;
  
      case MSG_MOUSE_DRAG:
+@@ -5485,6 +5651,8 @@ panel_panelize_save (WPanel *panel)
+ void
+ panel_init (void)
+ {
++    panel_dtopmiddle_char = mc_skin_get ("Lines", "dtopmiddle", "╤");
++    panel_bottommiddle_char = mc_skin_get ("Lines", "bottommiddle", "┴");
+     panel_sort_up_char = mc_skin_get ("widget-panel", "sort-up-char", "'");
+     panel_sort_down_char = mc_skin_get ("widget-panel", "sort-down-char", ".");
+     panel_hiddenfiles_show_char = mc_skin_get ("widget-panel", "hiddenfiles-show-char", ".");
+@@ -5509,6 +5677,8 @@ panel_init (void)
+ void
+ panel_deinit (void)
+ {
++    g_free (panel_bottommiddle_char);
++    g_free (panel_dtopmiddle_char);
+     g_free (panel_sort_up_char);
+     g_free (panel_sort_down_char);
+     g_free (panel_hiddenfiles_show_char);

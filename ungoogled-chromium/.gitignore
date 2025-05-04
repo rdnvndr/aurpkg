@@ -1,8 +1,6 @@
-*.pkg.*
-ungoogled-chromium
-src
 pkg
-*.tar.*
+src
+*.pkg.tar.*
 *.log
-nohup.out
-*.zip
+*.tar.gz
+*.tar.xz

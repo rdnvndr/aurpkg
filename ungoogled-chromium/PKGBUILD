@@ -2,6 +2,8 @@
 # Maintainer: Seppia <seppia@seppio.fish>
 # Maintainer: JustKidding <jk@vin.ovh>
 
+# Based on extra/chromium, with ungoogled-chromium patches
+
 # Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 # Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
@@ -10,12 +12,12 @@
 # binary version of this package (-bin): github.com/noahvogt/ungoogled-chromium-xdg-bin-aur
 
 pkgname=ungoogled-chromium-xdg
-pkgver=124.0.6367.60
-pkgrel=1
+pkgver=135.0.7049.114
+pkgrel=2
 _launcher_ver=8
 _manual_clone=0
 _system_clang=1
-pkgdesc="A lightweight approach to removing Google web service dependency - without creating a useless ~/.pki directory (using pre-releases)"
+pkgdesc="A lightweight approach to removing Google web service dependency - without creating a useless ~/.pki directory"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium"
 license=('BSD-3-Clause')
@@ -23,40 +25,45 @@ depends=('gtk3' 'nss' 'alsa-lib' 'xdg-utils' 'libxss' 'libcups' 'libgcrypt'
          'ttf-liberation' 'systemd' 'dbus' 'libpulse' 'pciutils' 'libva'
          'libffi' 'desktop-file-utils' 'hicolor-icon-theme')
 makedepends=('python' 'gn' 'ninja' 'clang' 'lld' 'gperf' 'nodejs' 'pipewire'
-             'rust' 'qt6-base' 'java-runtime-headless' 'git')
+             'rust' 'rust-bindgen' 'qt5-base' "qt6-base" 'java-runtime-headless'
+             'git')
 optdepends=('pipewire: WebRTC desktop sharing under Wayland'
             'kdialog: support for native dialogs in Plasma'
-            'qt5-base: enable Qt5 with --enable-features=AllowQt'
             'gtk4: for --gtk-version=4 (GTK4 IME might work better on Wayland)'
             'org.freedesktop.secrets: password storage backend on GNOME / Xfce'
-            'kwallet5: support for storing passwords in KWallet on Plasma')
+            'kwallet5: support for storing passwords in KWallet on Plasma'
+            'upower: Battery Status API support')
 options=('!lto') # Chromium adds its own flags for ThinLTO
-source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$pkgver.tar.xz
+source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$pkgver-lite.tar.xz
         https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver/chromium-launcher-$_launcher_ver.tar.gz
-        https://gitlab.com/Matt.Jolly/chromium-patches/-/archive/${pkgver%%.*}/chromium-patches-${pkgver%%.*}.tar.bz2
-        drop-flag-unsupported-by-clang17.patch
+        webrtc-fix-build-with-pipewire-1.4.patch
+        skia-only-call-format_message-when-needed.patch
+        add-more-CFI-suppressions-for-inline-PipeWire-functions.patch
         compiler-rt-adjust-paths.patch
-        use-oauth2-client-switches-as-default.patch)
-sha256sums=('ebd553527149cb8477a522df90acd6cea2388a6f431e2db589a0301df1d0cae2'
+        increase-fortify-level.patch
+        use-oauth2-client-switches-as-default.patch
+        tab.patch)
+sha256sums=('33c538ae7443d0cc11b9841276d20abe8c260198fa50e905e88aa9b8c2052e83'
             '213e50f48b67feb4441078d50b0fd431df34323be15be97c55302d3fdac4483a'
-            'c2bc4e65ed2a4e23528dd10d5c15bf99f880b7bbb789cc720d451b78098a7e12'
-            '3bd35dab1ded5d9e1befa10d5c6c4555fe0a76d909fb724ac57d0bf10cb666c1'
-            'b3de01b7df227478687d7517f61a777450dca765756002c80c4915f271e2d961'
-            'e393174d7695d0bafed69e868c5fbfecf07aa6969f3b64596d0bae8b067e1711')
+            '74a2d428f7f09132c4a923e816a5a9333803f842003d650cd4a95a35e5457253'
+            '271c7a767005b09e212808cfef7261dca00ea28ba7b808f69c3b5b9f202511d1'
+            'd3dd9b4132c9748b824f3dcf730ec998c0087438db902bc358b3c391658bebf5'
+            'cc8a71a312e9314743c289b7b8fddcc80350a31445d335f726bb2e68edf916d1'
+            'd634d2ce1fc63da7ac41f432b1e84c59b7cceabf19d510848a7cff40c8025342'
+            'e6da901e4d0860058dc2f90c6bbcdc38a0cf4b0a69122000f62204f24fa7e374'
+            'SKIP')
 
 # ungoogled-chromium-xdg patches
 source=(${source[@]}
         xdg-basedir.patch
-        no-omnibox-suggestion-autocomplete.patch
-        index.html)
+        no-omnibox-suggestion-autocomplete.patch)
 sha256sums=(${sha256sums[@]}
             '41258e1eb5c9523e543c88459fffa2eadc8dd90972a4d4fb4f4172ba3f1c4d23'
-            'ff1591fa38e0ede7e883dc7494b813641b7a1a7cb1ded00d9baaee987c1dbea8'
-            'a4cdd2b86f32d5302c2792be841ff40d982b19bb58a4e63df9d77f4c706b8665')
+            'ff1591fa38e0ede7e883dc7494b813641b7a1a7cb1ded00d9baaee987c1dbea8')
 
 if (( _manual_clone )); then
   source[0]=fetch-chromium-release
-  makedepends+=('python-httplib2' 'python-pyparsing' 'python-six')
+  makedepends+=('python-httplib2' 'python-pyparsing' 'python-six' 'npm' 'rsync')
 fi
 
 provides=("chromium=${pkgver}" "chromedriver=${pkgver}")
@@ -64,43 +71,31 @@ conflicts=('chromium' 'chromedriver')
 _uc_usr=ungoogled-software
 _uc_rel=1
 _uc_ver="$pkgver-$_uc_rel"
-# _uc_ver="120.0.6099.216-$_uc_rel"
 optdepends=("${optdepends[@]}"
             'chromium-extension-web-store: Web Store Functionality')
 source=(${source[@]}
-        ${pkgname%-*}-$_uc_ver.tar.gz::https://github.com/noahvogt/${pkgname%-*}/archive/refs/tags/$_uc_ver.tar.gz
-        # ${pkgname%-*}-$_uc_ver.zip::https://github.com/noahvogt/${pkgname%-*}/archive/refs/heads/update.zip
-        # ${pkgname%-*}-$_uc_ver.tar.gz::https://github.com/$_uc_usr/${pkgname%-*}/archive/refs/tags/$_uc_ver.tar.gz
-        0001-adjust-buffer-format-order.patch
-        0001-enable-linux-unstable-deb-target.patch
-        0001-ozone-wayland-implement-text_input_manager_v3.patch
-        0001-ozone-wayland-implement-text_input_manager-fixes.patch)
+        ${pkgname%-*}-$_uc_ver.tar.gz::https://github.com/$_uc_usr/ungoogled-chromium/archive/refs/tags/$_uc_ver.tar.gz)
 sha256sums=(${sha256sums[@]}
-            '22899b0817ccf459ad7f4c0742bea0a0911eee2e7e4d140cd8cff30e51d66bbd'
-            '8ba5c67b7eb6cacd2dbbc29e6766169f0fca3bbb07779b1a0a76c913f17d343f'
-            '2a44756404e13c97d000cc0d859604d6848163998ea2f838b3b9bb2c840967e3'
-            'd9974ddb50777be428fd0fa1e01ffe4b587065ba6adefea33678e1b3e25d1285'
-            'a2da75d0c20529f2d635050e0662941c0820264ea9371eb900b9d90b5968fa6a')
+            'bac5b844e936ec0340cdaa7e9a8d5b4cc3875d30828a1d6fa816f980d0f96e2e')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
 # Keys are the names in the above script; values are the dependencies in Arch
 declare -gA _system_libs=(
   [brotli]=brotli
-  [dav1d]=dav1d
+  #[dav1d]=dav1d
   #[ffmpeg]=ffmpeg    # YouTube playback stopped working in Chromium 120
   [flac]=flac
   [fontconfig]=fontconfig
   [freetype]=freetype2
   [harfbuzz-ng]=harfbuzz
-  [icu]=icu
+  #[icu]=icu
   #[jsoncpp]=jsoncpp  # needs libstdc++
   #[libaom]=aom
-  #[libavif]=libavif  # needs https://github.com/AOMediaCodec/libavif/commit/5410b23f76
-  [libdrm]=
-  [libjpeg]=libjpeg
+  #[libavif]=libavif  # needs -DAVIF_ENABLE_EXPERIMENTAL_GAIN_MAP=ON
+  [libjpeg]=libjpeg-turbo
   [libpng]=libpng
   #[libvpx]=libvpx
-  #[libwebp]=libwebp  # //third_party/libavif:libavif_enc needs //third_party/libwebp:libwebp_sharpyuv
+  [libwebp]=libwebp
   [libxml]=libxml2
   [libxslt]=libxslt
   [opus]=opus
@@ -114,13 +109,14 @@ _unwanted_bundled_libs=(
 )
 depends+=(${_system_libs[@]})
 
+export LANG=C.utf-8
+
 # Google API keys (see https://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for Arch Linux use ONLY. For your own distribution, please
 # get your own set of keys.
 #
 # Starting with Chromium 89 (2021-03-02) the OAuth2 credentials have been left
 # out: https://archlinux.org/news/chromium-losing-sync-support-in-early-march/
-_google_api_key=AIzaSyDwr302FpOSkGRpLlUpPThNTDPbXcIn_FM
 
 prepare() {
   if (( _manual_clone )); then
@@ -134,12 +130,10 @@ prepare() {
 
   # https://crbug.com/893950
   sed -i -e 's/\<xmlMalloc\>/malloc/' -e 's/\<xmlFree\>/free/' \
+         -e '1i #include <cstdlib>' \
     third_party/blink/renderer/core/xml/*.cc \
     third_party/blink/renderer/core/xml/parser/xml_document_parser.cc \
-    third_party/libxml/chromium/*.cc \
-    third_party/maldoca/src/maldoca/ole/oss_utils.h
-
-  patch -Np1 -i $startdir/tab.patch
+    third_party/libxml/chromium/*.cc
 
   # Use the --oauth2-client-id= and --oauth2-client-secret= switches for
   # setting GOOGLE_DEFAULT_CLIENT_ID and GOOGLE_DEFAULT_CLIENT_SECRET at
@@ -147,32 +141,17 @@ prepare() {
   patch -Np1 -i ../use-oauth2-client-switches-as-default.patch
 
   # Upstream fixes
-
-  # Drop compiler flag that needs newer clang
-  patch -Np1 -i ../drop-flag-unsupported-by-clang17.patch
+  patch -Np1 -d third_party/webrtc <../webrtc-fix-build-with-pipewire-1.4.patch
+  patch -Np1 -d third_party/skia <../skia-only-call-format_message-when-needed.patch
+  patch -Np1 -i ../add-more-CFI-suppressions-for-inline-PipeWire-functions.patch
 
   # Allow libclang_rt.builtins from compiler-rt >= 16 to be used
   patch -Np1 -i ../compiler-rt-adjust-paths.patch
 
-  # Fixes for building with libstdc++ instead of libc++
-  patch -Np1 -i ../chromium-patches-*/chromium-117-material-color-include.patch
-
+  # Increase _FORTIFY_SOURCE level to match Arch's default flags
+  patch -Np1 -i ../increase-fortify-level.patch
 
   # Custom Patches
-  sed -i '/^bool IsHevcProfileSupported(const VideoType& type) {$/{s++bool IsHevcProfileSupported(const VideoType\& type) { return true;+;h};${x;/./{x;q0};x;q1}' \
-			media/base/supported_types.cc
-
-  # Implement text_input_manager_v3
-  # https://chromium-review.googlesource.com/c/chromium/src/+/3750452
-  patch -Np1 -i ../0001-ozone-wayland-implement-text_input_manager_v3.patch
-  patch -Np1 -i ../0001-ozone-wayland-implement-text_input_manager-fixes.patch
-
-  # Enable VAAPI on Wayland
-  # https://discourse.ubuntu.com/t/chromium-hardware-accelerated-build-for-intel-based-platforms-available-for-beta-testing/35625
-  # https://git.launchpad.net/~chromium-team/chromium-browser/+git/snap-from-source/
-  # patch -Np1 -i ../0001-enable-linux-unstable-deb-target.patch
-  # patch -Np1 -i ../0001-adjust-buffer-format-order.patch
-  # patch -Np1 -i ../0001-vaapi-flag-ozone-wayland.patch
 
   # move ~/.pki directory to ${XDG_DATA_HOME:-$HOME/.local}/share/pki
   patch -p1 -i ../xdg-basedir.patch
@@ -181,12 +160,8 @@ prepare() {
   # effectively disable autocompletion in the url bar (and therefore the so-
   # called 'shoulder surfing').
   patch -p1 -i ../no-omnibox-suggestion-autocomplete.patch
-
-
-  # Link to system tools required by the build
-  mkdir -p third_party/node/linux/node-linux-x64/bin
-  ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/
-  ln -s /usr/bin/java third_party/jdk/current/bin/
+  
+  patch -Np1 -i $startdir/tab.patch
 
   if (( !_system_clang )); then
     # Use prebuilt rust as system rust cannot be used due to the error:
@@ -199,8 +174,7 @@ prepare() {
 
 
   # Ungoogled Chromium changes
-  # _ungoogled_repo="$srcdir/ungoogled-chromium-update"
-  _ungoogled_repo="$srcdir/${pkgname%-*}-$_uc_ver"
+  _ungoogled_repo="$srcdir/${pkgname%xdg*}$_uc_ver"
 
   _utils="${_ungoogled_repo}/utils"
   msg2 'Pruning binaries'
@@ -210,6 +184,12 @@ prepare() {
   msg2 'Applying domain substitution'
   python "$_utils/domain_substitution.py" apply -r "$_ungoogled_repo/domain_regex.list" \
     -f "$_ungoogled_repo/domain_substitution.list" -c domainsubcache.tar.gz ./
+
+  # Link to system tools required by the build
+  mkdir -p third_party/node/linux/node-linux-x64/bin
+  ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/
+  mkdir -p third_party/jdk/current/bin
+  ln -s /usr/bin/java third_party/jdk/current/bin/
 
   # Remove bundled libraries for which we will use the system copies; this
   # *should* do what the remove_bundled_libraries.py script does, with the
@@ -262,15 +242,23 @@ build() {
     'use_custom_libcxx=true' # https://github.com/llvm/llvm-project/issues/61705
     'use_sysroot=false'
     'use_system_libffi=true'
-    'enable_hangout_services_extension=true'
     'enable_widevine=true'
     'enable_nacl=false'
-    "google_api_key=\"$_google_api_key\""
+    'use_qt5=true'
+    'use_qt6=true'
+    'moc_qt6_path="/usr/lib/qt6"'
+    'enable_platform_hevc=true'
+    'enable_hevc_parser_and_hw_decoder=true'
   )
 
   if [[ -n ${_system_libs[icu]+set} ]]; then
     _flags+=('icu_use_data_file=false')
   fi
+
+  # Append ungoogled chromium flags to _flags array
+  _ungoogled_repo="$srcdir/${pkgname%xdg*}$_uc_ver"
+  readarray -t -O ${#_flags[@]} _flags < "${_ungoogled_repo}/flags.gn"
+
 
   if (( _system_clang )); then
      local _clang_version=$(
@@ -289,14 +277,10 @@ build() {
 
     _flags+=(
       'rust_sysroot_absolute="/usr"'
+      'rust_bindgen_root="/usr"'
       "rustc_version=\"$(rustc --version)\""
     )
   fi
-
-  # Append ungoogled chromium flags to _flags array
-  # _ungoogled_repo="$srcdir/ungoogled-chromium-update"
-  _ungoogled_repo="$srcdir/${pkgname%-*}-$_uc_ver"
-  readarray -t -O ${#_flags[@]} _flags < "${_ungoogled_repo}/flags.gn"
 
   # Facilitate deterministic builds (taken from build/config/compiler/BUILD.gn)
   CFLAGS+='   -Wno-builtin-macro-redefined'
@@ -352,20 +336,22 @@ package() {
     "$pkgdir/usr/share/applications/chromium.desktop" \
     "$pkgdir/usr/share/man/man1/chromium.1"
 
-  install -Dm644 chrome/installer/linux/common/chromium-browser/chromium-browser.appdata.xml \
-    "$pkgdir/usr/share/metainfo/chromium.appdata.xml"
-  sed -ni \
-    -e 's/chromium-browser\.desktop/chromium.desktop/' \
-    -e '/<update_contact>/d' \
-    -e '/<p>/N;/<p>\n.*\(We invite\|Chromium supports Vorbis\)/,/<\/p>/d' \
-    -e '/^<?xml/,$p' \
-    "$pkgdir/usr/share/metainfo/chromium.appdata.xml"
+  # Fill in common Chrome/Chromium AppData template with Chromium info
+  (
+    tmpl_file=chrome/installer/linux/common/appdata.xml.template
+    info_file=chrome/installer/linux/common/chromium-browser.info
+    . $info_file; PACKAGE=chromium
+    export $(grep -o '^[A-Z_]*' $info_file)
+    sed -E -e 's/@@([A-Z_]*)@@/\${\1}/g' -e '/<update_contact>/d' $tmpl_file | envsubst
+  ) \
+  | install -Dm644 /dev/stdin "$pkgdir/usr/share/metainfo/chromium.appdata.xml"
 
   local toplevel_files=(
     chrome_100_percent.pak
     chrome_200_percent.pak
     chrome_crashpad_handler
     libqt5_shim.so
+    libqt6_shim.so
     resources.pak
     v8_context_snapshot.bin
 
@@ -397,7 +383,6 @@ package() {
   done
 
   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/chromium/LICENSE"
-  install -Dm644 "${srcdir}/index.html" "$pkgdir/usr/share/ungoogled-chromium/index.html"
 }
 
 # vim:set ts=2 sw=2 et:

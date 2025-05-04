@@ -3,7 +3,7 @@ pkgdesc='Telegram Desktop client with some anti-features (sponsored messages, sa
 url="https://github.com/Layerex/telegram-desktop-patches"
 conflicts=("telegram-desktop")
 provides=("telegram-desktop")
-pkgrel=3
+pkgrel=4
 
 prepare() {
     patch -d tdesktop-$pkgver-full/Telegram/lib_base -p1 < qt-6.9.patch
@@ -13,6 +13,7 @@ prepare() {
     patch --forward --strip=1 --input "${srcdir}/0003-Disable-invite-peeking-restrictions.patch"
     patch --forward --strip=1 --input "${srcdir}/0004-Disable-accounts-limit.patch"
     patch --forward --strip=1 --input "${srcdir}/0005-Option-to-disable-stories.patch"
+    patch --forward --strip=1 --input "${srcdir}/null_ptr_t.patch"
 }
 # To bump Telegram version, selectively paste upstream PKGBUILD below, retaining PATCH_FILENAMES and PATCH_HASHES
 # https://gitlab.archlinux.org/archlinux/packaging/packages/telegram-desktop/-/blob/main/PKGBUILD
@@ -23,9 +24,9 @@ license=('GPL3')
 depends=('hunspell' 'ffmpeg' 'hicolor-icon-theme' 'lz4' 'minizip' 'openal'
          'qt6-imageformats' 'qt6-svg' 'qt6-wayland' 'xxhash' 'ada'
          'rnnoise' 'pipewire' 'libxtst' 'libxrandr' 'libxcomposite' 'libxdamage' 'abseil-cpp' 'libdispatch'
-         'openssl' 'protobuf' 'glib2' 'kcoreaddons' 'openh264' 'jemalloc')
+         'openssl' 'protobuf' 'glib2' 'kcoreaddons' 'openh264')
 makedepends=('cmake' 'git' 'ninja' 'python' 'range-v3' 'tl-expected' 'microsoft-gsl'
-             'libtg_owt' 'gobject-introspection' 'boost' 'glib2-devel' 'autoconf')
+             'libtg_owt' 'gobject-introspection' 'boost' 'glib2-devel' 'autoconf' 'vulkan-headers')
 optdepends=('geoclue: geoinformation support'
             'geocode-glib: geocoding support'
             'geocode-glib-2: geocoding support'
@@ -39,8 +40,10 @@ source=("https://github.com/telegramdesktop/tdesktop/releases/download/v${pkgver
         "0002-Disable-saving-restrictions.patch"
         "0003-Disable-invite-peeking-restrictions.patch"
         "0004-Disable-accounts-limit.patch"
-        "0005-Option-to-disable-stories.patch")
+        "0005-Option-to-disable-stories.patch"
+        "null_ptr_t.patch")
 sha512sums=("SKIP"
+            "SKIP"
             "SKIP"
             "SKIP"
             "SKIP"
@@ -55,6 +58,7 @@ build() {
         -DCMAKE_VERBOSE_MAKEFILE=ON \
         -DCMAKE_INSTALL_PREFIX="/usr" \
         -DCMAKE_BUILD_TYPE=Release \
+        -DDESKTOP_APP_DISABLE_JEMALLOC=ON \
         -DTDESKTOP_API_ID=611335 \
         -DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c
     cmake --build build

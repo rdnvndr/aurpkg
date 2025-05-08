@@ -93,3 +93,14 @@
  
      case WEBUI_TAB_STRIP_TOOLBAR_INTERIOR_MARGIN:
        return gfx::Insets::VH(4, 0);
+--- old/chrome/browser/ui/views/tabs/new_tab_button.cc	2025-05-08 09:24:54.603895788 +0300
++++ new/chrome/browser/ui/views/tabs/new_tab_button.cc	2025-05-08 09:45:56.001882945 +0300
+@@ -40,7 +40,7 @@
+ #endif
+ 
+ // static
+-const gfx::Size NewTabButton::kButtonSize{28, 28};
++const gfx::Size NewTabButton::kButtonSize{29, 29};
+ 
+ class NewTabButton::HighlightPathGenerator
+     : public views::HighlightPathGenerator {

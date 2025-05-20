@@ -12,8 +12,27 @@ depends=('hunspell' 'ffmpeg' 'hicolor-icon-theme' 'lz4' 'minizip' 'openal'
          'qt6-imageformats' 'qt6-svg' 'qt6-wayland' 'xxhash' 'ada'
          'rnnoise' 'pipewire' 'libxtst' 'libxrandr' 'libxcomposite' 'libxdamage' 'abseil-cpp' 'libdispatch'
          'openssl' 'protobuf' 'glib2' 'kcoreaddons' 'openh264')
-makedepends=('cmake' 'git' 'ninja' 'python' 'range-v3' 'tl-expected' 'microsoft-gsl'
-             'libtg_owt' 'gobject-introspection' 'boost' 'glib2-devel' 'autoconf' 'vulkan-headers')
+             
+makedepends=(
+  'boost'
+  'cmake'
+  'git'
+  'glib2-devel'
+  'gobject-introspection'
+  'gperf'
+  'libtg_owt'
+  'microsoft-gsl'
+  'ninja'
+  'python'
+  'range-v3'
+  'tl-expected'
+  'git'
+  'autoconf' 
+  'vulkan-headers'
+  'gperf'
+  'libgirepository'
+)
+             
 optdepends=('geoclue: geoinformation support'
             'geocode-glib: geocoding support'
             'geocode-glib-2: geocoding support'
@@ -67,6 +86,7 @@ build() {
   # https://github.com/telegramdesktop/tdesktop/blob/8fab9167beb2407c1153930ed03a4badd0c2b59f/snap/snapcraft.yaml#L87-L88
   # Thanks @primeos!
   cmake -B build -S tdesktop-$pkgver-full -G Ninja \
+        -Wno-dev \
         -DCMAKE_VERBOSE_MAKEFILE=ON \
         -DCMAKE_INSTALL_PREFIX="/usr" \
         -Dtde2e_DIR="$PWD/td/install/lib/cmake/tde2e" \

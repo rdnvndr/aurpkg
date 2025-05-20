@@ -1,0 +1,83 @@
+# Maintainer: Sven-Hendrik Haase <svenstaro@archlinux.org>
+# Contributor: hexchain <i@hexchain.org>
+
+pkgname=telegram-desktop-patches
+pkgver=5.14.3
+pkgrel=1
+pkgdesc='Official Telegram Desktop client'
+arch=('x86_64')
+url="https://desktop.telegram.org/"
+license=('GPL-3.0-or-later WITH OpenSSL-exception')
+depends=('hunspell' 'ffmpeg' 'hicolor-icon-theme' 'lz4' 'minizip' 'openal'
+         'qt6-imageformats' 'qt6-svg' 'qt6-wayland' 'xxhash' 'ada'
+         'rnnoise' 'pipewire' 'libxtst' 'libxrandr' 'libxcomposite' 'libxdamage' 'abseil-cpp' 'libdispatch'
+         'openssl' 'protobuf' 'glib2' 'kcoreaddons' 'openh264')
+makedepends=('cmake' 'git' 'ninja' 'python' 'range-v3' 'tl-expected' 'microsoft-gsl'
+             'libtg_owt' 'gobject-introspection' 'boost' 'glib2-devel' 'autoconf' 'vulkan-headers')
+optdepends=('geoclue: geoinformation support'
+            'geocode-glib: geocoding support'
+            'geocode-glib-2: geocoding support'
+            'webkit2gtk: embedded browser features provided by webkit2gtk'
+            'webkit2gtk-4.1: embedded browser features provided by webkit2gtk-4.1'
+            'webkitgtk-6.0: embedded browser features provided by webkitgtk-6.0 (Wayland only)'
+            'xdg-desktop-portal: desktop integration')
+_td_commit=51743dfd01dff6179e2d8f7095729caa4e2222e9
+
+source=(
+  "https://github.com/telegramdesktop/tdesktop/releases/download/v${pkgver}/tdesktop-${pkgver}-full.tar.gz"
+  "git+https://github.com/tdlib/td.git#tag=${_td_commit}"
+  "0001-Disable-sponsored-messages.patch"
+  "0002-Disable-saving-restrictions.patch"
+  "0003-Disable-invite-peeking-restrictions.patch"
+  "0004-Disable-accounts-limit.patch"
+  "0005-Option-to-disable-stories.patch"
+  "null_ptr_t.patch")
+sha512sums=("SKIP"
+            "SKIP"
+            "SKIP"
+            "SKIP"
+            "SKIP"
+            "SKIP"
+            "SKIP"
+            "SKIP")
+
+prepare() {
+    cd tdesktop-$pkgver-full
+    patch --forward --strip=1 --input "${srcdir}/0001-Disable-sponsored-messages.patch"
+    patch --forward --strip=1 --input "${srcdir}/0002-Disable-saving-restrictions.patch"
+    patch --forward --strip=1 --input "${srcdir}/0003-Disable-invite-peeking-restrictions.patch"
+    patch --forward --strip=1 --input "${srcdir}/0004-Disable-accounts-limit.patch"
+    patch --forward --strip=1 --input "${srcdir}/0005-Option-to-disable-stories.patch"
+    patch --forward --strip=1 --input "${srcdir}/null_ptr_t.patch"
+}
+
+build() {
+  CXXFLAGS+=' -ffat-lto-objects'
+
+  cmake -S td -B td/build \
+    -DCMAKE_BUILD_TYPE=None \
+    -DCMAKE_INSTALL_PREFIX="$PWD/td/install" \
+    -Wno-dev \
+    -DTD_E2E_ONLY=ON
+  cmake --build td/build
+  cmake --install td/build
+
+  # Turns out we're allowed to use the official API key that telegram uses for
+  # their snap builds:
+  # https://github.com/telegramdesktop/tdesktop/blob/8fab9167beb2407c1153930ed03a4badd0c2b59f/snap/snapcraft.yaml#L87-L88
+  # Thanks @primeos!
+  cmake -B build -S tdesktop-$pkgver-full -G Ninja \
+        -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_INSTALL_PREFIX="/usr" \
+        -Dtde2e_DIR="$PWD/td/install/lib/cmake/tde2e" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DDESKTOP_APP_DISABLE_JEMALLOC=ON \
+        -DTDESKTOP_API_ID=611335 \
+        -DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c
+  cmake --build build
+
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}

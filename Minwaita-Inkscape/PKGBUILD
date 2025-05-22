@@ -1,0 +1,12 @@
+pkgname=Minwaita-Inkscape
+pkgver=1
+pkgrel=1
+pkgdesc="Minwaita-Inkscape"
+arch=('any')
+
+package() {
+  cd Minwaita-Inkscape
+  install -d "${pkgdir}/usr/share/themes/Minwaita-Inkscape/"
+  cp -r * "${pkgdir}/usr/share/themes/Minwaita-Inkscape/"
+  chown root:root -R "${pkgdir}/usr"
+}

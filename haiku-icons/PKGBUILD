@@ -1,0 +1,15 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
+pkgname=haiku-icons
+pkgver=1
+pkgrel=1
+pkgdesc="Haiku icons"
+arch=('any')
+
+package() {
+  cd Haiku
+  install -d "${pkgdir}/usr/share/icons/Haiku/"
+  cp -r * "${pkgdir}/usr/share/icons/Haiku/"
+  chown root:root -R "${pkgdir}/usr"
+}

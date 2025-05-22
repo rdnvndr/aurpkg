@@ -3,7 +3,7 @@
 pkgname=pgadmin4-py
 _pkgname=${pkgname%[0-9]*}
 __pkgname=${pkgname%-*}
-pkgver=9.0
+pkgver=9.3
 pkgrel=1
 pkgdesc='Most popular and feature rich Open Source administration and development platform for PostgreSQL'
 url='https://www.pgadmin.org/'

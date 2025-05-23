@@ -97,7 +97,13 @@ package() {
   # FS#50889: Replace mc.keymap symlink with target file to fix backup mechanism.
   rm "$pkgdir/etc/mc/mc.keymap"
   cp "$pkgdir"/etc/mc/mc{.default,}.keymap
+  install -Dm644 "$pkgdir/../../far.ini" "$pkgdir/usr/share/mc/skins/far.ini"
   # remove s3 support until it no longer depends on deprecated python-boto:
   # https://midnight-commander.org/ticket/3904
   rm -v "$pkgdir/usr/lib/mc/extfs.d/s3+"
+  
+  rm -v "$pkgdir/usr/lib/mc/extfs.d/uzip"
+  rm -v "$pkgdir/usr/lib/mc/extfs.d/urar"
+  ln -rs "$pkgdir/usr/lib/mc/extfs.d/u7z" "$pkgdir/usr/lib/mc/extfs.d/urar" 
+  ln -rs "$pkgdir/usr/lib/mc/extfs.d/u7z" "$pkgdir/usr/lib/mc/extfs.d/uzip" 
 }

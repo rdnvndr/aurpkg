@@ -19,11 +19,14 @@ backup=()
 options=()
 install=install
 changelog=
-source=(https://github.com/Microsoft/team-explorer-everywhere/releases/download/${pkgver}/TEE-CLC-${pkgver}.zip)
-sha256sums=('SKIP')
+source=(https://github.com/Microsoft/team-explorer-everywhere/releases/download/${pkgver}/TEE-CLC-${pkgver}.zip
+        diff.patch)
+sha256sums=('SKIP' 
+            'SKIP')
 
 package() {
   cd "$srcdir/TEE-CLC-$pkgver"
+  patch -p1 < ../diff.patch
   mkdir -p ${pkgdir}/opt/tee-clc-${pkgver}
   cp -R help lib tf tf.cmd ${pkgdir}/opt/tee-clc-${pkgver}
   mkdir -p ${pkgdir}/usr/share/licenses/tee-clc/

@@ -1,0 +1,11 @@
+--- a/tf	2024-02-02 08:04:13.000000000 +0300
++++ b/tf	2024-11-21 08:58:36.337640007 +0300
+@@ -4,6 +4,8 @@
+ #
+ 
+ # BASE_DIRECTORY is the directory containing the Java libraries
++
++TF_DIFF_COMMAND='/usr/bin/diff -u --label "%6" "%1" "%2"'
+ if [ -z "$TF_CLC_HOME" ] ; then
+     BASE_DIRECTORY=`dirname "$0"`
+ else

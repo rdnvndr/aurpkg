@@ -1,0 +1,19 @@
+*** a/pass	2023-12-08 21:01:03.463364967 +0300
+--- b/pass	2023-12-08 20:54:39.190025669 +0300
+***************
+*** 10,16 ****
+  GPG="gpg"
+  export GPG_TTY="${GPG_TTY:-$(tty 2>/dev/null)}"
+  which gpg2 &>/dev/null && GPG="gpg2"
+! [[ -n $GPG_AGENT_INFO || $GPG == "gpg2" ]] && GPG_OPTS+=( "--batch" "--use-agent" )
+  
+  PREFIX="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+  EXTENSIONS="${PASSWORD_STORE_EXTENSIONS_DIR:-$PREFIX/.extensions}"
+--- 10,16 ----
+  GPG="gpg"
+  export GPG_TTY="${GPG_TTY:-$(tty 2>/dev/null)}"
+  which gpg2 &>/dev/null && GPG="gpg2"
+! #[[ -n $GPG_AGENT_INFO || $GPG == "gpg2" ]] && GPG_OPTS+=( "--batch" "--use-agent" )
+  
+  PREFIX="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+  EXTENSIONS="${PASSWORD_STORE_EXTENSIONS_DIR:-$PREFIX/.extensions}"

@@ -1,7 +1,7 @@
 pkgname=qt6-rtp-platformtheme
 _pkgname=qt-rtp-platformtheme
 pkgver=0.3.2
-pkgrel=2
+pkgrel=3
 pkgdesc="A theme engine for Qt6"
 arch=(x86_64)
 url="https://github.com/rdnvndr/$pkgname"

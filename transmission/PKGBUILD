@@ -6,7 +6,7 @@
 pkgbase=transmission
 pkgname=(transmission-qt libtransmission)
 pkgver=4.0.6
-pkgrel=9
+pkgrel=10
 arch=(x86_64)
 url="http://www.transmissionbt.com/"
 license=(GPL)

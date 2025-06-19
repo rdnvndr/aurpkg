@@ -1,6 +1,0 @@
-[clazy]
-source = 'gitlab'
-gitlab = 'sdk/clazy'
-host = 'invent.kde.org'
-use_max_tag = true
-prefix = 'v'

@@ -1,0 +1,18 @@
+pkgbase = virtualbox-host-modules-arch
+	pkgdesc = Virtualbox host kernel modules for Arch Kernel
+	pkgver = 7.1.10
+	pkgrel = 10
+	url = https://virtualbox.org/
+	arch = x86_64
+	license = GPL
+	makedepends = linux-headers
+	makedepends = virtualbox-host-dkms=7.1.10
+	provides = VIRTUALBOX-HOST-MODULES
+	conflicts = virtualbox-modules
+	conflicts = virtualbox-host-modules
+	conflicts = virtualbox-host-dkms
+	replaces = virtualbox-modules
+	replaces = virtualbox-host-modules
+
+pkgname = virtualbox-host-modules-arch
+	depends = linux

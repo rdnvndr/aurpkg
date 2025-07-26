@@ -34,17 +34,6 @@ index 0d9671f..f77cf4e 100644
  StoriesSourceInfo StoriesSource::info() const {
  	return {
  		.id = peer->id,
-@@ -364,6 +375,10 @@ void Stories::clearArchive(not_null<PeerData*> peer) {
- }
-
- void Stories::parseAndApply(const MTPPeerStories &stories) {
-+	if (DisableStories.value()) {
-+		return;
-+	}
-+
- 	const auto &data = stories.data();
- 	const auto peerId = peerFromMTP(data.vpeer());
- 	const auto already = _readTill.find(peerId);
 @@ -595,6 +610,10 @@ void Stories::savedStateChanged(not_null<Story*> story) {
  }
 

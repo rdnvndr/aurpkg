@@ -1,8 +1,8 @@
 # Maintainer: Christian Hesse <eworm@archlinux.org>
 
 pkgname='virtualbox-host-modules-arch'
-pkgver=7.1.12
-pkgrel=3
+pkgver=7.2.0
+pkgrel=1
 pkgdesc='Virtualbox host kernel modules for Arch Kernel'
 arch=('x86_64')
 url='https://virtualbox.org/'

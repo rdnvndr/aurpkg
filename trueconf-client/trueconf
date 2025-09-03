@@ -7,6 +7,14 @@ CLIENT_PATH="/opt/trueconf/client"
 if [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
   export DESKTOP_SESSION="kde"
   export QT_QPA_PLATFORMTHEME=gtk3
+else
+  if [ "$ID" == "arch" ]; then
+    export QSG_RENDER_LOOP="basic"
+  fi
+fi
+
+if [ "$ID" != "arch" ]; then
+  export QSG_RENDER_LOOP="basic"
 fi
 
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
@@ -24,13 +32,10 @@ fi
 # For debugging when runnning a QT application
 #export QT_DEBUG_PLUGINS=1
 
-export QSG_RENDER_LOOP="basic"
 export LD_LIBRARY_PATH=$CLIENT_PATH/lib:$CLIENT_PATH/qt5/lib:"$LD_LIBRARY_PATH"
+
 #export QT_PLUGIN_PATH='/opt/trueconf/client/plugins'
-export QTWEBENGINE_DISABLE_SANDBOX=1
-export QT_QPA_PLATFORMTHEME=''
+#export QT_QPA_PLATFORMTHEME=''
 export QT_SUPPORT_GL_CHILD_WIDGETS=1
 
-
-export LIBVA_DRIVER_NAME="iHD"
-$CLIENT_PATH/TrueConf  "$@"
+$CLIENT_PATH/TrueConf "$@"

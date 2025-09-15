@@ -12,7 +12,7 @@
 # binary version of this package (-bin): github.com/noahvogt/ungoogled-chromium-xdg-bin-aur
 
 pkgname=ungoogled-chromium-xdg
-pkgver=137.0.7151.55
+pkgver=140.0.7339.132
 pkgrel=1
 _launcher_ver=8
 _manual_clone=0
@@ -25,7 +25,7 @@ depends=('gtk3' 'nss' 'alsa-lib' 'xdg-utils' 'libxss' 'libcups' 'libgcrypt'
          'ttf-liberation' 'systemd' 'dbus' 'libpulse' 'pciutils' 'libva'
          'libffi' 'desktop-file-utils' 'hicolor-icon-theme')
 makedepends=('python' 'gn' 'ninja' 'clang' 'lld' 'gperf' 'nodejs' 'pipewire'
-             'rust' 'rust-bindgen' 'qt5-base' "qt6-base" 'java-runtime-headless'
+             'rust' 'rust-bindgen' 'qt6-base' 'java-runtime-headless'
              'git')
 optdepends=('pipewire: WebRTC desktop sharing under Wayland'
             'kdialog: support for native dialogs in Plasma'
@@ -36,23 +36,21 @@ optdepends=('pipewire: WebRTC desktop sharing under Wayland'
 options=('!lto') # Chromium adds its own flags for ThinLTO
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$pkgver-lite.tar.xz
         https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver/chromium-launcher-$_launcher_ver.tar.gz
-        disable-clang-fextend-variable-liveness.patch
-        pdfium-fix-build-with-system-libpng.patch
-        chromium-136-drop-nodejs-ver-check.patch
+        chromium-138-nodejs-version-check.patch
+        chromium-138-rust-1.86-mismatched_lifetime_syntaxes.patch
         compiler-rt-adjust-paths.patch
         increase-fortify-level.patch
-        disable-clang-warning-suppression-flag.patch
         use-oauth2-client-switches-as-default.patch
+        chromium-140.0.7339.41-rust.patch
         tab.patch)
-sha256sums=('7b8fa89febed9fae0297c8175bd35cc912d794fbf03d33a121a0bc9d3d13ef34'
+sha256sums=('e08746b02c08adbea49c5cf0483095ca514430de2281d762ceefac345a2cefe4'
             '213e50f48b67feb4441078d50b0fd431df34323be15be97c55302d3fdac4483a'
-            '2d98a7a6a553fb5c17c4bfe36f011410f377afa12a6a818ba36543dc9a258f4a'
-            'de3222b13d3a49628a00fd74acae633912b830f78c2de452d3bdff3d0e42026d'
-            '32f0080282fc0b2795a342bf17fcb3db4028c5d02619c7e304222230ba99d5fe'
-            'cc8a71a312e9314743c289b7b8fddcc80350a31445d335f726bb2e68edf916d1'
+            '11a96ffa21448ec4c63dd5c8d6795a1998d8e5cd5a689d91aea4d2bdd13fb06e'
+            '5abc8611463b3097fc5ce58017ef918af8b70d616ad093b8b486d017d021bbdf'
+            '75681c815bb2a8c102f0d7af3a3790b5012adbbce38780716b257b7da2e1c3d5'
             'd634d2ce1fc63da7ac41f432b1e84c59b7cceabf19d510848a7cff40c8025342'
-            'd6f3914c6adadaf061e7e2b1430c96d32b0cad05244b5cfaf58cf5344006a169'
             'e6da901e4d0860058dc2f90c6bbcdc38a0cf4b0a69122000f62204f24fa7e374'
+            '0eb47afd031188cf5a3f0502f3025a73a1799dfa52dff9906db5a3c2af24e2eb'
             'SKIP')
 
 # ungoogled-chromium-xdg patches
@@ -78,7 +76,7 @@ optdepends=("${optdepends[@]}"
 source=(${source[@]}
         ${pkgname%-*}-$_uc_ver.tar.gz::https://github.com/$_uc_usr/ungoogled-chromium/archive/refs/tags/$_uc_ver.tar.gz)
 sha256sums=(${sha256sums[@]}
-            '68ec6108c64ee516ed925d0b0ea44c2dc3d5973da92eb91f2788f7075596ddd6')
+            '4ce570764f48493cf0c182df0ca755e8c26548da91b5e9636663140ef600c6a0')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
 # Keys are the names in the above script; values are the dependencies in Arch
@@ -141,20 +139,19 @@ prepare() {
   patch -Np1 -i ../use-oauth2-client-switches-as-default.patch
 
   # Upstream fixes
-  patch -Np1 -i ../disable-clang-fextend-variable-liveness.patch
-  patch -d third_party/pdfium -Np1 <../pdfium-fix-build-with-system-libpng.patch
 
   # Fixes from Gentoo
-  patch -Np1 -i ../chromium-136-drop-nodejs-ver-check.patch
+  patch -Np1 -i ../chromium-138-nodejs-version-check.patch
+
+  # Fixes from NixOS
+  patch -Np1 -i ../chromium-138-rust-1.86-mismatched_lifetime_syntaxes.patch
+  patch -Np1 -i ../chromium-140.0.7339.41-rust.patch
 
   # Allow libclang_rt.builtins from compiler-rt >= 16 to be used
   patch -Np1 -i ../compiler-rt-adjust-paths.patch
 
   # Increase _FORTIFY_SOURCE level to match Arch's default flags
   patch -Np1 -i ../increase-fortify-level.patch
-
-  # Disable usage of --warning-suppression-mappings flag which needs clang 20
-  patch -Np1 -i ../disable-clang-warning-suppression-flag.patch
 
   # Custom Patches
 
@@ -191,9 +188,11 @@ prepare() {
     -f "$_ungoogled_repo/domain_substitution.list" -c domainsubcache.tar.gz ./
 
   # Link to system tools required by the build
-  mkdir -p third_party/node/linux/node-linux-x64/bin
-  ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/
-  mkdir -p third_party/jdk/current/bin/
+  if (( ! _manual_clone )); then
+    mkdir -p third_party/node/linux/node-linux-x64/bin
+    ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/
+  fi
+  mkdir -p third_party/jdk/current/bin
   ln -s /usr/bin/java third_party/jdk/current/bin/
 
   # Remove bundled libraries for which we will use the system copies; this
@@ -238,6 +237,7 @@ build() {
     'is_official_build=true' # implies is_cfi=true on x86_64
     'symbol_level=0' # sufficient for backtraces on x86(_64)
     'treat_warnings_as_errors=false'
+    'fatal_linker_warnings=false'
     'disable_fieldtrial_testing_config=true'
     'blink_enable_generated_code_formatting=false'
     'ffmpeg_branding="Chrome"'
@@ -249,7 +249,7 @@ build() {
     'use_system_libffi=true'
     'enable_widevine=true'
     'enable_nacl=false'
-    'use_qt5=true'
+    'use_qt5=false'
     'use_qt6=true'
     'moc_qt6_path="/usr/lib/qt6"'
     'enable_platform_hevc=true'
@@ -274,7 +274,7 @@ build() {
       'clang_use_chrome_plugins=false'
       "clang_version=\"$_clang_version\""
       'chrome_pgo_phase=0' # needs newer clang to read the bundled PGO profile
-    )
+      )
 
     # Allow the use of nightly features with stable Rust compiler
     # https://github.com/ungoogled-software/ungoogled-chromium/pull/2696#issuecomment-1918173198
@@ -355,7 +355,6 @@ package() {
     chrome_100_percent.pak
     chrome_200_percent.pak
     chrome_crashpad_handler
-    libqt5_shim.so
     libqt6_shim.so
     resources.pak
     v8_context_snapshot.bin

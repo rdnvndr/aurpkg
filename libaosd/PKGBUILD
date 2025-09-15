@@ -11,6 +11,7 @@ arch=('i686' 'x86_64')
 url="https://github.com/atheme/libaosd"
 license=('MIT')
 depends=('libxcomposite' 'pango')
+makedepends=('automake' 'autoconf')
 source=("https://github.com/atheme/$pkgname/archive/$pkgver.tar.gz")
 sha256sums=('b1d02cc5f1761ab6b1c1f8994a92466f11d91d57af65dcb3204e8c54ea514059')
 

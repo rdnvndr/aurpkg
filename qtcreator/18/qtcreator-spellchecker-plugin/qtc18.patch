@@ -1,0 +1,58 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c91ebe62..038b3dcf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,7 +17,7 @@ set(CMAKE_AUTOUIC ON)
+ set(CMAKE_CXX_STANDARD 20)
+ 
+ find_package(QtCreator COMPONENTS Core REQUIRED)
+-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
++find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Core5Compat REQUIRED)
+ set(QtX Qt${QT_VERSION_MAJOR})
+ 
+ add_qtc_plugin(SpellChecker
+@@ -27,6 +27,7 @@ add_qtc_plugin(SpellChecker
+     QtCreator::ProjectExplorer
+     QtCreator::CppEditor
+   DEPENDS
++    Qt6Core5Compat
+     ${QtX}::Widgets
+     QtCreator::ExtensionSystem
+     QtCreator::Utils
+diff --git a/src/Parsers/CppParser/cppdocumentparser.cpp b/src/Parsers/CppParser/cppdocumentparser.cpp
+index 2fae069a..44fc8356 100644
+--- a/src/Parsers/CppParser/cppdocumentparser.cpp
++++ b/src/Parsers/CppParser/cppdocumentparser.cpp
+@@ -28,6 +28,7 @@
+ #include "cppparseroptionspage.h"
+ #include "cppparsersettings.h"
+ 
++#include <cppeditor/editordocumenthandle.h>
+ #include <coreplugin/actionmanager/actioncontainer.h>
+ #include <coreplugin/actionmanager/actionmanager.h>
+ #include <coreplugin/icore.h>
+diff --git a/src/Parsers/CppParser/cppdocumentprocessor.cpp b/src/Parsers/CppParser/cppdocumentprocessor.cpp
+index 7a08dee0..bc84f5e0 100644
+--- a/src/Parsers/CppParser/cppdocumentprocessor.cpp
++++ b/src/Parsers/CppParser/cppdocumentprocessor.cpp
+@@ -26,6 +26,7 @@
+ #include <cppeditor/cppeditordocument.h>
+ #include <cppeditor/cppdoxygen.h>
+ #include <cppeditor/cppmodelmanager.h>
++#include <cppeditor/editordocumenthandle.h>
+ 
+ using namespace SpellChecker;
+ using namespace SpellChecker::CppSpellChecker::Internal;
+diff --git a/src/SpellCheckers/HunspellChecker/hunspellchecker.cpp b/src/SpellCheckers/HunspellChecker/hunspellchecker.cpp
+index d011ebcd..b905cb62 100644
+--- a/src/SpellCheckers/HunspellChecker/hunspellchecker.cpp
++++ b/src/SpellCheckers/HunspellChecker/hunspellchecker.cpp
+@@ -34,7 +34,7 @@
+ #include <QFileInfo>
+ #include <QMutex>
+ #include <QSharedPointer>
+-#include <QTextCodec>
++#include <QtCore5Compat/QTextCodec>
+ #include <QRegularExpression>
+ 
+ #include <memory>

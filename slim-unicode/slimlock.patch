@@ -31,15 +31,3 @@
   	if (using_dpms) {
   		DPMSGetTimeouts(dpy, &dpms_standby, &dpms_suspend, &dpms_off);
   
-***************
-*** 222,227 ****
---- 225,233 ----
-  
-  	pthread_t raise_thread;
-  	pthread_create(&raise_thread, NULL, RaiseWindow, NULL);
-+ 	
-+ 	if (fork())
-+ 	    return 0;
-  
-  	// Main loop
-  	while (true)

@@ -1,28 +1,28 @@
 # Maintainer: Christian Hesse <eworm@archlinux.org>
 
-pkgname='virtualbox-host-modules-zen'
+pkgname='virtualbox-host-modules-cachyos'
 pkgver=7.2.2
-pkgrel=5
+pkgrel=1
 pkgdesc='Virtualbox host kernel modules for Arch Kernel'
 arch=('x86_64')
 url='https://virtualbox.org/'
 license=('GPL')
-makedepends=('linux-zen-headers' "virtualbox-host-dkms=$pkgver")
+makedepends=('linux-cachyos-headers' "virtualbox-host-dkms=$pkgver")
 replaces=('virtualbox-modules' 'virtualbox-host-modules')
 conflicts=('virtualbox-modules' 'virtualbox-host-modules'
            'virtualbox-host-dkms')
 provides=('VIRTUALBOX-HOST-MODULES')
 
 build() {
-  _kernver="$(</usr/src/linux-zen/version)"
+  _kernver="$(</usr/src/linux-cachyos/version)"
 
   fakeroot dkms build --dkmstree "$srcdir" -m vboxhost/${pkgver}_OSE -k ${_kernver}
 }
 
 package(){
-  depends=('linux-zen')
+  depends=('linux-cachyos')
 
-  _kernver="$(</usr/src/linux-zen/version)"
+  _kernver="$(</usr/src/linux-cachyos/version)"
 
   install -Dt "$pkgdir/usr/lib/modules/$_kernver/extramodules" -m0644 \
     vboxhost/${pkgver}_OSE/${_kernver}/${CARCH}/module/*.ko*

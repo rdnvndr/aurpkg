@@ -1,5 +1,5 @@
 pkgname=jwm-git
-pkgver=bfd221a
+pkgver=032455c
 pkgrel=1
 pkgdesc="A lightweight window manager for the X11 Window System"
 arch=('i686' 'x86_64')
@@ -9,7 +9,7 @@ license=('GPL2')
 depends=('libx11' 'libxft' 'libjpeg-turbo' 'libxpm' 'libxinerama' 'libpng')
 backup=('etc/system.jwmrc')
 source=(jwm.desktop)
-makedepends=('automake' 'autoconf')
+#makedepends=('automake' 'autoconf')
 # contacted upstream about desktop
 # no reply
 md5sums=('SKIP')
@@ -45,10 +45,11 @@ build() {
   patch -p1 -i $startdir/dynamic_menu.patch                        || return 1
   patch -p1 -i $startdir/gnu_source.patch                          || return 1
   patch -p1 -i $startdir/drag.patch                                || return 1
+  tar xvf $startdir/gettext.tar.zst -C $srcdir                     || return 1
   
   cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
-  ./autogen.sh
-  gettextize -f
+#  ./autogen.sh
+#  gettextize -f
   ./configure --prefix=/usr --sysconfdir=/etc --disable-xbm --disable-xinerama --disable-rsvg --disable-jpeg
   make
 }

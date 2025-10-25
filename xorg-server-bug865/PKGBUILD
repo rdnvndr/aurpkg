@@ -4,7 +4,7 @@
 
 pkgname=xorg-server-bug865-issue1578
 pkgver=21.1.18
-pkgrel=3
+pkgrel=4
 arch=('x86_64')
 license=('LicenseRef-Adobe-Display-PostScript'
          'BSD-3-Clause'

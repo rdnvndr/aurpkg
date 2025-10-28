@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c91ebe62..038b3dcf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,7 +17,7 @@ set(CMAKE_AUTOUIC ON)
+ set(CMAKE_CXX_STANDARD 20)
+ 
+ find_package(QtCreator COMPONENTS Core REQUIRED)
+-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
++find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Core5Compat REQUIRED)
+ set(QtX Qt${QT_VERSION_MAJOR})
+ 
+ add_qtc_plugin(SpellChecker
+@@ -27,6 +27,7 @@ add_qtc_plugin(SpellChecker
+     QtCreator::ProjectExplorer
+     QtCreator::CppEditor
+   DEPENDS
++    Qt6Core5Compat
+     ${QtX}::Widgets
+     QtCreator::ExtensionSystem
+     QtCreator::Utils

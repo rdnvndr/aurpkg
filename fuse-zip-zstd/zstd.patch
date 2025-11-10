@@ -1,0 +1,22 @@
+--- a/lib/bigBuffer.cpp	2021-01-31 16:44:39.000000000 +0300
++++ b/lib/bigBuffer.cpp	2025-11-09 19:14:46.688761681 +0300
+@@ -326,6 +326,9 @@
+             return -ENOMEM;
+         } else {
+             // indices are actually in range [0..2^63-1]
++            if (zip_set_file_compression(z, static_cast<zip_uint64_t>(nid), ZIP_CM_ZSTD, 3) != 0)
++                return -ENOMEM;
++            
+             index = nid;
+         }
+     } else {
+@@ -335,6 +338,9 @@
+             zip_source_free(s);
+             return -ENOMEM;
+         }
++        
++        if (zip_set_file_compression(z, static_cast<zip_uint64_t>(index), ZIP_CM_ZSTD, 3) != 0)
++            return -ENOMEM;
+     }
+     return 0;
+ }

@@ -170,15 +170,16 @@ index 62f7fdfc..6742c136 100644
  
  rpl::producer<bool> Provider::hasSelectRestrictionChanges() {
 
-diff --git a/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp b/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
-index 9362819..4b3944f 100644
---- a/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
-+++ b/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
-@@ -1083,13 +1083,7 @@ QSize OverlayWidget::flipSizeByRotation(QSize size) const {
+--- a/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp	2025-11-17 19:45:32.000000000 +0300
++++ b/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp	2025-11-18 21:14:15.725793539 +0300
+@@ -1109,16 +1109,7 @@
  }
  
  bool OverlayWidget::hasCopyMediaRestriction(bool skipPremiumCheck) const {
 -	if (const auto story = _stories ? _stories->story() : nullptr) {
+-		if (story->call()) {
+-			return true;
+-		}
 -		return skipPremiumCheck
 -			? !story->canDownloadIfPremium()
 -			: !story->canDownloadChecked();
@@ -187,5 +188,5 @@ index 9362819..4b3944f 100644
 -		|| (_message && _message->forbidsSaving());
 +	return false;
  }
-
+ 
  bool OverlayWidget::showCopyMediaRestriction(bool skipPRemiumCheck) {

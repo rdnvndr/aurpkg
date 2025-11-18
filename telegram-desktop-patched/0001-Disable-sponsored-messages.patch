@@ -1,30 +1,26 @@
-*** a/Telegram/SourceFiles/data/components/sponsored_messages.cpp 2025-07-25 20:20:56.000000000 +0300
---- b/Telegram/SourceFiles/data/components/sponsored_messages.cpp 2025-07-26 11:29:36.507291967 +0300
-***************
-*** 231,241 ****
-  }
-  
-  bool SponsoredMessages::canHaveFor(not_null<History*> history) const {
-- 	if (history->peer->isChannel()) {
-- 		return true;
-- 	} else if (const auto user = history->peer->asUser()) {
-- 		return user->isBot();
-- 	}
-  	return false;
-  }
-  
---- 231,236 ----
-***************
-*** 245,255 ****
-  }
-  
-  bool SponsoredMessages::isTopBarFor(not_null<History*> history) const {
-- 	if (peerIsUser(history->peer->id)) {
-- 		if (const auto user = history->peer->asUser()) {
-- 			return user->isBot();
-- 		}
-- 	}
-  	return false;
-  }
-  
---- 240,245 ----
+--- a/Telegram/SourceFiles/data/components/sponsored_messages.cpp	2025-11-17 19:45:32.000000000 +0300
++++ a/Telegram/SourceFiles/data/components/sponsored_messages.cpp	2025-11-18 21:17:19.766392544 +0300
+@@ -239,11 +239,6 @@
+ }
+ 
+ bool SponsoredMessages::canHaveFor(not_null<History*> history) const {
+-	if (history->peer->isChannel()) {
+-		return true;
+-	} else if (const auto user = history->peer->asUser()) {
+-		return user->isBot();
+-	}
+ 	return false;
+ }
+ 
+@@ -253,11 +248,6 @@
+ }
+ 
+ bool SponsoredMessages::isTopBarFor(not_null<History*> history) const {
+-	if (peerIsUser(history->peer->id)) {
+-		if (const auto user = history->peer->asUser()) {
+-			return user->isBot();
+-		}
+-	}
+ 	return false;
+ }
+ 

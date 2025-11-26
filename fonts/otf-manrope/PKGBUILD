@@ -1,0 +1,22 @@
+# Maintainer: luxcem <a@luxcem.fr>
+
+pkgname=otf-manrope
+pkgver=5
+pkgrel=1
+pkgdesc="Manrope font – modern geometric sans-serif"
+url="https://www.shimmer.cloud/manrope"
+license=("custom:OFL")
+arch=("any")
+source=("https://www.shimmer.cloud/assets/manrope/manrope.zip"
+       "OFL.txt")
+sha256sums=('SKIP'
+            'SKIP')
+
+package() {
+  install -d "${pkgdir}"/usr/share/fonts/OTF
+  install -m644 "${srcdir}"/desktop/*.otf "${pkgdir}"/usr/share/fonts/OTF/
+    
+  install -d "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -Dm644 "OFL.txt" "${pkgdir}/usr/share/licenses/${pkgname}/"LICENCE
+  
+}

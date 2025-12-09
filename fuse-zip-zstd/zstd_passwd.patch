@@ -1,6 +1,6 @@
-diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
+diff -ru a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
 --- a/lib/bigBuffer.cpp	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/bigBuffer.cpp	2025-12-09 09:26:51.983245329 +0300
++++ b/lib/bigBuffer.cpp	2025-12-09 17:27:45.296087380 +0300
 @@ -30,6 +30,9 @@
  
  #include "bigBuffer.h"
@@ -21,7 +21,7 @@ diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
      if (zf == NULL) {
          syslog(LOG_WARNING, "%s", zip_strerror(z));
          throw std::runtime_error(zip_strerror(z));
-@@ -201,6 +205,25 @@
+@@ -201,6 +205,20 @@
  BigBuffer::~BigBuffer() {
  }
  
@@ -33,13 +33,8 @@ diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
 +    }
 +    else {
 +        zf = zip_fopen_index(z, nodeId, 0);
-+        if (zf == NULL) {
-+            *zep = zip_error_code_zip(zip_get_error(z)); 
-+            if (ZIP_ER_NOPASSWD == *zep) {
-+                zf = zip_fopen_index_encrypted(z, nodeId, 0, passwd);
-+            }
-+        }
 +    }
++    *zep = zip_error_code_zip(zip_get_error(z)); 
 +
 +    return zf;
 +}
@@ -47,7 +42,7 @@ diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
  int BigBuffer::read(char *buf, size_t size, size_t offset) const {
      if (offset > len) {
          return 0;
-@@ -326,6 +349,12 @@
+@@ -326,6 +344,12 @@
              return -ENOMEM;
          } else {
              // indices are actually in range [0..2^63-1]
@@ -60,7 +55,7 @@ diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
              index = nid;
          }
      } else {
-@@ -335,6 +364,12 @@
+@@ -335,6 +359,12 @@
              zip_source_free(s);
              return -ENOMEM;
          }
@@ -73,9 +68,9 @@ diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
      }
      return 0;
  }
-diff -ur a/lib/bigBuffer.h b/lib/bigBuffer.h
+diff -ru a/lib/bigBuffer.h b/lib/bigBuffer.h
 --- a/lib/bigBuffer.h	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/bigBuffer.h	2025-12-09 09:26:51.983486733 +0300
++++ b/lib/bigBuffer.h	2025-12-09 16:59:59.562451125 +0300
 @@ -74,6 +74,9 @@
  
  public:
@@ -98,9 +93,9 @@ diff -ur a/lib/bigBuffer.h b/lib/bigBuffer.h
       * Dispatch read requests to chunks of a file and write result to
       * resulting buffer.
       * Reading after end of file is not allowed, so 'size' is decreased to
-diff -ur a/lib/fileNode.cpp b/lib/fileNode.cpp
+diff -ru a/lib/fileNode.cpp b/lib/fileNode.cpp
 --- a/lib/fileNode.cpp	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/fileNode.cpp	2025-12-09 09:26:51.983614713 +0300
++++ b/lib/fileNode.cpp	2025-12-09 16:59:59.562516407 +0300
 @@ -25,6 +25,7 @@
  #include <cstdint>
  #include <cstdlib>
@@ -109,38 +104,29 @@ diff -ur a/lib/fileNode.cpp b/lib/fileNode.cpp
  #include <ctime>
  #include <limits>
  #include <memory>
-diff -ur a/lib/fuseZipData.cpp b/lib/fuseZipData.cpp
+diff -ru a/lib/fuseZipData.cpp b/lib/fuseZipData.cpp
 --- a/lib/fuseZipData.cpp	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/fuseZipData.cpp	2025-12-09 10:38:18.741269416 +0300
-@@ -58,6 +58,27 @@
++++ b/lib/fuseZipData.cpp	2025-12-09 18:11:39.733001191 +0300
+@@ -58,6 +58,18 @@
      }
  }
  
-+bool FuseZipData::try_passwd(const char *pass) {
-+    int zep;
-+    struct zip_file *zf;
-+
-+    zep = 0;
-+    zf = BigBuffer::open(m_zip, 0, &zep);
-+    if (zf == NULL) {
-+        BigBuffer::passwd = pass;
-+        return true;
-+    }
++bool FuseZipData::try_passwd() {
++    const auto *pass1 = getpass("Enter password: ");
++    const auto *pass2 = getpass("Retry password: ");
 +    
-+    if (zep != ZIP_ER_NOPASSWD) 
++    if (*pass1 != *pass2)
 +        return false;
 +    
-+    zep = 0;
-+    BigBuffer::passwd = pass;
-+    zf = BigBuffer::open(m_zip, 0, &zep);
 +    
-+    return zf != NULL && zep == 0;
++    BigBuffer::passwd = pass1;
++    return true;
 +}
 +
  void FuseZipData::build_tree(bool readonly) {
      m_root = FileNode::createRootNode(m_zip);
      if (m_root == NULL) {
-@@ -73,6 +94,7 @@
+@@ -73,6 +85,7 @@
              const char *name = zip_get_name(m_zip, static_cast<zip_uint64_t>(i), ZIP_FL_ENC_RAW);
              if ((name[0] == '/') || (strncmp(name, "../", 3) == 0)) {
                  needPrefix = true;
@@ -148,24 +134,24 @@ diff -ur a/lib/fuseZipData.cpp b/lib/fuseZipData.cpp
              }
          }
      }
-diff -ur a/lib/fuseZipData.h b/lib/fuseZipData.h
+diff -ru a/lib/fuseZipData.h b/lib/fuseZipData.h
 --- a/lib/fuseZipData.h	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/fuseZipData.h	2025-12-09 09:26:51.984329788 +0300
++++ b/lib/fuseZipData.h	2025-12-09 18:12:12.136889191 +0300
 @@ -96,6 +96,11 @@
      ~FuseZipData();
  
      /**
 +     * try password if ZIP DATA is encrypted
 +     */
-+    bool try_passwd(const char *pass);
++    bool try_passwd();
 +
 +    /**
       * Detach node from tree, and delete associated entry in zip file if
       * present.
       *
-diff -ur a/main.cpp b/main.cpp
+diff -ru a/main.cpp b/main.cpp
 --- a/main.cpp	2021-01-31 16:44:39.000000000 +0300
-+++ b/main.cpp	2025-12-09 09:33:25.689471662 +0300
++++ b/main.cpp	2025-12-09 18:11:04.624779082 +0300
 @@ -21,6 +21,7 @@
  #define KEY_VERSION (1)
  #define KEY_RO (2)
@@ -227,7 +213,7 @@ diff -ur a/main.cpp b/main.cpp
 +        if (param.usePasswd) {
 +            int try_count = 3;
 +            while (try_count--) {
-+                if (data->try_passwd(getpass("Enter password: "))) {
++                if (data->try_passwd()) {
 +                    break;
 +                }
 +                fprintf(stderr,"Incorrect!\n");

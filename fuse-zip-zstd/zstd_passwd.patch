@@ -1,0 +1,259 @@
+diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
+--- a/lib/bigBuffer.cpp	2021-01-31 16:44:39.000000000 +0300
++++ b/lib/bigBuffer.cpp	2025-12-07 17:10:52.739938381 +0300
+@@ -30,6 +30,9 @@
+ 
+ #include "bigBuffer.h"
+ 
++const char *BigBuffer::passwd = NULL;
++
++
+ /**
+  * Class that keep chunk of file data.
+  */
+@@ -161,7 +164,8 @@
+ 
+ BigBuffer::BigBuffer(struct zip *z, zip_uint64_t nodeId, size_t length):
+         len(length) {
+-    struct zip_file *zf = zip_fopen_index(z, nodeId, 0);
++    int zep = 0;
++    struct zip_file *zf = open(z, nodeId, &zep);
+     if (zf == NULL) {
+         syslog(LOG_WARNING, "%s", zip_strerror(z));
+         throw std::runtime_error(zip_strerror(z));
+@@ -201,6 +205,25 @@
+ BigBuffer::~BigBuffer() {
+ }
+ 
++struct zip_file *BigBuffer::open(struct zip *z, zip_uint64_t nodeId, int *zep) {
++    struct zip_file *zf;
++
++    if (passwd != NULL) {
++        zf = zip_fopen_index_encrypted(z, nodeId, 0, passwd);
++    }
++    else {
++        zf = zip_fopen_index(z, nodeId, 0);
++        if (zf == NULL) {
++            *zep = zip_error_code_zip(zip_get_error(z)); 
++            if (ZIP_ER_NOPASSWD == *zep) {
++                zf = zip_fopen_index_encrypted(z, nodeId, 0, passwd);
++            }
++        }
++    }
++
++    return zf;
++}
++
+ int BigBuffer::read(char *buf, size_t size, size_t offset) const {
+     if (offset > len) {
+         return 0;
+@@ -326,6 +349,12 @@
+             return -ENOMEM;
+         } else {
+             // indices are actually in range [0..2^63-1]
++            if (passwd && zip_file_set_encryption(z, static_cast<zip_uint64_t>(nid), ZIP_EM_AES_256, passwd) != 0)
++                return -ENOMEM;
++              
++            if (zip_set_file_compression(z, static_cast<zip_uint64_t>(nid), ZIP_CM_ZSTD, 6) != 0)
++                return -ENOMEM;
++            
+             index = nid;
+         }
+     } else {
+@@ -335,6 +364,12 @@
+             zip_source_free(s);
+             return -ENOMEM;
+         }
++        
++        if (passwd && zip_file_set_encryption(z, static_cast<zip_uint64_t>(index), ZIP_EM_AES_256, passwd) != 0)
++            return -ENOMEM;
++            
++        if (zip_set_file_compression(z, static_cast<zip_uint64_t>(index), ZIP_CM_ZSTD, 6) != 0)
++            return -ENOMEM;
+     }
+     return 0;
+ }
+diff -ur a/lib/bigBuffer.h b/lib/bigBuffer.h
+--- a/lib/bigBuffer.h	2021-01-31 16:44:39.000000000 +0300
++++ b/lib/bigBuffer.h	2025-12-07 16:42:27.801763545 +0300
+@@ -74,6 +74,9 @@
+ 
+ public:
+     size_t len;
++    
++    /* store password here, Can be NULL */
++    static const char *passwd;
+ 
+     /**
+      * Create new file buffer without mapping to file in a zip archive
+@@ -95,6 +98,11 @@
+     ~BigBuffer();
+ 
+     /**
++     * open a file inside zip archive
++     */
++    static struct zip_file *open(struct zip *z, zip_uint64_t nodeId, int *zep);
++
++    /**
+      * Dispatch read requests to chunks of a file and write result to
+      * resulting buffer.
+      * Reading after end of file is not allowed, so 'size' is decreased to
+diff -ur a/lib/fileNode.cpp b/lib/fileNode.cpp
+--- a/lib/fileNode.cpp	2021-01-31 16:44:39.000000000 +0300
++++ b/lib/fileNode.cpp	2025-12-07 16:42:27.801890323 +0300
+@@ -25,6 +25,7 @@
+ #include <cstdint>
+ #include <cstdlib>
+ #include <cstring>
++#include <stdint.h>
+ #include <ctime>
+ #include <limits>
+ #include <memory>
+diff -ur a/lib/fuseZipData.cpp b/lib/fuseZipData.cpp
+--- a/lib/fuseZipData.cpp	2021-01-31 16:44:39.000000000 +0300
++++ b/lib/fuseZipData.cpp	2025-12-07 17:11:40.461286605 +0300
+@@ -58,6 +58,25 @@
+     }
+ }
+ 
++bool FuseZipData::try_passwd(const char *pass) {
++    int zep, try_count;
++    struct zip_file *zf;
++
++    try_count = 1;
++just_try:
++    zep = 0;
++    BigBuffer::passwd = pass; 
++    zf = BigBuffer::open(m_zip, 0, &zep);
++    if (zf == NULL) {
++        if (ZIP_ER_NOPASSWD == zep && try_count--) {
++            BigBuffer::passwd = pass;
++            goto just_try;
++        }
++    }
++
++    return zf != NULL;
++}
++
+ void FuseZipData::build_tree(bool readonly) {
+     m_root = FileNode::createRootNode(m_zip);
+     if (m_root == NULL) {
+@@ -73,6 +92,7 @@
+             const char *name = zip_get_name(m_zip, static_cast<zip_uint64_t>(i), ZIP_FL_ENC_RAW);
+             if ((name[0] == '/') || (strncmp(name, "../", 3) == 0)) {
+                 needPrefix = true;
++                break;
+             }
+         }
+     }
+diff -ur a/lib/fuseZipData.h b/lib/fuseZipData.h
+--- a/lib/fuseZipData.h	2021-01-31 16:44:39.000000000 +0300
++++ b/lib/fuseZipData.h	2025-12-07 16:42:27.802464593 +0300
+@@ -96,6 +96,11 @@
+     ~FuseZipData();
+ 
+     /**
++     * try password if ZIP DATA is encrypted
++     */
++    bool try_passwd(const char *pass);
++
++    /**
+      * Detach node from tree, and delete associated entry in zip file if
+      * present.
+      *
+diff -ur a/main.cpp b/main.cpp
+--- a/main.cpp	2021-01-31 16:44:39.000000000 +0300
++++ b/main.cpp	2025-12-07 16:42:27.802600067 +0300
+@@ -21,6 +21,7 @@
+ #define KEY_VERSION (1)
+ #define KEY_RO (2)
+ #define KEY_FORCE_PRECISE_TIME (3)
++#define KEY_USE_PASSWD (4)
+ 
+ #include "config.h"
+ 
+@@ -58,6 +59,7 @@
+             "    -V   --version         print version\n"
+             "    -r   -o ro             open archive in read-only mode\n"
+             "    -f                     don't detach from terminal\n"
++            "    -p                     use password\n"
+             "    -d                     turn on debugging, also implies -f\n"
+             "\n");
+ }
+@@ -86,6 +88,8 @@
+     bool readonly;
+     // force precise time
+     bool force_precise_time;
++    // optional, use passwd
++    bool usePasswd;
+ };
+ 
+ /**
+@@ -130,6 +134,11 @@
+             return DISCARD;
+         }
+ 
++        case KEY_USE_PASSWD: {
++            param->usePasswd = true;
++            return DISCARD;
++        }
++
+         case FUSE_OPT_KEY_NONOPT: {
+             ++param->strArgCount;
+             switch (param->strArgCount) {
+@@ -188,6 +197,7 @@
+     FUSE_OPT_KEY("-r",                  KEY_RO),
+     FUSE_OPT_KEY("ro",                  KEY_RO),
+     FUSE_OPT_KEY("force_precise_time",  KEY_FORCE_PRECISE_TIME),
++    FUSE_OPT_KEY("-p",                  KEY_USE_PASSWD),
+     {NULL, 0, 0}
+ };
+ 
+@@ -204,6 +214,7 @@
+     param.readonly = false;
+     param.force_precise_time = false;
+     param.strArgCount = 0;
++    param.usePasswd = false;
+     param.fileName = NULL;
+ 
+     if (fuse_opt_parse(&args, &param, fusezip_opts, process_arg)) {
+@@ -242,9 +253,25 @@
+             fuse_opt_free_args(&args);
+             return EXIT_FAILURE;
+         }
++        // try password
++        if (param.usePasswd) {
++            int try_count = 3;
++            while (try_count--) {
++                if (data->try_passwd(getpass("Enter password: "))) {
++                    break;
++                }
++                fprintf(stderr,"Incorrect!\n");
++            }
++            if (try_count < 0) {
++                fuse_opt_free_args(&args);
++                fprintf(stderr,"%s quit!\n", PROGRAM);
++                return EXIT_FAILURE;
++            }
++        }
+     }
+ 
+     static struct fuse_operations fusezip_oper;
++    /* {{{ */
+     fusezip_oper.init       =   fusezip_init;
+     fusezip_oper.destroy    =   fusezip_destroy;
+     fusezip_oper.readdir    =   fusezip_readdir;
+@@ -285,6 +312,7 @@
+     fusezip_oper.flag_utime_omit_ok = 1;
+ #   endif
+ #endif
++    /* }}} */
+ 
+     struct fuse *fuse;
+     char *mountpoint;
+@@ -302,4 +330,4 @@
+     fuse_teardown(fuse, mountpoint);
+     return (res == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+ }
+-
++/* vim:set st=4 sw=4 et fdm=marker: */

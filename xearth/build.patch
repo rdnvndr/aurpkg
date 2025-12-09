@@ -1,0 +1,9 @@
+diff -u a/gifout.c b/gifout.c
+--- a/gifout.c	2025-12-09 00:09:14.478665421 +0300
++++ b/gifout.c	2025-12-09 00:09:54.974531403 +0300
+@@ -553,5 +553,4 @@
+   fprintf(stderr, "\n");
+   fprintf(stderr, "gifout.c: fatal error\n");
+   fprintf(stderr, "    %s\n", msg);
+-  exit(1);
+ }

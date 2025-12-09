@@ -3,7 +3,7 @@
 
 pkgname=fuse-zip-zstd
 pkgver=0.7.2
-pkgrel=1
+pkgrel=4
 pkgdesc='Mount and modify zip files'
 arch=(x86_64)
 url='https://bitbucket.org/agalanin/fuse-zip'
@@ -16,8 +16,8 @@ b2sums=('b7cd0ad3dc605434e40f1914424d3da681308ef758d2aa613323eb0e3ca5c32a9f10377
 
 prepare() {
   cd fuse-zip-$pkgver
-  #patch -p1 -i $startdir/zstd_passwd.patch
-  patch -p1 -i $startdir/zstd.patch
+  patch -p1 -i $startdir/zstd_passwd.patch
+  #patch -p1 -i $startdir/zstd.patch
   setconf Makefile prefix /usr
   setconf Makefile RELEASE_CXXFLAGS '-O3 -w'
 }

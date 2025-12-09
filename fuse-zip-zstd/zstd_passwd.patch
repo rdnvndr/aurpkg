@@ -1,6 +1,6 @@
 diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
 --- a/lib/bigBuffer.cpp	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/bigBuffer.cpp	2025-12-07 17:10:52.739938381 +0300
++++ b/lib/bigBuffer.cpp	2025-12-09 09:26:51.983245329 +0300
 @@ -30,6 +30,9 @@
  
  #include "bigBuffer.h"
@@ -75,7 +75,7 @@ diff -ur a/lib/bigBuffer.cpp b/lib/bigBuffer.cpp
  }
 diff -ur a/lib/bigBuffer.h b/lib/bigBuffer.h
 --- a/lib/bigBuffer.h	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/bigBuffer.h	2025-12-07 16:42:27.801763545 +0300
++++ b/lib/bigBuffer.h	2025-12-09 09:26:51.983486733 +0300
 @@ -74,6 +74,9 @@
  
  public:
@@ -100,7 +100,7 @@ diff -ur a/lib/bigBuffer.h b/lib/bigBuffer.h
       * Reading after end of file is not allowed, so 'size' is decreased to
 diff -ur a/lib/fileNode.cpp b/lib/fileNode.cpp
 --- a/lib/fileNode.cpp	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/fileNode.cpp	2025-12-07 16:42:27.801890323 +0300
++++ b/lib/fileNode.cpp	2025-12-09 09:26:51.983614713 +0300
 @@ -25,6 +25,7 @@
  #include <cstdint>
  #include <cstdlib>
@@ -111,34 +111,36 @@ diff -ur a/lib/fileNode.cpp b/lib/fileNode.cpp
  #include <memory>
 diff -ur a/lib/fuseZipData.cpp b/lib/fuseZipData.cpp
 --- a/lib/fuseZipData.cpp	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/fuseZipData.cpp	2025-12-07 17:11:40.461286605 +0300
-@@ -58,6 +58,25 @@
++++ b/lib/fuseZipData.cpp	2025-12-09 10:38:18.741269416 +0300
+@@ -58,6 +58,27 @@
      }
  }
  
 +bool FuseZipData::try_passwd(const char *pass) {
-+    int zep, try_count;
++    int zep;
 +    struct zip_file *zf;
 +
-+    try_count = 1;
-+just_try:
 +    zep = 0;
-+    BigBuffer::passwd = pass; 
 +    zf = BigBuffer::open(m_zip, 0, &zep);
 +    if (zf == NULL) {
-+        if (ZIP_ER_NOPASSWD == zep && try_count--) {
-+            BigBuffer::passwd = pass;
-+            goto just_try;
-+        }
++        BigBuffer::passwd = pass;
++        return true;
 +    }
-+
-+    return zf != NULL;
++    
++    if (zep != ZIP_ER_NOPASSWD) 
++        return false;
++    
++    zep = 0;
++    BigBuffer::passwd = pass;
++    zf = BigBuffer::open(m_zip, 0, &zep);
++    
++    return zf != NULL && zep == 0;
 +}
 +
  void FuseZipData::build_tree(bool readonly) {
      m_root = FileNode::createRootNode(m_zip);
      if (m_root == NULL) {
-@@ -73,6 +92,7 @@
+@@ -73,6 +94,7 @@
              const char *name = zip_get_name(m_zip, static_cast<zip_uint64_t>(i), ZIP_FL_ENC_RAW);
              if ((name[0] == '/') || (strncmp(name, "../", 3) == 0)) {
                  needPrefix = true;
@@ -148,7 +150,7 @@ diff -ur a/lib/fuseZipData.cpp b/lib/fuseZipData.cpp
      }
 diff -ur a/lib/fuseZipData.h b/lib/fuseZipData.h
 --- a/lib/fuseZipData.h	2021-01-31 16:44:39.000000000 +0300
-+++ b/lib/fuseZipData.h	2025-12-07 16:42:27.802464593 +0300
++++ b/lib/fuseZipData.h	2025-12-09 09:26:51.984329788 +0300
 @@ -96,6 +96,11 @@
      ~FuseZipData();
  
@@ -163,7 +165,7 @@ diff -ur a/lib/fuseZipData.h b/lib/fuseZipData.h
       *
 diff -ur a/main.cpp b/main.cpp
 --- a/main.cpp	2021-01-31 16:44:39.000000000 +0300
-+++ b/main.cpp	2025-12-07 16:42:27.802600067 +0300
++++ b/main.cpp	2025-12-09 09:33:25.689471662 +0300
 @@ -21,6 +21,7 @@
  #define KEY_VERSION (1)
  #define KEY_RO (2)

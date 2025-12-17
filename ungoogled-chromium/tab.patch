@@ -1,3 +1,14 @@
+--- old/chrome/browser/ui/views/tabs/tab_strip_control_button.cc	2025-12-08 23:35:33.000000000 +0300
++++ new/chrome/browser/ui/views/tabs/tab_strip_control_button.cc	2025-12-17 22:11:52.297420896 +0300
+@@ -60,7 +60,7 @@
+ }  // namespace
+ 
+ const int TabStripControlButton::kIconSize = 16;
+-const gfx::Size TabStripControlButton::kButtonSize{28, 28};
++const gfx::Size TabStripControlButton::kButtonSize{22, 22};
+ 
+ TabStripControlButton::TabStripControlButton(
+     TabStripController* tab_strip_controller,
 --- old/chrome/browser/ui/layout_constants.cc	2019-02-07 01:06:38.000000000 +0300
 +++ new/chrome/browser/ui/layout_constants.cc	2019-02-11 00:59:36.133485914 +0300
 @@ -52,7 +52,7 @@
@@ -39,9 +50,9 @@
 -      return 20;
 +      return 16;
      case NEW_TAB_BUTTON_LEADING_MARGIN:
-       return features::IsTabSearchMoving() &&
-                      !features::HasTabstripComboButtonWithBackground() &&
-@@ -97,12 +97,12 @@
+       return 0;
+     case STAR_RATING_ICON_SIZE:
+@@ -93,12 +93,12 @@
      case TAB_CLOSE_BUTTON_SIZE:
        return touch_ui ? 24 : 16;
      case TAB_HEIGHT:
@@ -56,7 +67,7 @@
      case TAB_SEPARATOR_HEIGHT:
        return touch_ui ? 24 : 20;
      case TAB_PRE_TITLE_PADDING:
-@@ -117,7 +117,7 @@
+@@ -113,7 +113,7 @@
        }
        return 1;
      case TOOLBAR_BUTTON_HEIGHT:
@@ -65,7 +76,7 @@
      case TOOLBAR_DIVIDER_CORNER_RADIUS:
        return 1;
      case TOOLBAR_DIVIDER_HEIGHT:
-@@ -127,7 +127,7 @@
+@@ -123,7 +123,7 @@
      case TOOLBAR_DIVIDER_WIDTH:
        return 2;
      case TOOLBAR_ELEMENT_PADDING:
@@ -92,23 +103,12 @@
  
      case BROWSER_APP_MENU_CHIP_PADDING:
        if (touch_ui) {
-@@ -186,7 +186,7 @@
+@@ -189,7 +189,7 @@
        }
  
      case TOOLBAR_INTERIOR_MARGIN:
--      return touch_ui ? gfx::Insets() : gfx::Insets::VH(6, 5);
-+      return touch_ui ? gfx::Insets() : gfx::Insets::VH(3, 0);
+-      return touch_ui ? gfx::Insets::VH(4, 0) : gfx::Insets::VH(6, 5);
++      return touch_ui ? gfx::Insets::VH(4, 0) : gfx::Insets::VH(3, 0);
  
      case WEBUI_TAB_STRIP_TOOLBAR_INTERIOR_MARGIN:
        return gfx::Insets::VH(4, 0);
---- old/chrome/browser/ui/views/tabs/new_tab_button.cc	2025-05-08 09:24:54.603895788 +0300
-+++ new/chrome/browser/ui/views/tabs/new_tab_button.cc	2025-05-08 09:45:56.001882945 +0300
-@@ -40,7 +40,7 @@
- #endif
- 
- // static
--const gfx::Size NewTabButton::kButtonSize{28, 28};
-+const gfx::Size NewTabButton::kButtonSize{29, 29};
- 
- class NewTabButton::HighlightPathGenerator
-     : public views::HighlightPathGenerator {

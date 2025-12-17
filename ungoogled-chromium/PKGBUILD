@@ -12,7 +12,7 @@
 # binary version of this package (-bin): github.com/noahvogt/ungoogled-chromium-xdg-bin-aur
 
 pkgname=ungoogled-chromium-xdg
-pkgver=140.0.7339.132
+pkgver=143.0.7499.109
 pkgrel=1
 _launcher_ver=8
 _manual_clone=0
@@ -26,12 +26,12 @@ depends=('gtk3' 'nss' 'alsa-lib' 'xdg-utils' 'libxss' 'libcups' 'libgcrypt'
          'libffi' 'desktop-file-utils' 'hicolor-icon-theme')
 makedepends=('python' 'gn' 'ninja' 'clang' 'lld' 'gperf' 'nodejs' 'pipewire'
              'rust' 'rust-bindgen' 'qt6-base' 'java-runtime-headless'
-             'git')
+             'git' 'compiler-rt')
 optdepends=('pipewire: WebRTC desktop sharing under Wayland'
             'kdialog: support for native dialogs in Plasma'
             'gtk4: for --gtk-version=4 (GTK4 IME might work better on Wayland)'
             'org.freedesktop.secrets: password storage backend on GNOME / Xfce'
-            'kwallet5: support for storing passwords in KWallet on Plasma'
+            'kwallet: support for storing passwords in KWallet on Plasma'
             'upower: Battery Status API support')
 options=('!lto') # Chromium adds its own flags for ThinLTO
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$pkgver-lite.tar.xz
@@ -41,16 +41,16 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         compiler-rt-adjust-paths.patch
         increase-fortify-level.patch
         use-oauth2-client-switches-as-default.patch
-        chromium-140.0.7339.41-rust.patch
+        chromium-141-cssstylesheet-iwyu.patch
         tab.patch)
-sha256sums=('e08746b02c08adbea49c5cf0483095ca514430de2281d762ceefac345a2cefe4'
+sha256sums=('d3a3f3acbae7c9edc75fcea8c7725f90c6e5b57a21c8e37d3e629f2224184b51'
             '213e50f48b67feb4441078d50b0fd431df34323be15be97c55302d3fdac4483a'
             '11a96ffa21448ec4c63dd5c8d6795a1998d8e5cd5a689d91aea4d2bdd13fb06e'
             '5abc8611463b3097fc5ce58017ef918af8b70d616ad093b8b486d017d021bbdf'
-            '75681c815bb2a8c102f0d7af3a3790b5012adbbce38780716b257b7da2e1c3d5'
+            'ec8e49b7114e2fa2d359155c9ef722ff1ba5fe2c518fa48e30863d71d3b82863'
             'd634d2ce1fc63da7ac41f432b1e84c59b7cceabf19d510848a7cff40c8025342'
             'e6da901e4d0860058dc2f90c6bbcdc38a0cf4b0a69122000f62204f24fa7e374'
-            '0eb47afd031188cf5a3f0502f3025a73a1799dfa52dff9906db5a3c2af24e2eb'
+            'de5c873564b09713b65dd9e6a0b9049d7b3cf8f881436f36e1c091824b63e876'
             'SKIP')
 
 # ungoogled-chromium-xdg patches
@@ -76,7 +76,7 @@ optdepends=("${optdepends[@]}"
 source=(${source[@]}
         ${pkgname%-*}-$_uc_ver.tar.gz::https://github.com/$_uc_usr/ungoogled-chromium/archive/refs/tags/$_uc_ver.tar.gz)
 sha256sums=(${sha256sums[@]}
-            '4ce570764f48493cf0c182df0ca755e8c26548da91b5e9636663140ef600c6a0')
+            'd5b8561004cb19ef56d7f0e23e3045f01a5971edb7ec84c5c6e7b2e2335378da')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
 # Keys are the names in the above script; values are the dependencies in Arch
@@ -93,7 +93,7 @@ declare -gA _system_libs=(
   #[libaom]=aom
   #[libavif]=libavif  # needs -DAVIF_ENABLE_EXPERIMENTAL_GAIN_MAP=ON
   [libjpeg]=libjpeg-turbo
-  [libpng]=libpng
+  #[libpng]=libpng    # libpng has been replaced by the png rust crate
   #[libvpx]=libvpx
   [libwebp]=libwebp
   [libxml]=libxml2
@@ -142,10 +142,10 @@ prepare() {
 
   # Fixes from Gentoo
   patch -Np1 -i ../chromium-138-nodejs-version-check.patch
+  patch -Np1 -i ../chromium-141-cssstylesheet-iwyu.patch
 
   # Fixes from NixOS
   patch -Np1 -i ../chromium-138-rust-1.86-mismatched_lifetime_syntaxes.patch
-  patch -Np1 -i ../chromium-140.0.7339.41-rust.patch
 
   # Allow libclang_rt.builtins from compiler-rt >= 16 to be used
   patch -Np1 -i ../compiler-rt-adjust-paths.patch
@@ -188,10 +188,8 @@ prepare() {
     -f "$_ungoogled_repo/domain_substitution.list" -c domainsubcache.tar.gz ./
 
   # Link to system tools required by the build
-  if (( ! _manual_clone )); then
-    mkdir -p third_party/node/linux/node-linux-x64/bin
-    ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/
-  fi
+  mkdir -p third_party/node/linux/node-linux-x64/bin
+  ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/
   mkdir -p third_party/jdk/current/bin
   ln -s /usr/bin/java third_party/jdk/current/bin/
 
@@ -210,6 +208,11 @@ prepare() {
 
   ./build/linux/unbundle/replace_gn_files.py \
     --system-libraries "${!_system_libs[@]}"
+
+  # Generate missing header
+  python3 build/util/lastchange.py -m DAWN_COMMIT_HASH \
+    -s third_party/dawn --revision gpu/webgpu/DAWN_VERSION \
+    --header gpu/webgpu/dawn_commit_hash.h
 }
 
 build() {
@@ -248,12 +251,12 @@ build() {
     'use_sysroot=false'
     'use_system_libffi=true'
     'enable_widevine=true'
-    'enable_nacl=false'
     'use_qt5=false'
     'use_qt6=true'
     'moc_qt6_path="/usr/lib/qt6"'
     'enable_platform_hevc=true'
     'enable_hevc_parser_and_hw_decoder=true'
+    'use_clang_modules=false'
   )
 
   if [[ -n ${_system_libs[icu]+set} ]]; then
@@ -314,6 +317,15 @@ build() {
   # https://crbug.com/957519#c122
   CXXFLAGS=${CXXFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS}
 
+  if [[ $CARCH == aarch64 ]] || [[ $CARCH == riscv64 ]]; then
+    # On aarch64 and riscv64, certain files (e.g. in libvpx and libyuv) needs to
+    # be compiled with additional arch features (e.g. dotprod, sve, sme, rvv)
+    # Having an arch setting in the C(XX)FLAGS overrides those
+    # and causes compilation failure
+    CFLAGS="${CFLAGS/-march=*([^ ]) }"
+    CXXFLAGS="${CXXFLAGS/-march=*([^ ]) }"
+  fi
+
   gn gen out/Release --args="${_flags[*]}"
   ninja -C out/Release chrome chrome_sandbox chromedriver
 }
@@ -321,18 +333,18 @@ build() {
 package() {
   cd chromium-launcher-$_launcher_ver
   make PREFIX=/usr DESTDIR="$pkgdir" install
-  install -Dm644 LICENSE \
+  install -Dvm644 LICENSE \
     "$pkgdir/usr/share/licenses/chromium/LICENSE.launcher"
 
   cd ../chromium-$pkgver
 
-  install -D out/Release/chrome "$pkgdir/usr/lib/chromium/chromium"
-  install -D out/Release/chromedriver "$pkgdir/usr/bin/chromedriver"
-  install -Dm4755 out/Release/chrome_sandbox "$pkgdir/usr/lib/chromium/chrome-sandbox"
+  install -Dv out/Release/chrome "$pkgdir/usr/lib/chromium/chromium"
+  install -Dv out/Release/chromedriver "$pkgdir/usr/bin/chromedriver"
+  install -Dvm4755 out/Release/chrome_sandbox "$pkgdir/usr/lib/chromium/chrome-sandbox"
 
-  install -Dm644 chrome/installer/linux/common/desktop.template \
+  install -Dvm644 chrome/installer/linux/common/desktop.template \
     "$pkgdir/usr/share/applications/chromium.desktop"
-  install -Dm644 chrome/app/resources/manpage.1.in \
+  install -Dvm644 chrome/app/resources/manpage.1.in \
     "$pkgdir/usr/share/man/man1/chromium.1"
   sed -i \
     -e 's/@@MENUNAME@@/Chromium/g' \
@@ -349,7 +361,7 @@ package() {
     export $(grep -o '^[A-Z_]*' $info_file)
     sed -E -e 's/@@([A-Z_]*)@@/\${\1}/g' -e '/<update_contact>/d' $tmpl_file | envsubst
   ) \
-  | install -Dm644 /dev/stdin "$pkgdir/usr/share/metainfo/chromium.appdata.xml"
+  | install -Dvm644 /dev/stdin "$pkgdir/usr/share/metainfo/chromium.appdata.xml"
 
   local toplevel_files=(
     chrome_100_percent.pak
@@ -374,19 +386,19 @@ package() {
   fi
 
   cp "${toplevel_files[@]/#/out/Release/}" "$pkgdir/usr/lib/chromium/"
-  install -Dm644 -t "$pkgdir/usr/lib/chromium/locales" out/Release/locales/*.pak
+  install -Dvm644 -t "$pkgdir/usr/lib/chromium/locales" out/Release/locales/*.pak
 
   for size in 24 48 64 128 256; do
-    install -Dm644 "chrome/app/theme/chromium/product_logo_$size.png" \
+    install -Dvm644 "chrome/app/theme/chromium/product_logo_$size.png" \
       "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png"
   done
 
   for size in 16 32; do
-    install -Dm644 "chrome/app/theme/default_100_percent/chromium/product_logo_$size.png" \
+    install -Dvm644 "chrome/app/theme/default_100_percent/chromium/product_logo_$size.png" \
       "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png"
   done
 
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/chromium/LICENSE"
+  install -Dvm644 LICENSE "$pkgdir/usr/share/licenses/chromium/LICENSE"
 }
 
 # vim:set ts=2 sw=2 et:

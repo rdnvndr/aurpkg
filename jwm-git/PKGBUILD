@@ -9,9 +9,7 @@ license=('GPL2')
 depends=('libx11' 'libxft' 'libjpeg-turbo' 'libxpm' 'libxinerama' 'libpng')
 backup=('etc/system.jwmrc')
 source=(jwm.desktop)
-#makedepends=('automake' 'autoconf')
-# contacted upstream about desktop
-# no reply
+makedepends=('automake' 'autoconf')
 md5sums=('SKIP')
 
 prepare() {
@@ -19,6 +17,16 @@ prepare() {
   git clone https://github.com/joewing/jwm.git
   cd "$srcdir/jwm"
   git checkout $pkgver
+  
+  sed -i 's|/usr/local/share/|/usr/share/|' example.jwmrc
+  sed -i 's/AM_GNU_GETTEXT_VERSION/AM_GNU_GETTEXT_REQUIRE_VERSION/' configure.ac
+  touch AUTHORS ChangeLog NEWS
+
+  # Automake is used only for gettext
+  mv Makefile.in{,.bak}
+  echo 'SUBDIRS = po' > Makefile.am
+  autoreconf -fiv -I /usr/share/gettext/m4/
+  mv Makefile.in{.bak,}
 }
 
 build() {
@@ -45,11 +53,9 @@ build() {
   patch -p1 -i $startdir/dynamic_menu.patch                        || return 1
   patch -p1 -i $startdir/gnu_source.patch                          || return 1
   patch -p1 -i $startdir/drag.patch                                || return 1
-  tar xvf $startdir/gettext.tar.zst -C $srcdir                     || return 1
-  
-  cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
-#  ./autogen.sh
-#  gettextize -f
+#  tar xvf $startdir/gettext.tar.zst -C $srcdir                     || return 1  
+#  cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
+
   ./configure --prefix=/usr --sysconfdir=/etc --disable-xbm --disable-xinerama --disable-rsvg --disable-jpeg
   make
 }

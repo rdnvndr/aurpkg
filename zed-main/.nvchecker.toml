@@ -1,0 +1,6 @@
+[zed]
+source = "git"
+git = "https://github.com/zed-industries/zed.git"
+include_regex = 'v\d+\.\d+\.\d+'
+exclude_regex = '.*9999.*'
+prefix = "v"

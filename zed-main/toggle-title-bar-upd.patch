@@ -1,0 +1,180 @@
+diff --git a/assets/settings/default.json b/assets/settings/default.json
+index bd41f170..220d8ba7 100644
+--- a/assets/settings/default.json
++++ b/assets/settings/default.json
+@@ -438,6 +438,8 @@
+   "use_system_window_tabs": false,
+   // Titlebar related settings
+   "title_bar": {
++    // Whether to show the titlebar in the editor.
++    "show": true,
+     // Whether to show the branch icon beside branch switcher in the titlebar.
+     "show_branch_icon": false,
+     // Whether to show the branch name button in the titlebar.
+diff --git a/crates/settings_content/src/settings_content.rs b/crates/settings_content/src/settings_content.rs
+index 86c58dc5..51d9f0c4 100644
+--- a/crates/settings_content/src/settings_content.rs
++++ b/crates/settings_content/src/settings_content.rs
+@@ -284,6 +284,10 @@ impl strum::VariantNames for BaseKeymapContent {
+ #[with_fallible_options]
+ #[derive(Clone, PartialEq, Default, Serialize, Deserialize, JsonSchema, MergeFrom, Debug)]
+ pub struct TitleBarSettingsContent {
++    /// Whether to show the titlebar in the editor.
++    ///
++    /// Default: true
++    pub show: Option<bool>,
+     /// Whether to show the branch icon beside branch switcher in the title bar.
+     ///
+     /// Default: false
+diff --git a/crates/title_bar/src/title_bar.rs b/crates/title_bar/src/title_bar.rs
+index 38fc531a..259f55db 100644
+--- a/crates/title_bar/src/title_bar.rs
++++ b/crates/title_bar/src/title_bar.rs
+@@ -35,7 +35,7 @@ use settings::Settings;
+ use settings::WorktreeId;
+ use std::sync::Arc;
+ use theme::ActiveTheme;
+-use title_bar_settings::TitleBarSettings;
++pub use title_bar_settings::TitleBarSettings;
+ use ui::{
+     Avatar, ButtonLike, Chip, ContextMenu, IconWithIndicator, Indicator, PopoverMenu,
+     PopoverMenuHandle, TintColor, Tooltip, prelude::*,
+@@ -65,6 +65,27 @@ actions!(
+     ]
+ );
+ 
++fn apply_title_bar_visibility(
++    workspace: &mut Workspace,
++    window: &mut Window,
++    cx: &mut Context<Workspace>,
++) {
++    let should_show = TitleBarSettings::get_global(cx).show;
++    let has_titlebar = workspace.titlebar_item().is_some();
++
++    if should_show {
++        if !has_titlebar {
++            let item = cx.new(|cx| TitleBar::new("title-bar", workspace, window, cx));
++            workspace.set_titlebar_item(Some(item.into()), window, cx);
++        }
++    } else {
++        workspace.set_titlebar_item(None, window, cx);
++    }
++
++    // #[cfg(target_os = "macos")]
++    // window.set_traffic_light_visible(should_show);
++}
++
+ pub fn init(cx: &mut App) {
+     platform_title_bar::PlatformTitleBar::init(cx);
+ 
+@@ -72,8 +93,14 @@ pub fn init(cx: &mut App) {
+         let Some(window) = window else {
+             return;
+         };
+-        let item = cx.new(|cx| TitleBar::new("title-bar", workspace, window, cx));
+-        workspace.set_titlebar_item(item.into(), window, cx);
++        // let item = cx.new(|cx| TitleBar::new("title-bar", workspace, window, cx));
++        // workspace.set_titlebar_item(item.into(), window, cx);
++        apply_title_bar_visibility(workspace, window, cx);
++
++        cx.observe_global_in::<settings::SettingsStore>(window, |workspace, window, cx| {
++            apply_title_bar_visibility(workspace, window, cx);
++        })
++        .detach();
+ 
+         workspace.register_action(|workspace, _: &SwitchProject, window, cx| {
+             if let Some(titlebar) = workspace
+diff --git a/crates/title_bar/src/title_bar_settings.rs b/crates/title_bar/src/title_bar_settings.rs
+index 155b7b7b..519fefb2 100644
+--- a/crates/title_bar/src/title_bar_settings.rs
++++ b/crates/title_bar/src/title_bar_settings.rs
+@@ -2,6 +2,7 @@ use settings::{RegisterSetting, Settings, SettingsContent};
+ 
+ #[derive(Copy, Clone, Debug, RegisterSetting)]
+ pub struct TitleBarSettings {
++    pub show: bool,
+     pub show_branch_icon: bool,
+     pub show_onboarding_banner: bool,
+     pub show_user_picture: bool,
+@@ -16,6 +17,7 @@ impl Settings for TitleBarSettings {
+     fn from_settings(s: &SettingsContent) -> Self {
+         let content = s.title_bar.clone().unwrap();
+         TitleBarSettings {
++            show: content.show.unwrap(),
+             show_branch_icon: content.show_branch_icon.unwrap(),
+             show_onboarding_banner: content.show_onboarding_banner.unwrap(),
+             show_user_picture: content.show_user_picture.unwrap(),
+diff --git a/crates/workspace/src/workspace.rs b/crates/workspace/src/workspace.rs
+index 4341d61f..007fc71b 100644
+--- a/crates/workspace/src/workspace.rs
++++ b/crates/workspace/src/workspace.rs
+@@ -2316,8 +2316,17 @@ impl Workspace {
+         &self.app_state.client
+     }
+ 
+-    pub fn set_titlebar_item(&mut self, item: AnyView, _: &mut Window, cx: &mut Context<Self>) {
+-        self.titlebar_item = Some(item);
++    // pub fn set_titlebar_item(&mut self, item: AnyView, _: &mut Window, cx: &mut Context<Self>) {
++    //     self.titlebar_item = Some(item);
++    //     cx.notify();
++    // }
++    pub fn set_titlebar_item(
++        &mut self,
++        item: Option<AnyView>,
++        _: &mut Window,
++        cx: &mut Context<Self>,
++    ) {
++        self.titlebar_item = item;
+         cx.notify();
+     }
+ 
+diff --git a/crates/zed/src/zed.rs b/crates/zed/src/zed.rs
+index 68303c30..5df2ba44 100644
+--- a/crates/zed/src/zed.rs
++++ b/crates/zed/src/zed.rs
+@@ -77,6 +77,7 @@ use std::{
+ };
+ use terminal_view::terminal_panel::{self, TerminalPanel};
+ use theme::{ActiveTheme, GlobalTheme, SystemAppearance, ThemeRegistry, ThemeSettings};
++use title_bar::TitleBarSettings;
+ use ui::{PopoverMenuHandle, prelude::*};
+ use util::markdown::MarkdownString;
+ use util::rel_path::RelPath;
+@@ -99,7 +100,7 @@ use workspace::{
+ use workspace::{Pane, notifications::DetachAndPromptErr};
+ use zed_actions::{
+     OpenAccountSettings, OpenBrowser, OpenDocs, OpenServerSettings, OpenSettingsFile, OpenZedUrl,
+-    Quit,
++    Quit, ToggleTitleBar,
+ };
+ 
+ actions!(
+@@ -1189,6 +1190,15 @@ fn register_actions(
+                 }
+             }
+         })
++        .register_action({
++            let fs = app_state.fs.clone();
++            move |_, _: &ToggleTitleBar, _window, cx| {
++                let current_show = TitleBarSettings::get_global(cx).show;
++                update_settings_file(fs.clone(), cx, move |settings, _| {
++                    settings.title_bar.get_or_insert_default().show = Some(!current_show);
++                });
++            }
++        })
+         .register_action(|workspace, _: &CaptureRecentAudio, window, cx| {
+             capture_recent_audio(workspace, window, cx);
+         });
+diff --git a/crates/zed_actions/src/lib.rs b/crates/zed_actions/src/lib.rs
+index d13bfdd2..4522923e 100644
+--- a/crates/zed_actions/src/lib.rs
++++ b/crates/zed_actions/src/lib.rs
+@@ -72,6 +72,8 @@ actions!(
+         OpenPerformanceProfiler,
+         /// Opens the onboarding view.
+         OpenOnboarding,
++        /// Toggles the title bar display.
++        ToggleTitleBar,
+     ]
+ );
+ 

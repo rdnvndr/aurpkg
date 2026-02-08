@@ -1,8 +1,8 @@
 pkgbase=qtcreator-patches
 pkgname=(qtcreator-patches qtcreator-devel-patches)
-pkgver=18.0.2
-_commit=18.0
-pkgrel=3
+pkgver=19.0.0
+_commit=19.0
+pkgrel=1
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
@@ -46,11 +46,10 @@ sha256sums=('22f9559555524f7b40d9910627d63307ff48486b48312efa5325762fbc04d3a1'
             'd2f1fcfc0dcc301ca65c141478957c938074b95ab063f682786226f576c8f9a8'
             '5c12a2a62b59f5c3d74eaf6e75a8a0b947e45f59cc410dfbe8774fda3f2e2913'
             '507dc7a5219da83ac7ef1bc07d9576ac703f7c7f6b8d766c6c43d0b9421f69ca'
-            '8741091cf3b0ac606df2d581f82394964d78bc0a6d0b14f2ec0a71066ab0c3d8'
+            '15007d429ecb7f6cdb4ac2bdbcd8efc836c02c22b4f4b28fd0cde48cd9638d7f'
             'f94a87f46282b93679d7c3b26e060c7f88c7f64c692292efba2ee27e329692ac'
             '6546401d89e6b4991e5051b138a92e4222923283183ec2d9b347752113b6dbe1'
             '30c2c76f4f98a25a469e0e7ee76c5b1faf2b18a26d037739d8a3512c8b4372a5')
-
 prepare() {
   cd $srcdir
 
@@ -70,7 +69,7 @@ prepare() {
   patch -d qt-creator -p1 < pythonproject.patch
   patch -d qt-creator -p1 < appstackedpane.patch
   patch -d qt-creator -p1 < fancymainwindow.patch
-  patch -d qt-creator -p1 < pylsp.patch
+##  patch -d qt-creator -p1 < pylsp.patch
   patch -d qt-creator -p1 < pyindent.patch        # Fix rename symbol under cursor
   patch -d qt-creator -p1 < multitextcursor.patch # Fix delete and move cursor to left
 #  patch -d qt-creator -p1 < center_on_scroll.patch

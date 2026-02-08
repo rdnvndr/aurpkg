@@ -1,0 +1,16 @@
+diff -ur qView-7.1/src/actionmanager.cpp q/src/actionmanager.cpp
+--- a/src/actionmanager.cpp	2025-07-27 01:11:39.000000000 +0300
++++ b/src/actionmanager.cpp	2026-01-16 13:19:04.633374311 +0300
+@@ -439,9 +439,9 @@
+ 
+ #if defined Q_OS_UNIX && !defined Q_OS_MACOS
+                 // set icons for linux users
+-                QMimeDatabase mimedb;
+-                QMimeType type = mimedb.mimeTypeForFile(recent.filePath);
+-                action->setIcon(QIcon::fromTheme(type.iconName(), QIcon::fromTheme(type.genericIconName())));
++                //QMimeDatabase mimedb;
++                //QMimeType type = mimedb.mimeTypeForFile(recent.filePath);
++                //action->setIcon(QIcon::fromTheme(type.iconName(), QIcon::fromTheme(type.genericIconName())));
+ #else
+                 // set icons for mac/windows users
+                 QFileInfo fileInfo(recent.filePath);

@@ -280,3 +280,21 @@ index be0dc1b4..b3665e29 100644
  void AppOutputPane::runControlFinished(RunControl *runControl)
  {
      const RunControlTab * const tab = tabFor(runControl);
+diff --git a/src/plugins/coreplugin/outputwindow.cpp b/src/plugins/coreplugin/outputwindow.cpp
+index 67c53ede..ec486d62 100644
+--- a/src/plugins/coreplugin/outputwindow.cpp
++++ b/src/plugins/coreplugin/outputwindow.cpp
+@@ -166,6 +166,13 @@ OutputWindow::OutputWindow(Context context, const Key &settingsKey, QWidget *par
+ 
+     connect(verticalScrollBar(), &QAbstractSlider::actionTriggered,
+             this, &OutputWindow::updateAutoScroll);
++            
++    connect(verticalScrollBar(), &QAbstractSlider::rangeChanged,
++            this, [this](int min, int max)
++            {
++                const QSignalBlocker blocker(verticalScrollBar());
++                verticalScrollBar()->setRange(min, max - 2);
++            });
+ 
+     // For when "Find" changes the position; see QTCREATORBUG-26100.
+     connect(this, &QPlainTextEdit::selectionChanged, this, &OutputWindow::updateAutoScroll,

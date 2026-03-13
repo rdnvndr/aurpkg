@@ -2,7 +2,7 @@
 # Contributor: hexchain <i@hexchain.org>
 
 pkgname=telegram-desktop-patched
-pkgver=6.5.1
+pkgver=6.6.2
 pkgrel=1
 pkgdesc='Official Telegram Desktop client'
 arch=('x86_64')
@@ -24,7 +24,7 @@ depends=(
   'libxrandr'
   'libxtst'
   'lz4'
-  'minizip'
+  'minizip-ng'
   'openal'
   'openh264'
   'openssl'
@@ -88,7 +88,7 @@ prepare() {
 }
 
 build() {
-  CXXFLAGS+=' -ffat-lto-objects'
+  CXXFLAGS+=' -ffat-lto-objects -I/usr/include/minizip-ng/ '
 
   cmake -S td -B td/build \
     -DCMAKE_BUILD_TYPE=None \

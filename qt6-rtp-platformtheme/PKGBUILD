@@ -1,7 +1,7 @@
 pkgname=qt6-rtp-platformtheme
 _pkgname=qt-rtp-platformtheme
 pkgver=0.3.2
-pkgrel=5
+pkgrel=6
 pkgdesc="A theme engine for Qt6"
 arch=(x86_64)
 url="https://github.com/rdnvndr/$pkgname"
@@ -10,18 +10,14 @@ depends=('qt6-base')
 source=("$_pkgname-$pkgver.tar.gz::https://github.com/rdnvndr/$_pkgname/archive/v${pkgver}.tar.gz")
 sha512sums=('SKIP')
 
-prepare() {
-  mkdir -p build
-}
-
 build() {
-  cd build
-  cmake ../$_pkgname-$pkgver -DQT_DEFAULT_MAJOR_VERSION=6
+  cd $_pkgname-$pkgver
+  qmake6
   make
 }
 
 package() {
-  cd build
+  cd $_pkgname-$pkgver
   install -Dm555 librtptheme.so "$pkgdir"/usr/lib/qt6/plugins/platformthemes/librtptheme.so
 }
 

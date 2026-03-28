@@ -1,5 +1,0 @@
-pkg/*
-src/*
-psqlodbc-*.tar.gz
-psqlodbc-*.pkg.tar.xz
-psqlodbc-*.pkg.tar.zst

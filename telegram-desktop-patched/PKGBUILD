@@ -3,7 +3,7 @@
 
 pkgname=telegram-desktop-patched
 pkgver=6.6.4
-pkgrel=3
+pkgrel=4
 pkgdesc='Official Telegram Desktop client'
 arch=('x86_64')
 url="https://desktop.telegram.org/"
@@ -24,7 +24,7 @@ depends=(
   'libxrandr'
   'libxtst'
   'lz4'
-  'minizip-ng'
+  'minizip'
   'openal'
   'openh264'
   'openssl'
@@ -70,8 +70,11 @@ source=(
   "0002-Disable-saving-restrictions.patch"
   "0003-Disable-invite-peeking-restrictions.patch"
   "0004-Disable-accounts-limit.patch"
-  "0005-Option-to-disable-stories.patch")
+  "0005-Option-to-disable-stories.patch"
+  "tdesktop-fix-minizip-includes.patch"
+  )
 sha512sums=("SKIP"
+            "SKIP"
             "SKIP"
             "SKIP"
             "SKIP"
@@ -85,6 +88,7 @@ prepare() {
     patch --forward --strip=1 --input "${srcdir}/0003-Disable-invite-peeking-restrictions.patch"
     patch --forward --strip=1 --input "${srcdir}/0004-Disable-accounts-limit.patch"
     patch --forward --strip=1 --input "${srcdir}/0005-Option-to-disable-stories.patch"
+    patch --forward --strip=1 --input "${srcdir}/tdesktop-fix-minizip-includes.patch"
 }
 
 build() {

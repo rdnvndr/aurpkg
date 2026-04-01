@@ -1,0 +1,11 @@
+--- old/zaread	2025-05-23 16:34:02.621503536 +0300
++++ new/zaread	2025-05-16 11:44:22.190652984 +0300
+@@ -11,7 +11,7 @@
+ # Default converters, i.e. commands, which script uses to convert files to pdf
+ MOBI_CMD="ebook-convert"
+ OFFICE_CMD="soffice"
+-MD_CMD="md2pdf"
++MD_CMD="md2pdf.sh"
+ TYPST_CMD="typst"
+ TYPST_ARG="compile" # Can be changed to "watch"
+ MD_ARG=""

@@ -1,0 +1,7 @@
+pkgbase = haiku-icons
+	pkgdesc = Haiku icons
+	pkgver = 1
+	pkgrel = 1
+	arch = any
+
+pkgname = haiku-icons

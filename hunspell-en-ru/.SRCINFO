@@ -1,0 +1,15 @@
+pkgbase = hunspell-en-ru
+	pkgdesc = Russian dictionary for Hunspell
+	pkgver = 0.1
+	pkgrel = 1
+	arch = any
+	license = custom
+	optdepends = hunspell: the spell checking libraries and apps
+	provides = hunspell-dictionary
+	conflicts = hunspell-ru
+	source = ru_RU.dic
+	source = ru_RU.aff
+	sha512sums = SKIP
+	sha512sums = SKIP
+
+pkgname = hunspell-en-ru

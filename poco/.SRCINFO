@@ -1,0 +1,16 @@
+pkgbase = poco
+	pkgdesc = C++ class libraries for network-centric, portable applications, complete edition with debug libraries
+	pkgver = 1.11.0
+	pkgrel = 1
+	url = http://www.pocoproject.org/
+	arch = x86_64
+	license = custom:boost
+	makedepends = cmake
+	makedepends = ninja
+	depends = mariadb-libs
+	depends = openssl
+	depends = unixodbc
+	source = https://github.com/pocoproject/poco/archive/poco-1.11.0-release.tar.gz
+	sha256sums = SKIP
+
+pkgname = poco

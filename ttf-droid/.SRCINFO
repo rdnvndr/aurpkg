@@ -1,0 +1,14 @@
+pkgbase = ttf-droid-sans-mono
+	pkgdesc = General-purpose fonts released by Google as part of Android
+	pkgver = 20121017
+	pkgrel = 10
+	url = https://www.droidfonts.com/
+	arch = any
+	license = Apache
+	provides = ttf-font
+	source = https://sources.archlinux.org/other/community/ttf-droid/ttf-droid-20121017.tar.xz
+	source = 65-droid-sans-mono.conf
+	sha256sums = f068efec9e8201fe0d1be75b1a4751c98d14dc44267b2237f549403b2a8069e3
+	sha256sums = SKIP
+
+pkgname = ttf-droid-sans-mono

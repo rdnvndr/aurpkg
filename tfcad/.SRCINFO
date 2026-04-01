@@ -1,0 +1,17 @@
+pkgbase = tfcad
+	pkgdesc = tfcad
+	pkgver = 0.1.0
+	pkgrel = 1
+	arch = x86_64
+	depends = qt5-base
+	depends = qt5-svg
+	depends = freeimage
+	depends = glew
+	depends = cgal
+	depends = opencv
+	depends = qt5-webengine
+	depends = zeromq
+	depends = onetbb
+	depends = booster
+
+pkgname = tfcad

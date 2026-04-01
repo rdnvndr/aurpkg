@@ -1,0 +1,12 @@
+pkgbase = ttf-opensans
+	pkgdesc = Sans-serif typeface commissioned by Google
+	pkgver = 3.001
+	pkgrel = 1
+	url = https://fonts.google.com/specimen/Open+Sans
+	arch = any
+	groups = modified
+	license = Apache
+	source = https://github.com/googlefonts/opensans/archive/refs/heads/main.zip
+	sha256sums = SKIP
+
+pkgname = ttf-opensans

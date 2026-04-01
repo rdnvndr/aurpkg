@@ -1,0 +1,14 @@
+pkgbase = plog-converter-git
+	pkgdesc = PVS Studio analyzer log conversion tool
+	pkgver = b4fda14
+	pkgrel = 1
+	url = https://github.com/viva64/plog-converter
+	arch = x86_64
+	groups = modified
+	license = Apache-2.0
+	makedepends = cmake
+	makedepends = git
+	makedepends = gcc
+	depends = gcc-libs
+
+pkgname = plog-converter-git

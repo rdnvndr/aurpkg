@@ -1,0 +1,13 @@
+pkgbase = qarma-git
+	pkgdesc = A drop-in replacement clone for zenity, written in Qt5/6
+	pkgver = 3004c986
+	pkgrel = 1
+	url = https://github.com/luebking/qarma
+	arch = i686
+	arch = x86_64
+	license = GPL
+	makedepends = git
+	makedepends = gcc
+	depends = qt6-base
+
+pkgname = qarma-git

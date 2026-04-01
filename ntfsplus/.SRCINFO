@@ -1,0 +1,12 @@
+pkgbase = ntfsplus
+	pkgdesc = A new NTFS driver for Linux promised to be better than NTFS3
+	pkgver = 2025.10.24.r8.6ce7d0eb
+	pkgrel = 1
+	url = https://github.com/shadichy/ntfsplus-dkms
+	arch = x86_64
+	license = GPL
+	makedepends = linux-zen-headers
+	makedepends = ntfsplus-dkms-git=2025.10.24.r8.6ce7d0eb
+
+pkgname = ntfsplus
+	depends = linux-zen

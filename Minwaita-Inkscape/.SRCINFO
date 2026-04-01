@@ -1,0 +1,7 @@
+pkgbase = Minwaita-Inkscape
+	pkgdesc = Minwaita-Inkscape
+	pkgver = 1
+	pkgrel = 1
+	arch = any
+
+pkgname = Minwaita-Inkscape

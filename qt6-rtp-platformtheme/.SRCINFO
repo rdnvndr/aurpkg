@@ -1,0 +1,12 @@
+pkgbase = qt6-rtp-platformtheme
+	pkgdesc = A theme engine for Qt6
+	pkgver = 0.3.2
+	pkgrel = 6
+	url = https://github.com/rdnvndr/qt6-rtp-platformtheme
+	arch = x86_64
+	license = GPL3
+	depends = qt6-base
+	source = qt-rtp-platformtheme-0.3.2.tar.gz::https://github.com/rdnvndr/qt-rtp-platformtheme/archive/v0.3.2.tar.gz
+	sha512sums = SKIP
+
+pkgname = qt6-rtp-platformtheme

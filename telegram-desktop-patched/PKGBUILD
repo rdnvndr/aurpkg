@@ -2,8 +2,8 @@
 # Contributor: hexchain <i@hexchain.org>
 
 pkgname=telegram-desktop-patched
-pkgver=6.6.4
-pkgrel=4
+pkgver=6.7.1
+pkgrel=1
 pkgdesc='Official Telegram Desktop client'
 arch=('x86_64')
 url="https://desktop.telegram.org/"

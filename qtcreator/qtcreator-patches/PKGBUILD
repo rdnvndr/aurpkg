@@ -2,14 +2,14 @@ pkgbase=qtcreator-patches
 pkgname=(qtcreator-patches qtcreator-devel-patches)
 pkgver=19.0.1
 _commit=19.0
-pkgrel=5
+pkgrel=6
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=(x86_64)
 url='https://www.qt.io'
 license=("Apache-2.0")
 depends=(qt6-tools qt6-svg qt6-quick3d qt6-webengine qt6-serialport qt6-shadertools qt6-5compat
          clang clazy yaml-cpp litehtml) # syntax-highlighting
-makedepends=(cmake llvm python clang go)
+makedepends=(cmake llvm python clang go clang21)
 options=(docs)
 optdepends=('qt6-doc: integrated Qt documentation'
             'qt6-examples: welcome page examples'

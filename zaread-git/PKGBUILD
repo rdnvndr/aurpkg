@@ -3,7 +3,7 @@
 
 pkgname=zaread-git
 _pkgname="${pkgname%-git}"
-pkgver=r120.c2d45e1b
+pkgver=r143.035b476f
 pkgrel=1
 pkgdesc='A (very) lightweight ebook and Office document reader'
 arch=(any)

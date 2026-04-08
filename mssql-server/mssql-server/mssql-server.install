@@ -1,4 +1,0 @@
-post_install()
-{
-  echo "Now run /opt/mssql/bin/mssql-conf setup"
-}

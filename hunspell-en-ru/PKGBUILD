@@ -3,7 +3,7 @@
 
 pkgname=hunspell-en-ru
 pkgver=0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Russian dictionary for Hunspell"
 arch=('any')
 license=('custom')
@@ -19,6 +19,7 @@ package() {
 	install -vdm755 "${pkgdir}/usr/share/hunspell"
 	for dict in aff dic; do
 		install -vDm644 "ru_RU.${dict}" "${pkgdir}/usr/share/hunspell/ru_RU.${dict}"
+		ln -sv /usr/share/hunspell/ru_RU.${dict} ${pkgdir}/usr/share/hunspell/en_US.${dict}
 	done
 
 	# the symlinks

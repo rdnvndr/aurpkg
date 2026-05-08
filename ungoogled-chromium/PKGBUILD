@@ -12,71 +12,98 @@
 # binary version of this package (-bin): github.com/noahvogt/ungoogled-chromium-xdg-bin-aur
 
 pkgname=ungoogled-chromium-xdg
-pkgver=143.0.7499.109
+pkgver=147.0.7727.137
 pkgrel=1
 _launcher_ver=8
 _manual_clone=0
 _system_clang=1
+_uc_usr=ungoogled-software
+_uc_ver=$pkgver-1
 pkgdesc="A lightweight approach to removing Google web service dependency - without creating a useless ~/.pki directory"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium"
 license=('BSD-3-Clause')
-depends=('gtk3' 'nss' 'alsa-lib' 'xdg-utils' 'libxss' 'libcups' 'libgcrypt'
-         'ttf-liberation' 'systemd' 'dbus' 'libpulse' 'pciutils' 'libva'
-         'libffi' 'desktop-file-utils' 'hicolor-icon-theme')
-makedepends=('python' 'gn' 'ninja' 'clang' 'lld' 'gperf' 'nodejs' 'pipewire'
-             'rust' 'rust-bindgen' 'qt6-base' 'java-runtime-headless'
-             'git' 'compiler-rt')
+depends=(
+  'alsa-lib'
+  'dbus'
+  'desktop-file-utils'
+  'gtk3'
+  'hicolor-icon-theme'
+  'libcups'
+  'libffi'
+  'libgcrypt'
+  'libpulse'
+  'libva'
+  'libxss'
+  'nss'
+  'pciutils'
+  'systemd'
+  'ttf-liberation'
+  'xdg-utils'
+)
+makedepends=(
+  'clang'
+  'compiler-rt'
+  'git'
+  'gn'
+  'gperf'
+  'java-runtime-headless'
+  'lld'
+  'ninja'
+  'nodejs'
+  'pipewire'
+  'python'
+  'qt6-base'
+  'rust-bindgen'
+  'rust'
+)
 optdepends=('pipewire: WebRTC desktop sharing under Wayland'
             'kdialog: support for native dialogs in Plasma'
             'gtk4: for --gtk-version=4 (GTK4 IME might work better on Wayland)'
-            'org.freedesktop.secrets: password storage backend on GNOME / Xfce'
-            'kwallet: support for storing passwords in KWallet on Plasma'
-            'upower: Battery Status API support')
+            'org.freedesktop.secrets: password storage backend on GNOME, KDE and Xfce'
+            'upower: Battery Status API support'
+            'chromium-extension-web-store: Web Store Functionality')
 options=('!lto') # Chromium adds its own flags for ThinLTO
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$pkgver-lite.tar.xz
+        "ungoogled-chromium-$_uc_ver.tar.gz::https://github.com/$_uc_usr/ungoogled-chromium/archive/$_uc_ver.tar.gz"
         https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver/chromium-launcher-$_launcher_ver.tar.gz
         chromium-138-nodejs-version-check.patch
-        chromium-138-rust-1.86-mismatched_lifetime_syntaxes.patch
+        chromium-145-fix-SYS_SECCOMP.patch
+        chromium-146-drop-unknown-clang-flag.patch
+        chromium-147-revert-clang-no-lifetime-dse-flag.patch
+        chromium-147-rust-1.95-bytemuck.patch
         compiler-rt-adjust-paths.patch
         increase-fortify-level.patch
+        enable-widevine-arm64.patch
         use-oauth2-client-switches-as-default.patch
-        chromium-141-cssstylesheet-iwyu.patch
+        glibc-2.42-baud-rate-fix.patch
+        # ungoogled-chromium-xdg patches
+        no-omnibox-suggestion-autocomplete.patch
         tab.patch)
-sha256sums=('d3a3f3acbae7c9edc75fcea8c7725f90c6e5b57a21c8e37d3e629f2224184b51'
+sha256sums=('b2649077061c59e286ad43b3a3c8c5b490eab82ca95205f14b9c265b1ee442d4'
+            '88736ee761d1f1a54c46faa8c49d2bd24699d4c1ee4670c98ea6def02b68a433'
             '213e50f48b67feb4441078d50b0fd431df34323be15be97c55302d3fdac4483a'
             '11a96ffa21448ec4c63dd5c8d6795a1998d8e5cd5a689d91aea4d2bdd13fb06e'
-            '5abc8611463b3097fc5ce58017ef918af8b70d616ad093b8b486d017d021bbdf'
+            '4fc040a0656a0a524dd8ad090cd129fc5b6cb21adcc66be82080165789e8c13e'
+            '24535c314c7e70c52bcf409aaf604728bfc5b5c97e60087e630e1f7233b9e12d'
+            'c382830318c5b37826ecf44f3ba9def6be8affdad1bce819ecb83f3222ff4b3a'
+            'b9e6339221efe03540ffb360c161d93604a1fc93a5a1c53e5e9849066f987d05'
             'ec8e49b7114e2fa2d359155c9ef722ff1ba5fe2c518fa48e30863d71d3b82863'
             'd634d2ce1fc63da7ac41f432b1e84c59b7cceabf19d510848a7cff40c8025342'
-            'e6da901e4d0860058dc2f90c6bbcdc38a0cf4b0a69122000f62204f24fa7e374'
-            'de5c873564b09713b65dd9e6a0b9049d7b3cf8f881436f36e1c091824b63e876'
+            '9c766b82d1143cb3413fe2057361bd2655e46287eacc2c6d6f8504b4c255647a'
+            '9343afa1a4308a7cfb3317229f5aff7778688debcc03c4a74a85908aa1d0cc3a'
+            '1c1898f263eaacbc069a8e1a3e732852350350d1dad4cb1a6bba430e3b796cd0'
+            'f4a93437b3e45518fc307606a98e5b4b1fb3471f44ce36a8ef83d57e5c90ca72'
             'SKIP')
-
-# ungoogled-chromium-xdg patches
-source=(${source[@]}
-        xdg-basedir.patch
-        no-omnibox-suggestion-autocomplete.patch)
-sha256sums=(${sha256sums[@]}
-            '2848ccca54ec4a118471b833d20cf3a32fff7775d5b0fc881f9e1660dcd6ca23'
-            'ff1591fa38e0ede7e883dc7494b813641b7a1a7cb1ded00d9baaee987c1dbea8')
 
 if (( _manual_clone )); then
   source[0]=fetch-chromium-release
+  sha256sums[0]='2e2f36e3cd1ebc4ad57fd310774a5e5e9db77883d5f9374fedeaabd3c103b819'
   makedepends+=('python-httplib2' 'python-pyparsing' 'python-six' 'npm' 'rsync')
 fi
 
 provides=("chromium=${pkgver}" "chromedriver=${pkgver}")
 conflicts=('chromium' 'chromedriver')
-_uc_usr=ungoogled-software
-_uc_rel=1
-_uc_ver="$pkgver-$_uc_rel"
-optdepends=("${optdepends[@]}"
-            'chromium-extension-web-store: Web Store Functionality')
-source=(${source[@]}
-        ${pkgname%-*}-$_uc_ver.tar.gz::https://github.com/$_uc_usr/ungoogled-chromium/archive/refs/tags/$_uc_ver.tar.gz)
-sha256sums=(${sha256sums[@]}
-            'd5b8561004cb19ef56d7f0e23e3045f01a5971edb7ec84c5c6e7b2e2335378da')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
 # Keys are the names in the above script; values are the dependencies in Arch
@@ -142,10 +169,6 @@ prepare() {
 
   # Fixes from Gentoo
   patch -Np1 -i ../chromium-138-nodejs-version-check.patch
-  patch -Np1 -i ../chromium-141-cssstylesheet-iwyu.patch
-
-  # Fixes from NixOS
-  patch -Np1 -i ../chromium-138-rust-1.86-mismatched_lifetime_syntaxes.patch
 
   # Allow libclang_rt.builtins from compiler-rt >= 16 to be used
   patch -Np1 -i ../compiler-rt-adjust-paths.patch
@@ -153,10 +176,25 @@ prepare() {
   # Increase _FORTIFY_SOURCE level to match Arch's default flags
   patch -Np1 -i ../increase-fortify-level.patch
 
-  # Custom Patches
+  # Fix issue about missing compiler flag, can be dropped when arch has LLVM 23
+  # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
+  patch -Np1 -i ../chromium-146-drop-unknown-clang-flag.patch
 
-  # move ~/.pki directory to ${XDG_DATA_HOME:-$HOME/.local}/share/pki
-  patch -p1 -i ../xdg-basedir.patch
+  # Causes a build failure with our clang version
+  patch -Np1 -i ../chromium-147-revert-clang-no-lifetime-dse-flag.patch
+
+  # https://crbug.com/456218403
+  patch -Np1 -i ../chromium-145-fix-SYS_SECCOMP.patch
+
+  patch -Np1 -i ../chromium-147-rust-1.95-bytemuck.patch
+
+  # enable widevine for arm64
+  patch -Np1 -i ../enable-widevine-arm64.patch
+
+  # https://crbug.com/456677057
+  patch -Np1 -i ../glibc-2.42-baud-rate-fix.patch
+
+  # Custom Patches
 
   # You can now set '1' in the flag #omnibox-ui-max-autocomplete-matches to
   # effectively disable autocompletion in the url bar (and therefore the so-
@@ -172,6 +210,10 @@ prepare() {
 
     # To link to rust libraries we need to compile with prebuilt clang
     ./tools/clang/scripts/update.py
+  else
+    # To fix missing libadler.rlib
+    sed -i 's/rustc_nightly_capability = use_chromium_rust_toolchain/rustc_nightly_capability = true/' \
+      build/config/rust.gni
   fi
 
 
@@ -208,11 +250,6 @@ prepare() {
 
   ./build/linux/unbundle/replace_gn_files.py \
     --system-libraries "${!_system_libs[@]}"
-
-  # Generate missing header
-  python3 build/util/lastchange.py -m DAWN_COMMIT_HASH \
-    -s third_party/dawn --revision gpu/webgpu/DAWN_VERSION \
-    --header gpu/webgpu/dawn_commit_hash.h
 }
 
 build() {
@@ -286,7 +323,7 @@ build() {
     _flags+=(
       'rust_sysroot_absolute="/usr"'
       'rust_bindgen_root="/usr"'
-      "rustc_version=\"$(rustc --version)\""
+      "rustc_version=\"$(rustc --version | awk '{ print $2 ;}')\""
     )
   fi
 
@@ -347,9 +384,11 @@ package() {
   install -Dvm644 chrome/app/resources/manpage.1.in \
     "$pkgdir/usr/share/man/man1/chromium.1"
   sed -i \
-    -e 's/@@MENUNAME@@/Chromium/g' \
-    -e 's/@@PACKAGE@@/chromium/g' \
-    -e 's/@@USR_BIN_SYMLINK_NAME@@/chromium/g' \
+    -e 's/@@MENUNAME/Chromium/g' \
+    -e 's/@@PACKAGE/chromium/g' \
+    -e 's/@@usr_bin_symlink_name/chromium/g' \
+    -e 's|@@uri_scheme|x-scheme-handler/chromium;|g' \
+    -e 's/@@extra_desktop_entries//g' \
     "$pkgdir/usr/share/applications/chromium.desktop" \
     "$pkgdir/usr/share/man/man1/chromium.1"
 

@@ -1,4 +1,4 @@
-DefinitionBlock ("ssdt1.aml", "SSDT", 1, "HACK  ", "S3      ", 0x00000001)
+DefinitionBlock ("ssdt1.aml", "SSDT", 1, "HACK  ", "S3      ", 0x0107200A)
 {
   Scope (\)
   {

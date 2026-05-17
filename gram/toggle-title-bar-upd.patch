@@ -1,0 +1,162 @@
+diff -ru a/assets/settings/default.jsonc b/assets/settings/default.jsonc
+--- a/assets/settings/default.jsonc	2026-05-11 09:37:15.000000000 +0300
++++ b/assets/settings/default.jsonc	2026-05-17 00:03:49.064885176 +0300
+@@ -407,6 +407,8 @@
+   "use_system_window_tabs": false,
+   // Titlebar related settings
+   "title_bar": {
++    // Whether to show the titlebar in the editor.
++    "show": true,
+     // Whether to show the branch icon beside branch switcher in the titlebar.
+     "show_branch_icon": true,
+     // Whether to show the branch name button in the titlebar.
+diff -ru a/crates/app_actions/src/lib.rs b/crates/app_actions/src/lib.rs
+--- a/crates/app_actions/src/lib.rs	2026-05-11 09:37:15.000000000 +0300
++++ b/crates/app_actions/src/lib.rs	2026-05-17 00:23:23.071056458 +0300
+@@ -68,6 +68,8 @@
+         OpenPerformanceProfiler,
+         /// Opens the onboarding view.
+         OpenOnboarding,
++        /// Toggles the title bar display.
++        ToggleTitleBar,
+     ]
+ );
+ 
+diff -ru a/crates/gram/src/gram.rs b/crates/gram/src/gram.rs
+--- a/crates/gram/src/gram.rs	2026-05-11 09:37:15.000000000 +0300
++++ b/crates/gram/src/gram.rs	2026-05-17 00:21:47.076815893 +0300
+@@ -9,7 +9,7 @@
+ pub(crate) mod windows_only_instance;
+ 
+ use anyhow::Context as _;
+-use app_actions::{About, OpenBrowser, OpenGramUrl, OpenServerSettings, OpenSettingsFile, Quit};
++use app_actions::{About, OpenBrowser, OpenGramUrl, OpenServerSettings, OpenSettingsFile, Quit, ToggleTitleBar};
+ pub use app_menus::*;
+ use assets::Assets;
+ use breadcrumbs::Breadcrumbs;
+@@ -64,6 +64,7 @@
+ use system_specs::CopySystemSpecsIntoClipboard;
+ use terminal_view::terminal_panel::{self, TerminalPanel};
+ use theme::{ActiveTheme, Appearance, GlobalTheme, SystemAppearance, ThemeRegistry, ThemeSettings};
++use title_bar::TitleBarSettings;
+ use ui::{
+     ButtonLink, CopyButton, Navigable, NavigableEntry, PopoverMenuHandle, TintColor, Vector,
+     VectorName, prelude::*,
+@@ -945,6 +946,15 @@
+             }
+         })
+         .register_action({
++            let fs = app_state.fs.clone();
++            move |_, _: &ToggleTitleBar, _window, cx| {
++                let current_show = TitleBarSettings::get_global(cx).show;
++                update_settings_file(fs.clone(), cx, move |settings, _| {
++                    settings.title_bar.get_or_insert_default().show = Some(!current_show);
++                });
++            }
++        })
++        .register_action({
+             let app_state = Arc::downgrade(&app_state);
+             move |_, _: &NewFile, _, cx| {
+                 if let Some(app_state) = app_state.upgrade() {
+diff -ru a/crates/settings/src/settings_content.rs b/crates/settings/src/settings_content.rs
+--- a/crates/settings/src/settings_content.rs	2026-05-11 09:37:15.000000000 +0300
++++ b/crates/settings/src/settings_content.rs	2026-05-17 00:06:26.453657401 +0300
+@@ -222,6 +222,10 @@
+ #[with_fallible_options]
+ #[derive(Clone, PartialEq, Default, Serialize, Deserialize, JsonSchema, MergeFrom, Debug)]
+ pub struct TitleBarSettingsContent {
++    /// Whether to show the titlebar in the editor.
++    ///
++    /// Default: true
++    pub show: Option<bool>,
+     /// Whether to show the branch icon beside branch switcher in the title bar.
+     ///
+     /// Default: false
+diff -ru a/crates/title_bar/src/title_bar.rs b/crates/title_bar/src/title_bar.rs
+--- a/crates/title_bar/src/title_bar.rs	2026-05-11 09:37:15.000000000 +0300
++++ b/crates/title_bar/src/title_bar.rs	2026-05-17 00:10:20.238809938 +0300
+@@ -27,7 +27,7 @@
+ use remote::RemoteConnectionOptions;
+ use settings::Settings;
+ use theme::ActiveTheme;
+-use title_bar_settings::TitleBarSettings;
++pub use title_bar_settings::TitleBarSettings;
+ use ui::{
+     Button, ButtonLike, ButtonStyle, ContextMenu, Icon, IconName, IconSize, IconWithIndicator,
+     Indicator, PopoverMenu, Tooltip, h_flex, prelude::*,
+@@ -41,6 +41,27 @@
+ const MAX_BRANCH_NAME_LENGTH: usize = 40;
+ const MAX_SHORT_SHA_LENGTH: usize = 8;
+ 
++fn apply_title_bar_visibility(
++    workspace: &mut Workspace,
++    window: &mut Window,
++    cx: &mut Context<Workspace>,
++) {
++    let should_show = TitleBarSettings::get_global(cx).show;
++    let has_titlebar = workspace.titlebar_item().is_some();
++
++    if should_show {
++        if !has_titlebar {
++            let item = cx.new(|cx| TitleBar::new("title-bar", workspace, window, cx));
++            workspace.set_titlebar_item(Some(item.into()), window, cx);
++        }
++    } else {
++        workspace.set_titlebar_item(None, window, cx);
++    }
++
++    // #[cfg(target_os = "macos")]
++    // window.set_traffic_light_visible(should_show);
++}
++
+ pub fn init(cx: &mut App) {
+     SystemWindowTabs::init(cx);
+ 
+@@ -50,8 +71,12 @@
+             log::info!("titlebar: Didn't get a window for some reason");
+             return;
+         };
+-        let item = cx.new(|cx| TitleBar::new("title-bar", workspace, window, cx));
+-        workspace.set_titlebar_item(item.into(), window, cx);
++        apply_title_bar_visibility(workspace, window, cx);
++
++        cx.observe_global_in::<settings::SettingsStore>(window, |workspace, window, cx| {
++            apply_title_bar_visibility(workspace, window, cx);
++        })
++        .detach();
+ 
+         #[cfg(not(target_os = "macos"))]
+         workspace.register_action(|workspace, action: &OpenApplicationMenu, window, cx| {
+diff -ru a/crates/title_bar/src/title_bar_settings.rs b/crates/title_bar/src/title_bar_settings.rs
+--- a/crates/title_bar/src/title_bar_settings.rs	2026-05-11 09:37:15.000000000 +0300
++++ b/crates/title_bar/src/title_bar_settings.rs	2026-05-17 00:11:21.045446807 +0300
+@@ -2,6 +2,7 @@
+ 
+ #[derive(Copy, Clone, Debug, RegisterSetting)]
+ pub struct TitleBarSettings {
++    pub show: bool,
+     pub show_branch_icon: bool,
+     pub show_branch_name: bool,
+     pub show_project_items: bool,
+@@ -12,6 +13,7 @@
+     fn from_settings(s: &SettingsContent) -> Self {
+         let content = s.title_bar.clone().unwrap();
+         TitleBarSettings {
++            show: content.show.unwrap(),
+             show_branch_icon: content.show_branch_icon.unwrap(),
+             show_branch_name: content.show_branch_name.unwrap(),
+             show_project_items: content.show_project_items.unwrap(),
+diff -ru a/crates/workspace/src/workspace.rs b/crates/workspace/src/workspace.rs
+--- a/crates/workspace/src/workspace.rs	2026-05-11 09:37:15.000000000 +0300
++++ b/crates/workspace/src/workspace.rs	2026-05-17 00:46:59.568674684 +0300
+@@ -1993,8 +1993,8 @@
+         &self.app_state.client
+     }
+ 
+-    pub fn set_titlebar_item(&mut self, item: AnyView, _: &mut Window, cx: &mut Context<Self>) {
+-        self.titlebar_item = Some(item);
++    pub fn set_titlebar_item(&mut self, item: Option<AnyView>, _: &mut Window, cx: &mut Context<Self>) {
++        self.titlebar_item = item;
+         cx.notify();
+     }
+ 

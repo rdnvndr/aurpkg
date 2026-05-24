@@ -3,8 +3,8 @@
 # Contributor: nerdyslacker <karyan40024@gmail.com>
 
 pkgname=gram
-pkgver=2.0.0
-pkgrel=2
+pkgver=2.1.2
+pkgrel=1
 pkgdesc='A code editor for humanoid apes and grumpy toads'
 arch=(x86_64)
 url=https://gram-editor.com
@@ -41,7 +41,7 @@ replaces=(gram-bin gram-editor-bin)
 _archive="$pkgname-$pkgver"
 source=("$_archive.tar.gz::$_url/archive/$pkgver.tar.gz"
         "toggle-title-bar-upd.patch")
-sha256sums=('091e2788a31261e76c01c272bdb9b4f53a3106a4c9e16dfa1318fb916e50e5bf'
+sha256sums=('SKIP'
             "SKIP")
 
 _binname=gram

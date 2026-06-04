@@ -36,6 +36,10 @@ export LD_LIBRARY_PATH=$CLIENT_PATH/lib:$CLIENT_PATH/qt5/lib:"$LD_LIBRARY_PATH"
 
 #export QT_PLUGIN_PATH='/opt/trueconf/client/plugins'
 #export QT_QPA_PLATFORMTHEME=''
-export QT_SUPPORT_GL_CHILD_WIDGETS=1
+#export QT_SUPPORT_GL_CHILD_WIDGETS=1
 
+export QT_QPA_PLATFORM=xcb 
+export QT_XCB_GL_INTEGRATION=xcb_egl
+
+export LIBVA_DRIVER_NAME="radeonsi"
 $CLIENT_PATH/TrueConf "$@"

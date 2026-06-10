@@ -1,6 +1,6 @@
 pkgname=jwm-git
 pkgver=ba12b4f
-pkgrel=3
+pkgrel=4
 pkgdesc="A lightweight window manager for the X11 Window System"
 arch=('i686' 'x86_64')
 conflicts=('jwm')
@@ -56,7 +56,7 @@ build() {
 #  tar xvf $startdir/gettext.tar.zst -C $srcdir                     || return 1  
 #  cp $startdir/x.xpm $srcdir/jwm/src/x.xpm
 
-  ./configure --prefix=/usr --sysconfdir=/etc --disable-xmu --disable-xbm --disable-xinerama --disable-rsvg --disable-jpeg
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-xbm --disable-xinerama --disable-rsvg --disable-jpeg
   make
 }
 
